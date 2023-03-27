@@ -1,0 +1,14 @@
+{
+    "extends": "../tsconfig.base.json",
+    "compilerOptions": {
+        "composite": true,
+        "sourceMap": true,
+        "baseUrl": ".",
+        "paths": {
+            "/#/*": ["typings/*"]
+        }
+        // "types": ["webpack-env", "node", "element-plus/global"],
+        // "typeRoots": ["typings"]
+    },
+    "include": ["../typings", ".vitepress/**/*"]
+}

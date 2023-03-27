@@ -1,0 +1,9 @@
+.idea
+
+node_modules
+
+.pnpm-debug.log*
+
+dist
+
+docs/.vitepress/cache

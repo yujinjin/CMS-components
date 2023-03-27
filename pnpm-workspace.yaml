@@ -1,0 +1,7 @@
+packages:
+    # 组件包
+    - packages/**
+    # 存放组件文档的说明
+    - docs
+    # 组件演示
+    - play
