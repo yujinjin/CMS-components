@@ -32,6 +32,7 @@
         "lint:fix": "pnpm run lint --fix"
     },
     "dependencies": {
+        "@cms-components/utils": "workspace:*",
         "core-js": "^3.21.1",
         "vue": "^3.2.41",
         "vue-router": "^4.1.6",

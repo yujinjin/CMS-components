@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2023-03-24 15:05:52
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-03-27 15:46:47
+ * @最后修改时间: 2023-03-28 10:16:14
  * @项目的路径: \CMS-components\packages\utils\validation.ts
  * @描述: 常用验证工具类方法
  */
@@ -14,7 +14,7 @@ export function chinaPhoneNumberValidate(phoneNumber: string): boolean {
 
 // 验证邮箱
 export function emailValidate(email: string): boolean {
-    return !!email && /^([a-zA-Z0-9_\\.\\-])+\\@(([a-zA-Z0-9\\-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(email.trim());
+    return !!email && /^([a-zA-Z0-9_\\.\\-])+@(([a-zA-Z0-9\\-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(email.trim());
 }
 
 // 中国身份证验证（支持香港、澳门、台湾）

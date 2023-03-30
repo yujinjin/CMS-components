@@ -51,7 +51,7 @@ description：一句话描述此次提交的主要内容，做到言简意赅。
 
 ```
 git commit -m 'feat(components): [action-bar]增加 xxx 功能'
-git commit -m 'bug(components): [action-bar]修复 xxx 功能'
+git commit -m 'fix(components): [action-bar]修复 xxx 功能'
 ```
 
 ### 4. 引用包说明

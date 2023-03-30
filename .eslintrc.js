@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2023-02-08 18:06:57
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-03-27 16:20:38
+ * @最后修改时间: 2023-03-30 14:10:01
  * @项目的路径: \CMS-components\.eslintrc.js
  * @描述: eslingt 配置
  */
@@ -101,7 +101,7 @@ module.exports = defineConfig({
         // 生产模式禁止出现空语句块
         "no-empty": "error",
         // 禁止重复导入(imports)
-        "no-duplicate-imports": "error",
+        // "no-duplicate-imports": "error",
         // 禁用 tab
         "no-tabs": "error",
         // 要求使用 === 和 !==
