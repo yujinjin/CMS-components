@@ -1,23 +1,24 @@
+<!-- eslint-disable vue/no-v-html -->
 <!--
  * @创建者: yujinjin9@126.com
  * @创建时间: 2023-03-10 17:31:21
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-03-21 16:13:32
+ * @最后修改时间: 2024-09-12 16:56:59
  * @项目的路径: \CMS-components\docs\.vitepress\theme\components\demo\source-code.vue
  * @描述: 示例源码
 -->
 <template>
     <div class="example-source-wrapper">
-        <div class="example-source language-vue" v-if="sources.length === 1" v-html="sources[index].highlightSourceHtml" />
-        <el-tabs v-else :model-value="index" @tab-change="tabChangeHandle" class="source-tabs">
-            <el-tab-pane v-for="(sourceItem, i) in sources" :label="sourceItem.path" :key="sourceItem.path" :name="i">
+        <div v-if="sources.length === 1" class="example-source language-vue" v-html="sources[index].highlightSourceHtml" />
+        <el-tabs v-else :model-value="index" class="source-tabs" @tab-change="tabChangeHandle">
+            <el-tab-pane v-for="(sourceItem, i) in sources" :key="sourceItem.path" :label="sourceItem.path" :name="i">
                 <div class="example-source" :class="['language-' + sourceItem.suffixName]" v-html="sourceItem.highlightSourceHtml" />
             </el-tab-pane>
         </el-tabs>
     </div>
 </template>
 <script setup lang="ts">
-import { PropType } from "vue";
+import type { PropType } from "vue";
 import type { Docs } from "/#/docs";
 
 defineProps({

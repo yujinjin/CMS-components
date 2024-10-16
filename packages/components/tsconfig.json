@@ -1,0 +1,10 @@
+{
+    "extends": "../../tsconfig.base.json",
+    "compilerOptions": {
+        "composite": true,
+        "sourceMap": true
+        // "types": ["webpack-env", "node", "element-plus/global"],
+        // "typeRoots": ["types"],
+    },
+    "include": ["../../typings", "./**/*"]
+}

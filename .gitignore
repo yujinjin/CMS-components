@@ -9,3 +9,5 @@ dist
 docs/.vitepress/cache
 
 .eslintcache
+
+pnpm-lock.yaml

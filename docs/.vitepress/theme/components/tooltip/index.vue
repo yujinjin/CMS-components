@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2023-03-23 14:00:21
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-03-23 18:07:15
+ * @最后修改时间: 2024-09-12 16:56:38
  * @项目的路径: \CMS-components\docs\.vitepress\theme\components\tooltip\index.vue
  * @描述: 提示信息组件，MD内容格式示例：^[Function]`(event: MouseEvent) => void`
 -->
@@ -30,8 +30,14 @@
 <script setup lang="ts">
 import { Warning } from "@element-plus/icons-vue";
 defineProps({
-    type: String,
-    details: String
+    type: {
+        type: String,
+        default: null
+    },
+    details: {
+        type: String,
+        default: null
+    }
 });
 </script>
 <style lang="scss" scoped>

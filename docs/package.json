@@ -1,24 +1,24 @@
 {
-    "name": "@cms-components/docs",
+    "name": "@yujinjin/cms-components-docs",
     "version": "0.1.0",
     "description": "docs",
     "private": true,
+    "type": "module",
     "scripts": {
-        "dev": "vitepress dev",
+        "dev": "vitepress dev --host 0.0.0.0",
         "build": "vitepress build",
-        "serve": "vitepress serve"
+        "preview": "vitepress preview"
     },
     "dependencies": {
-        "chalk": "^4.1.2",
         "escape-html": "^1.0.3",
         "prismjs": "^1.29.0",
-        "prism-theme-vars": "^0.2.3",
+        "prism-theme-vars": "^0.2.5",
         "consola": "^2.15.3",
-        "markdown-it": "^13.0.1",
-        "markdown-it-container": "^3.0.0",
-        "@vueuse/core": "^9.13.0"
+        "markdown-it": "^14.1.0",
+        "markdown-it-container": "^4.0.0",
+        "@vueuse/core": "^10.9.0"
     },
     "devDependencies": {
-        "vitepress": "^1.0.0-alpha.60"
+        "vitepress": "^1.2.2"
     }
 }

@@ -1,0 +1,12 @@
+{
+    "extends": "./tsconfig.base.json",
+    "compilerOptions": {
+        "composite": true,
+        "declaration": true,
+        "emitDeclarationOnly": true
+    },
+    "include": ["./packages/**/*"],
+    "exclude": ["./packages/scripts/**", "node_modules", "**/__tests__/**", "**/__demos__/**", "**/*.md", "./packages/components/vitest.config.ts"]
+    // "include": ["packages/**/*.ts", "packages/**/*.tsx", "packages/**/*.d.ts", "packages/**/*.vue"],
+    // "exclude": ["./packages/scripts/**", "node_modules", "**/__tests__/**", "**/__demos__/**", "**/*.md", "./packages/components/vitest.config.ts"]
+}

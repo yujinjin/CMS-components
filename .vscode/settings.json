@@ -1,11 +1,11 @@
 {
     "editor.formatOnSave": true,
-    "editor.formatOnType": false,
-    "editor.formatOnPaste": false,
+    "editor.formatOnType": true,
+    "editor.formatOnPaste": true,
     "editor.tabSize": 4,
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": true
+        "source.fixAll.eslint": "explicit"
     },
     "eslint.enable": true,
     "eslint.format.enable": true,
@@ -47,7 +47,7 @@
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "[typescript]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
+        "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
     },
     "[javascriptreact]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -63,5 +63,6 @@
     },
     "[json]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
-    }
+    },
+    "vitest.disableWorkspaceWarning": true
 }

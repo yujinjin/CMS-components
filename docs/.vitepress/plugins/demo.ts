@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2023-03-23 14:19:07
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-03-23 14:31:20
+ * @最后修改时间: 2024-09-12 15:56:32
  * @项目的路径: \CMS-components\docs\.vitepress\plugins\demo.ts
  * @描述: markdown 的demo 示例插件
  */
@@ -63,8 +63,7 @@ export default {
             return `<vp-demo sources="${encodeURIComponent(JSON.stringify(sourceFiles))}" mainVueFilePath="${encodeURIComponent(sourceFiles[0].path)}" description="${encodeURIComponent(
                 markdownItInstance.render(description)
             )}">`;
-        } else {
-            return "</vp-demo>";
         }
+        return "</vp-demo>";
     }
 };

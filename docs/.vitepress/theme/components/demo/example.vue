@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2023-03-10 17:31:02
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-03-20 14:32:36
+ * @最后修改时间: 2024-09-12 16:49:25
  * @项目的路径: \CMS-components\docs\.vitepress\theme\components\demo\example.vue
  * @描述: 示例
 -->
@@ -16,7 +16,8 @@
 <script setup lang="ts">
 defineProps({
     file: {
-        type: String
+        type: String,
+        default: null
     },
     demo: {
         type: Object,

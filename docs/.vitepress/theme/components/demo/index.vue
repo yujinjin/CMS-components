@@ -2,12 +2,13 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2023-03-10 17:30:23
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-03-22 16:34:22
+ * @最后修改时间: 2024-09-12 16:58:19
  * @项目的路径: \CMS-components\docs\.vitepress\theme\components\demo\index.vue
  * @描述: 示例组件
 -->
 <template>
     <ClientOnly>
+        <!-- eslint-disable-next-line vue/no-v-html -->
         <div class="describe-text" v-html="decodedDescription"></div>
         <div class="example">
             <Example :file="decodedMainVueFilePath" :demo="demoComponent" />
@@ -15,6 +16,11 @@
             <ElDivider style="margin: 0px" />
 
             <div class="op-btns">
+                <ElTooltip content="去 playground 运行" :show-arrow="false" :trigger="['hover', 'focus']" :trigger-keys="[]">
+                    <ElIcon :size="16" aria-label="去 playground 运行" class="op-btn" tabindex="0" role="button" @click="gotoPlaygroundPage">
+                        <i class="docs-icon-experiment" />
+                    </ElIcon>
+                </ElTooltip>
                 <ElTooltip content="复制代码" :show-arrow="false" :trigger="['hover', 'focus']" :trigger-keys="[]">
                     <ElIcon
                         :size="16"
@@ -39,7 +45,7 @@
             </div>
 
             <ElCollapseTransition>
-                <SourceCode v-show="sourceVisible" :sources="decodeSourceList" v-model:index="currentSourceIndex" />
+                <SourceCode v-show="sourceVisible" v-model:index="currentSourceIndex" :sources="decodeSourceList" />
             </ElCollapseTransition>
 
             <Transition name="el-fade-in-linear">
@@ -58,10 +64,10 @@ import { ref, computed } from "vue";
 import { ElMessage } from "element-plus";
 import { CaretTop } from "@element-plus/icons-vue";
 import type { ComputedRef } from "vue";
-import Example from "./example.vue";
-import SourceCode from "./source-code.vue";
 import type { Docs } from "/#/docs";
 import { useClipboard } from "@vueuse/core";
+import Example from "./example.vue";
+import SourceCode from "./source-code.vue";
 
 const props = defineProps({
     // 示例源码文件列表（Array JSON string）
@@ -76,7 +82,8 @@ const props = defineProps({
     },
     // 示例描述内容
     description: {
-        type: String
+        type: String,
+        default: ""
     }
 });
 
@@ -111,6 +118,11 @@ const decodeSourceList: ComputedRef<Docs.Source[]> = computed(() => {
 
 // 复制操作
 const { copy, isSupported } = useClipboard({ legacy: true });
+
+// 跳转演练场页面
+const gotoPlaygroundPage = function () {
+    // TODO: 去Playground页面
+};
 
 // 复制代码操作
 const copyCodeHandle = async function () {
