@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2023-03-10 17:30:23
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-09-12 16:58:19
+ * @最后修改时间: 2024-10-17 16:14:53
  * @项目的路径: \CMS-components\docs\.vitepress\theme\components\demo\index.vue
  * @描述: 示例组件
 -->
@@ -18,7 +18,7 @@
             <div class="op-btns">
                 <ElTooltip content="去 playground 运行" :show-arrow="false" :trigger="['hover', 'focus']" :trigger-keys="[]">
                     <ElIcon :size="16" aria-label="去 playground 运行" class="op-btn" tabindex="0" role="button" @click="gotoPlaygroundPage">
-                        <i class="docs-icon-experiment" />
+                        <i class="docs-icon-chemistry" />
                     </ElIcon>
                 </ElTooltip>
                 <ElTooltip content="复制代码" :show-arrow="false" :trigger="['hover', 'focus']" :trigger-keys="[]">

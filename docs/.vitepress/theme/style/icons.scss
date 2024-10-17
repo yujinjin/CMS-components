@@ -1,7 +1,10 @@
 @font-face {
     font-family: "docsicons";
     src: url("../fonts/icomoon.eot?r2rpcu");
-    src: url("../fonts/icomoon.eot?r2rpcu#iefix") format("embedded-opentype"), url("../fonts/icomoon.ttf?r2rpcu") format("truetype"), url("../fonts/icomoon.woff?r2rpcu") format("woff"),
+    src:
+        url("../fonts/icomoon.eot?r2rpcu#iefix") format("embedded-opentype"),
+        url("../fonts/icomoon.ttf?r2rpcu") format("truetype"),
+        url("../fonts/icomoon.woff?r2rpcu") format("woff"),
         url("../fonts/icomoon.svg?r2rpcu#icomoon") format("svg");
     font-weight: normal;
     font-style: normal;
@@ -24,7 +27,7 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
-.docs-icon-experiment:before {
+.docs-icon-chemistry:before {
     content: "\e900";
 }
 .docs-icon-code:before {
