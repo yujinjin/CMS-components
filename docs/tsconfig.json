@@ -10,5 +10,6 @@
         // "types": ["webpack-env", "node", "element-plus/global"],
         // "typeRoots": ["typings"]
     },
-    "include": ["../typings", ".vitepress/**/*"]
+    "include": ["../typings", "./**/*"]
+    // "include": ["typings", "src/**/*", "src/**/*.vue", "docs/**/*", "docs/**/*.vue"]
 }
