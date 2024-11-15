@@ -189,7 +189,7 @@ const { ElementPlusResolver } = require('unplugin-vue-components/resolvers'); //
 -   2.@rollup/plugin-node-resolve
     用途: 用于解析 node_modules 中第三方模块
 
-#### TODO: 当前正在进行的开发-build脚本编写
+#### TODO: 研究为什么element-plus组件明明没有定义defineExpose，但ref实例还能为啥能获取到所有的属性（比如：$data、$el）
 
 ##### 参考资料如下：
 
@@ -207,3 +207,20 @@ const { ElementPlusResolver } = require('unplugin-vue-components/resolvers'); //
 -   [eslint中文文档](https://eslint.nodejs.cn/docs/latest/rules/strict)
 -   [typescript-eslint 官网](https://typescript-eslint.io/)
 -   [typescript-eslint 中文](https://typescript.eslint.org.cn/)
+
+### 7. 增加一个组件的开发步骤
+
+-   1.开发一个组件(packages/components)
+
+    -   1. 定义组件所用到的props、emits等相关实例(/:name/src/:name.ts)
+    -   2. 定义组件内容(/:name/src/:name.vue)
+    -   3. 定义组件的入口文件(/:name/index.ts)
+    -   4. 编写组件的测试文件(/:name/**tests**/:name.test.tsx)
+    -   5. 入口文件导出组件(/index.ts)
+
+-   2.组件库入口文件引入组件(packages/main/components.ts)
+
+-   3.docs:
+    -   1.组件的vue示例代码(/examples/)
+    -   2.编写组件的MD文档(/pages/)
+    -   3.配置文档的路由地址(/.vitepress/config.ts)

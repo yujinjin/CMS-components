@@ -2,13 +2,13 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2023-03-23 14:19:07
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-10-17 14:47:15
+ * @最后修改时间: 2024-10-25 16:32:53
  * @项目的路径: \CMS-components\docs\.vitepress\plugins\demo.ts
  * @描述: markdown 的demo 示例插件
  */
 import path from "path";
 import fs from "fs";
-import type { MarkdownRenderer } from "vitepress";
+import { type MarkdownRenderer } from "vitepress";
 
 export default function (markdownRenderer: MarkdownRenderer) {
     return {

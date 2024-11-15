@@ -6,5 +6,5 @@
         // "types": ["webpack-env", "node", "element-plus/global"],
         // "typeRoots": ["types"],
     },
-    "include": ["../../typings", "./**/*"]
+    "include": ["../../typings", "./**/*", "../utils/index.ts"]
 }

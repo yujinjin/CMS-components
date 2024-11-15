@@ -2,13 +2,13 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2023-03-20 14:04:22
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-03-20 16:04:20
+ * @最后修改时间: 2024-10-25 17:17:05
  * @项目的路径: \CMS-components\docs\typings\docs.d.ts
  * @描述: 文档命名空间
  */
-export namespace Docs {
+declare namespace Docs {
     /** 源码文件 */
-    export interface Source {
+    interface Source {
         /** 源码文件路径 */
         path: string;
 

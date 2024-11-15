@@ -2,13 +2,20 @@
 @use "./element-variables.scss";
 @use "./icons.scss";
 
-.doc-content > div .vp-table {
+:root {
+    --vp-c-brand-1: rgb(0 184 92);
+    --vp-c-brand-2: rgb(6 195 118);
+    --vp-c-brand-3: rgb(38 207 119);
+}
+
+.vp-doc .vp-table {
     width: 100%;
     overflow-y: hidden;
     overflow-x: auto;
     margin-bottom: 45px;
 
     & > table {
+        display: table;
         border-collapse: collapse;
         width: 100%;
         background-color: var(--bg-color);

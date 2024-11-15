@@ -5,7 +5,7 @@
         "sourceMap": true,
         "baseUrl": ".",
         "paths": {
-            "/#/*": ["typings/*"]
+            "/#/*": ["./typings/*"]
         }
         // "types": ["webpack-env", "node", "element-plus/global"],
         // "typeRoots": ["typings"]

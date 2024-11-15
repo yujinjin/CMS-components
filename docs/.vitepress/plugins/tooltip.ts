@@ -2,13 +2,13 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2023-03-23 14:19:34
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-03-23 14:46:31
+ * @最后修改时间: 2024-11-07 16:35:46
  * @项目的路径: \CMS-components\docs\.vitepress\plugins\tooltip.ts
  * @描述: markdown 的提示插件
  */
-import type MarkdownIt from "markdown-it";
+import { type MarkdownRenderer } from "vitepress";
 
-export default (md: MarkdownIt): void => {
+export default (md: MarkdownRenderer): void => {
     md.renderer.rules.tooltip = (tokens, idx) => {
         const token = tokens[idx];
 

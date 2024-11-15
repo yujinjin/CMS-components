@@ -3,7 +3,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2023-03-10 17:31:21
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-09-12 16:56:59
+ * @最后修改时间: 2024-10-25 17:07:14
  * @项目的路径: \CMS-components\docs\.vitepress\theme\components\demo\source-code.vue
  * @描述: 示例源码
 -->
@@ -18,8 +18,8 @@
     </div>
 </template>
 <script setup lang="ts">
-import type { PropType } from "vue";
-import type { Docs } from "/#/docs";
+import { type PropType } from "vue";
+import { type Docs } from "/#/docs";
 
 defineProps({
     sources: {

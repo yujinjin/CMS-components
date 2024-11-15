@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2023-03-10 17:30:23
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-10-17 16:14:53
+ * @最后修改时间: 2024-11-11 14:56:25
  * @项目的路径: \CMS-components\docs\.vitepress\theme\components\demo\index.vue
  * @描述: 示例组件
 -->
@@ -63,8 +63,8 @@
 import { ref, computed } from "vue";
 import { ElMessage } from "element-plus";
 import { CaretTop } from "@element-plus/icons-vue";
-import type { ComputedRef } from "vue";
-import type { Docs } from "/#/docs";
+import { type ComputedRef } from "vue";
+import { type Docs } from "/#/docs";
 import { useClipboard } from "@vueuse/core";
 import Example from "./example.vue";
 import SourceCode from "./source-code.vue";

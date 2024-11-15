@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2024-07-30 16:08:36
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-10-16 14:08:32
+ * @最后修改时间: 2024-10-31 20:05:47
  * @项目的路径: \CMS-components\packages\scripts\src\tasks\build-libs.ts
  * @描述: 合并打包 esm模块和umd模块
  */
@@ -87,7 +87,7 @@ const buildLib = async function (minify: boolean, banner: string) {
             banner
         })
     ]);
-    console.success("  完成-----合并打包" + (minify ? +" 压缩" : " 非压缩") + "esm模块和umd模块");
+    console.success("  完成-----合并打包" + (minify ? " 压缩" : " 非压缩") + "esm模块和umd模块");
 };
 
 /**

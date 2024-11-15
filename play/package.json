@@ -4,8 +4,11 @@
     "description": "play",
     "private": true,
     "scripts": {
-        "dev": "vite",
-        "build": "vue-tsc --noEmit && vite build",
-        "preview": "vite preview"
+        "dev": "vite"
+    },
+    "dependencies": {
+        "@yujinjin/cms-components": "workspace:*",
+        "vue-router": "^4.4.5",
+        "clipboard": "^2.0.11"
     }
 }

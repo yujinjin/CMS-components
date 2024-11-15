@@ -48,7 +48,7 @@ export default tseslint.config(
             ...eslintPluginImportX.configs.recommended.rules,
             "import-x/no-unresolved": "off",
             "import-x/order": "error",
-            "import-x/consistent-type-specifier-style": "error",
+            "import-x/consistent-type-specifier-style": ["error", "prefer-inline"],
             "import-x/namespace": "off"
             // "import-x/named": "off"
         }
@@ -181,7 +181,7 @@ export default tseslint.config(
             "@typescript-eslint/no-unused-vars": "off"
         }
     },
-    /** 但愿测试 配置 */
+    /** 单元测试 配置 */
     {
         files: ["**/__tests__/**"],
         plugins: {

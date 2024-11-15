@@ -80,6 +80,9 @@ npm install --save @yujinjin/cms-components
 │   │   ├── component.ts  (所有的组件库（插件）集合列表)
 │   │   ├── index.ts
 │   │   └── package.json (name: @yujinjin/cms-components)
+│   ├── utils (工具库)
+│   │   ├── index.ts
+│   │   └── package.json (name: @yujinjin/cms-components-utils)
 │   ├── scripts (脚本)
 │   │   ├── tasks
 │   │   │   └── index.ts

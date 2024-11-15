@@ -1,0 +1,6 @@
+{
+    "name": "@yujinjin/cms-components-utils",
+    "private": true,
+    "license": "MIT",
+    "main": "index.ts"
+}
