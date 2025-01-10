@@ -3,7 +3,7 @@
     "compilerOptions": {
         "composite": true,
         "sourceMap": true
-        // "types": ["webpack-env", "node", "element-plus/global"],
+        // "types": ["node", "jsdom", "unplugin-vue-macros/macros-global"]
         // "typeRoots": ["types"],
     },
     "include": ["../../typings", "./**/*", "../utils/index.ts"]

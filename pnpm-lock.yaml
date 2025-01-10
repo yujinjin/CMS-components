@@ -20,6 +20,9 @@ importers:
       '@yujinjin/cms-components-utils':
         specifier: workspace:*
         version: link:packages/utils
+      '@yujinjin/utils':
+        specifier: ^0.0.3
+        version: 0.0.3
       element-plus:
         specifier: ^2.8.7
         version: 2.8.7(vue@3.5.12(typescript@5.6.3))
@@ -1590,6 +1593,9 @@ packages:
 
   '@vueuse/shared@9.13.0':
     resolution: {integrity: sha512-UrnhU+Cnufu4S6JLCPZnkWh0WwZGUp72ktOF2DFptMlOs3TOdVv8xJN53zhHGARmVOsz5KqOls09+J1NR6sBKw==}
+
+  '@yujinjin/utils@0.0.3':
+    resolution: {integrity: sha512-mS2+o/G1tR2jbL4P0yYDGz1K91YFZcX1sUFM57TVWkGQtVX8+Oj0h1ij4PPZ8jSK1sbVCTWwuzPcdjyadB0COQ==}
 
   JSONStream@1.3.5:
     resolution: {integrity: sha512-E+iruNOY8VV9s4JEbe1aNEm6MiszPRr/UfcHMz0TQh1BXSxHK+ASV1R6W4HpjBhSeS+54PIsAMCBmwD06LLsqQ==}
@@ -6218,6 +6224,8 @@ snapshots:
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
+
+  '@yujinjin/utils@0.0.3': {}
 
   JSONStream@1.3.5:
     dependencies:

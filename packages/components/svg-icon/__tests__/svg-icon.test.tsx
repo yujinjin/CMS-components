@@ -10,7 +10,7 @@ import { mount } from "@vue/test-utils";
 import { describe, expect, test } from "vitest";
 import SvgIcon from "../src/svg-icon.vue";
 
-describe("svg-icon.vue", () => {
+describe("SvgIcon", () => {
     test("render test & class", () => {
         const wrapper = mount(() => <SvgIcon value="" />);
         expect(wrapper.find("i").classes()).toContain("icon");

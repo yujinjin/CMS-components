@@ -41,7 +41,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { type Router, useRouter } from "vue-router";
-import { CircleCheck, Notification } from "@element-plus/icons-vue";
+import { CircleCheck, Notification, PictureFilled, EditPen, Grid } from "@element-plus/icons-vue";
 
 const router: Router = useRouter();
 
@@ -64,6 +64,24 @@ const menuDataList = [
         //         path: "/check-select/example1"
         //     }
         // ]
+    },
+    {
+        name: "img-upload",
+        title: "img-upload组件",
+        icon: PictureFilled,
+        path: "/img-upload"
+    },
+    {
+        name: "input-field",
+        title: "input-field组件",
+        icon: EditPen,
+        path: "/input-field"
+    },
+    {
+        name: "data-table",
+        title: "data-table组件",
+        icon: Grid,
+        path: "/data-table"
     }
 ];
 
@@ -144,5 +162,21 @@ body {
             position: relative;
         }
     }
+}
+
+/*滚动条整体样式*/
+::-webkit-scrollbar {
+    width: 6px; /*竖向滚动条的宽度*/
+    height: 6px; /*横向滚动条的高度*/
+}
+::-webkit-scrollbar-thumb {
+    /*滚动条里面的小方块*/
+    background: #ddd;
+    border-radius: 5px;
+}
+::-webkit-scrollbar-track {
+    /*滚动条轨道的样式*/
+    background: #fafafa;
+    border-radius: 5px;
 }
 </style>

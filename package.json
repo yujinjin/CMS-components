@@ -23,6 +23,7 @@
         "vue": "^3.4.30",
         "element-plus": "^2.8.7",
         "@element-plus/icons-vue": "^2.3.1",
+        "@yujinjin/utils": "^0.0.3",
         "@yujinjin/cms-components-modules": "workspace:*",
         "@yujinjin/cms-components": "workspace:*",
         "@yujinjin/cms-components-utils": "workspace:*"

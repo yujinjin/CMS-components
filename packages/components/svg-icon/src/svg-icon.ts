@@ -7,8 +7,9 @@
  * @描述: svg icon
  */
 
-import { type ExtractPropTypes } from "vue";
+import { type ExtractPublicPropTypes } from "vue";
 import { buildProps } from "@yujinjin/cms-components-utils";
+import { type NotReadonly } from "/#/global";
 
 export const svgIconProps = buildProps({
     // svg的link名称
@@ -19,4 +20,4 @@ export const svgIconProps = buildProps({
     }
 });
 
-export type SvgIconProps = ExtractPropTypes<typeof svgIconProps>;
+export type SvgIconProps = NotReadonly<ExtractPublicPropTypes<typeof svgIconProps>>;

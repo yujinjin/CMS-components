@@ -1,4 +1,5 @@
 {
-    "files": [],
-    "references": [{ "path": "play/tsconfig.json" }]
+    "extends": "./tsconfig.base.json",
+    "compilerOptions": {},
+    "include": ["typings"]
 }

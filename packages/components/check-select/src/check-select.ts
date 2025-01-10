@@ -6,8 +6,9 @@
  * @项目的路径: \CMS-components\packages\components\check-select\src\check-select.ts
  * @描述: checkselect 组件
  */
-import { type PropType, type ExtractPropTypes } from "vue";
+import { type PropType, type ExtractPublicPropTypes } from "vue";
 import { buildProps } from "@yujinjin/cms-components-utils";
+import { type NotReadonly } from "/#/global";
 
 export const checkSelectProps = buildProps({
     data: {
@@ -32,7 +33,7 @@ export const checkSelectProps = buildProps({
     }
 });
 
-export type CheckSelectProps = ExtractPropTypes<typeof checkSelectProps>;
+export type CheckSelectProps = NotReadonly<ExtractPublicPropTypes<typeof checkSelectProps>>;
 
 export const checkSelectEmits = {
     change: (value: Array<object | string | number>) => Array.isArray(value)

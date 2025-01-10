@@ -11,7 +11,7 @@ import { mount } from "@vue/test-utils";
 import { describe, expect, test } from "vitest";
 import SelectCheck from "../src/check-select.vue";
 
-describe("SelectCheck", () => {
+describe("CheckSelect", () => {
     test("render test & class", async () => {
         const values = ref(["1", "2", "3", "4"]);
         const data = ["1", "2", "3", "4"];

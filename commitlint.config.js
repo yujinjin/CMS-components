@@ -2,16 +2,20 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2023-02-07 10:49:32
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-09-12 16:15:12
+ * @最后修改时间: 2025-01-10 17:26:18
  * @项目的路径: \CMS-components\commitlint.config.js
  * @描述: git commit 检查配置文件
+ * @示例: 1.feat(components): [action-bar]增加 xxx 功能
+ *        2.fix(components): [action-bar]修复 xxx 功能
+ *        3.chore(all): 项目框架搭建
+ *        4.chore(docs): vitepress文档框架构建优化
  */
 export default {
     extends: ["@commitlint/config-conventional"],
     // rule配置说明：rule由name和配置数组组成，如：'name:[0, 'always', 72]'，数组中第一位为level，可选0,1,2，0为disable，1为warning，2为error，第二位为应用与否，可选always|never，第三位该rule的值。
     rules: {
         // scope的枚举值
-        "scope-enum": [2, "always", ["components", "http", "docs", "play", "all"]],
+        "scope-enum": [2, "always", ["components", "playground", "docs", "play", "all"]],
         // 改变预设中的提交类型
         "type-enum": [2, "always", ["feat", "ui", "fix", "docs", "style", "refactor", "build", "ci", "perf", "chore", "revert", "test"]],
         // body 以空行开始

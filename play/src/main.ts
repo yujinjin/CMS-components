@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2023-03-08 16:37:12
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-11-06 14:28:30
+ * @最后修改时间: 2024-11-19 16:20:55
  * @项目的路径: \CMS-components\play\src\main.ts
  * @描述: 入口页
  */
@@ -27,6 +27,21 @@ const router: Router = createRouter({
             path: "/check-select",
             name: "check-select",
             component: () => import("./check-select/example1.vue")
+        },
+        {
+            path: "/img-upload",
+            name: "img-upload",
+            component: () => import("./img-upload/example1.vue")
+        },
+        {
+            path: "/input-field",
+            name: "input-field",
+            component: () => import("./input-field/example1.vue")
+        },
+        {
+            path: "/data-table",
+            name: "data-table",
+            component: () => import("./data-table/example1.vue")
         }
     ],
     scrollBehavior: () => ({ left: 0, top: 0 }),

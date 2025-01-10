@@ -4,12 +4,10 @@
         "composite": true,
         "sourceMap": true,
         "baseUrl": ".",
+        "types": ["node", "element-plus/global"],
         "paths": {
-            "/#/*": ["./typings/*"]
+            "/#/*": ["./*"]
         }
-        // "types": ["webpack-env", "node", "element-plus/global"],
-        // "typeRoots": ["typings"]
     },
-    "include": ["../typings", "./**/*"]
-    // "include": ["typings", "src/**/*", "src/**/*.vue", "docs/**/*", "docs/**/*.vue"]
+    "include": ["examples", ".vitepress/**/*", "pages", "global.d.ts", "../typings"]
 }
