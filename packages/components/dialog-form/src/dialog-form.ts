@@ -2,11 +2,11 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2025-01-08 15:00:06
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2025-01-10 11:15:34
+ * @最后修改时间: 2025-01-15 11:38:36
  * @项目的路径: \CMS-components\packages\components\dialog-form\src\dialog-form.ts
  * @描述: dialog-form组件属性、事件声明
  */
-import { type PropType, type ExtractPublicPropTypes } from "vue";
+import { type PropType, type ExtractPublicPropTypes, type Component } from "vue";
 import { type FormValidateCallback, type FormValidationResult, type ButtonProps, type DialogProps, type FormInstance } from "element-plus";
 import { type NotReadonly } from "/#/global";
 import { buildProps } from "@yujinjin/cms-components-utils";
@@ -20,23 +20,30 @@ export type DialogFormButton = NotReadonly<Partial<ButtonProps>> & {
     /** 按钮文案内容 */
     contents?: string;
 
+    /** 自定义图标 */
+    customIcon?: string | Component;
+
     /** 自定义插槽名称（如有值其他选项无效） */
     slot?: string;
 
     /** 按钮是否正在加载 */
     // isLoading?: boolean;
 
-    /** 是否显示*/
+    /** 是否显示（如果不想销毁当前组件数据可以使用此属性） */
     isShow?: boolean;
 
     /** 按钮点击函数事件（注入：返回false或者异常不会自动关闭弹窗） */
-    click?: (inputFormValue: Record<string, any>, formRef: FormInstance | null, button: DialogFormButton) => Promise<void | boolean>;
+    click?: (inputFormValue: Record<string, any>, formRef: FormInstance | null, button: DialogFormButton) => Promise<void | boolean> | void | boolean;
+};
+
+export type DialogFormButtonSlotScope = {
+    button: DialogFormButton;
 };
 
 export const dialogFormProps = buildProps({
     isShow: {
         type: Boolean,
-        default: false
+        default: true
     },
     dialogProps: {
         type: Object as PropType<Partial<NotReadonly<DialogProps>>>

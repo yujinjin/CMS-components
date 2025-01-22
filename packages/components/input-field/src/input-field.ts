@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2024-12-19 17:33:09
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2025-01-10 11:01:10
+ * @最后修改时间: 2025-01-16 20:21:27
  * @项目的路径: \CMS-components\packages\components\input-field\src\input-field.ts
  * @描述: 表单输入字段组件声明
  */
@@ -12,8 +12,6 @@ import { type NotReadonly } from "/#/global";
 
 type FieldType =
     | "input"
-    | "textarea"
-    | "password"
     | "select"
     | "selectV2"
     | "checkSelect"
@@ -40,7 +38,8 @@ export const inputFieldProps = buildProps({
     },
     /** 组件的类型 */
     type: {
-        type: String as PropType<FieldType>
+        type: String as PropType<FieldType>,
+        default: "input"
     },
     /** 组件的数值 */
     modelValue: {

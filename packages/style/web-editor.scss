@@ -1,0 +1,19 @@
+// @use "quill/dist/quill.snow.css";
+
+.cms-web-editor-container {
+    width: 100%;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+
+    .web-editor {
+        width: 100%;
+        flex: 1;
+        overflow-y: auto;
+    }
+
+    .ql-toolbar.ql-snow {
+        width: 100%;
+    }
+}

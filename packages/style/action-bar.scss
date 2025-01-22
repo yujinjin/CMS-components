@@ -1,0 +1,16 @@
+.cms-action-bar-panel {
+    padding: 16px 16px 0px;
+    display: flex;
+    align-items: center;
+
+    .buttons-panel {
+        flex: 1;
+        .el-button {
+            min-width: 80px;
+
+            + .el-button {
+                margin-left: 6px;
+            }
+        }
+    }
+}

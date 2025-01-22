@@ -2,12 +2,12 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2024-12-30 09:51:01
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-12-30 18:00:46
+ * @最后修改时间: 2025-01-21 17:13:23
  * @项目的路径: \CMS-components\packages\components\data-table\src\table-column-date.vue
  * @描述: 日期格式化数据列
 -->
 <template>
-    <div class="table-column-date">{{ dateText }}</div>
+    <div class="cms-table-column-date">{{ dateText }}</div>
 </template>
 <script setup lang="ts">
 import { computed } from "vue";

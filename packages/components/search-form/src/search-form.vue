@@ -2,20 +2,22 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2025-01-06 19:28:46
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2025-01-08 16:06:50
+ * @最后修改时间: 2025-01-21 10:47:02
  * @项目的路径: \CMS-components\packages\components\search-form\src\search-form.vue
  * @描述: 搜索表单
 -->
 <template>
-    <div class="search-panel" :class="{ collapse: !collapseStatus }" :style="{ paddingRight: collapseStatus ? '' : buttonBoxWidth + 'px' }">
+    <div class="cms-search-panel" :class="{ collapse: !collapseStatus }" :style="{ paddingRight: collapseStatus ? '' : buttonBoxWidth + 'px' }">
         <template v-for="(field, index) in formFields" :key="(field.name || '') + '_' + index">
             <div v-if="field.isShow !== false" class="field-box">
                 <div v-if="field.label" class="label-text" :style="{ width: (field.labelWidth || labelWidth) + 'px' }">{{ field.label }}{{ labelSuffix }}</div>
-                <search-field v-model="field.value" v-bind="field" :style="{ width: (field.inputWidth || inputWidth) + 'px' }" @change="changeHandle(field)">
-                    <template v-if="field.slot">
-                        <slot :name="field.slot" :field="field" :form-fields="formFields"></slot>
-                    </template>
-                </search-field>
+                <div class="input-box" :style="{ width: (field.inputWidth || inputWidth) + 'px' }">
+                    <search-field v-model="field.value" v-bind="field" @change="changeHandle(field)">
+                        <template v-if="field.slot">
+                            <slot :name="field.slot" :field="field" :form-fields="formFields"></slot>
+                        </template>
+                    </search-field>
+                </div>
             </div>
         </template>
         <!-- 占位 -->
@@ -32,16 +34,20 @@
 </template>
 
 <script setup lang="ts">
-import { type Ref, onMounted, ref, watch, nextTick } from "vue";
+import { type Ref, onMounted, ref, markRaw, watch, nextTick } from "vue";
 import { ElButton } from "element-plus";
-import { setObjectProperty, extend } from "@yujinjin/utils";
-import { type SearchFormButton, type SearchFormField, type SearchFormRef, searchFormProps, searchFormEmits } from "./search-form";
+import { setObjectProperty, extend, dateFormat } from "@yujinjin/utils";
+import { type SearchFormButton, type SearchFormField, type SearchFormRef, type SearchFormSlotScope, searchFormProps, searchFormEmits } from "./search-form";
 import { SEARCH_FORM_FIELD_DEFAULT_ATTRIBUTES } from "./constants";
 import { SearchField } from "@yujinjin/cms-components-modules/search-field";
 
 defineOptions({
     name: "SearchForm"
 });
+
+defineSlots<{
+    [key: string]: (props: SearchFormSlotScope) => any;
+}>();
 
 const props = defineProps(searchFormProps);
 
@@ -53,7 +59,7 @@ const emits = defineEmits(searchFormEmits);
 const formFields: Ref<SearchFormField[]> = ref([]);
 
 // 扩展按钮列表
-const extendButtons: Ref<SearchFormButton[]> = ref([]);
+const extendButtons = ref<SearchFormButton[]>([]);
 
 // 展开状态
 const collapseStatus: Ref<boolean> = ref(true);
@@ -85,6 +91,9 @@ const generateFormFields = function () {
             }
             if (newField.type === "datePicker") {
                 newField.props = Object.assign({}, SEARCH_FORM_FIELD_DEFAULT_ATTRIBUTES[newField.type][newField.props.type || "date"], newField.props);
+                if (newField.defaultValue && newField.props.valueFormat) {
+                    newField.value = dateFormat(newField.defaultValue, newField.props.valueFormat);
+                }
             } else {
                 if (!newField.props.placeholder) {
                     newField.props.placeholder = (SEARCH_FORM_FIELD_DEFAULT_ATTRIBUTES[newField.type].placeholder || "") + (newField.label || "");
@@ -104,7 +113,11 @@ const generateExtendButtons = function () {
         return [];
     }
     props.buttons.forEach(button => {
-        extendButtons.value.push(extend(true, { loading: false }, button));
+        button = Object.assign({ loading: false }, button);
+        if (button.icon && typeof button.icon === "object") {
+            button.icon = markRaw(button.icon);
+        }
+        extendButtons.value.push(button);
     });
 };
 
@@ -138,7 +151,7 @@ const searchHandle = function () {
 const resetHandle = function () {
     props.fields.forEach((field, index) => {
         if (Object.prototype.hasOwnProperty.call(field, "defaultValue")) {
-            formFields.value[index].value = field.defaultValue;
+            formFields.value[index].value = formFields.value[index].props?.valueFormat ? dateFormat(field.defaultValue, formFields.value[index].props?.valueFormat) : field.defaultValue;
         } else if (Object.prototype.hasOwnProperty.call(field, "value")) {
             formFields.value[index].value = field.value;
         } else {
@@ -213,92 +226,3 @@ defineExpose<SearchFormRef>({
     getValue: getSearchFormValue
 });
 </script>
-
-<style lang="scss" scoped>
-.search-panel {
-    --el-component-size: 28px;
-    --el-input-icon-color: #babac2;
-    --el-text-color-regular: #595959;
-    padding: 8px 0px;
-    display: flex;
-    flex-wrap: wrap;
-    border-bottom: 1px solid #ebebeb;
-    font-size: 12px;
-    color: #595959;
-    position: relative;
-
-    &.collapse {
-        height: 60px;
-        overflow: hidden;
-    }
-
-    .field-box {
-        display: flex;
-        padding: 8px 0px;
-
-        .label-text {
-            text-align: right;
-            line-height: 28px;
-        }
-        .input-box {
-            flex: 1;
-
-            :deep(.el-range-separator) {
-                color: #bfbfbf;
-            }
-
-            :deep(.el-radio) {
-                height: 28px;
-            }
-
-            :deep(.el-input-number) {
-                .el-input__inner {
-                    text-align: left;
-                }
-            }
-
-            :deep(.el-date-editor) {
-                --el-date-editor-daterange-width: 220px;
-            }
-
-            :deep(.el-switch) {
-                height: 28px;
-            }
-        }
-    }
-
-    .placeholder-button-box {
-        height: 44px;
-    }
-
-    .button-box {
-        padding: 8px 25px;
-        position: absolute;
-        right: 0px;
-        bottom: 8px;
-        z-index: 1;
-
-        // &.placeholder::after {
-        //     content: "";
-        //     left: 0px;
-        //     right: 0px;
-        //     top: 0px;
-        //     bottom: 0px;
-        //     z-index: 1;
-        // }
-
-        .el-button {
-            height: 28px;
-            width: 72px;
-
-            &.is-link {
-                width: auto;
-            }
-
-            + .el-button {
-                margin-left: 8px;
-            }
-        }
-    }
-}
-</style>

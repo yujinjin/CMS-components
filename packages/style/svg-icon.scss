@@ -1,11 +1,16 @@
-i.icon {
+i.cms-icon {
     display: inline-block;
 
     .svg-icon {
-        width: 1em;
         height: 1em;
-        vertical-align: -0.15em;
+        width: 1em;
+        line-height: 1em;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
         fill: currentColor;
-        overflow: hidden;
+        color: var(--color);
+        font-size: inherit;
     }
 }

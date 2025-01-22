@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2024-08-02 17:29:02
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-09-26 16:23:37
+ * @最后修改时间: 2025-01-22 15:19:53
  * @项目的路径: \CMS-components\packages\scripts\src\generate-styles.ts
  * @描述: 生成样式任务
  */
@@ -21,7 +21,11 @@ function buildStyle() {
     const sass = gulpSass(dartSass);
 
     return src(COMPONENTS_STYLE_ROOT + "/**/*.scss")
-        .pipe(sass.sync())
+        .pipe(
+            sass.sync({
+                importers: [new dartSass.NodePackageImporter()]
+            })
+        )
         .pipe(autoprefixer({ cascade: false }))
         .pipe(minifyCss())
         .pipe(dest(BUILD_STYLE_ROOT));

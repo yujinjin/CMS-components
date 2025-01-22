@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2025-01-08 14:59:51
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2025-01-09 11:50:41
+ * @最后修改时间: 2025-01-15 15:03:39
  * @项目的路径: \CMS-components\packages\components\dialog-form\__tests__\dialog-form.test.tsx
  * @描述: dialog-form组件测试用例
  */
@@ -122,7 +122,8 @@ describe("DialogForm", () => {
                     isShow: true
                 },
                 slots: {
-                    text: '<div class="custom-slot">Custom Slot Content</div>'
+                    text: '<div class="custom-slot">Custom Slot Content</div>',
+                    default: ""
                 },
                 global: {
                     plugins: [ElLoading]

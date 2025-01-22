@@ -1,0 +1,28 @@
+.cms-table-column-action {
+    display: flex;
+    align-items: center;
+
+    i.icomoon-more {
+        font-size: 24px;
+        color: #babac2;
+        cursor: pointer;
+    }
+
+    .el-button {
+        height: 28px;
+
+        + .el-button {
+            margin-left: 6px;
+        }
+    }
+}
+
+.el-popper.cms-custom-action-dropdown {
+    min-width: 80px;
+
+    .el-dropdown-menu__item {
+        font-size: 12px;
+        font-weight: 400;
+        color: #595959;
+    }
+}

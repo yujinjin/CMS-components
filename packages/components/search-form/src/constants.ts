@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2025-01-07 10:52:30
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2025-01-07 11:08:58
+ * @最后修改时间: 2025-01-22 11:42:51
  * @项目的路径: \CMS-components\packages\components\search-form\src\constants.ts
  * @描述: search-form组件常量集合
  */
@@ -65,21 +65,30 @@ export const SEARCH_FORM_FIELD_DEFAULT_ATTRIBUTES = {
             type: "datetimerange",
             startPlaceholder: "开始日期时间",
             endPlaceholder: "结束日期时间",
+            name: null,
             valueFormat: "YYYY-MM-DD HH:mm:ss",
-            rangeSeparator: "-"
+            rangeSeparator: "-",
+            style: {
+                width: "250px"
+            }
         },
         daterange: {
             type: "daterange",
             startPlaceholder: "开始日期",
             endPlaceholder: "结束日期",
             valueFormat: "YYYY-MM-DD",
-            rangeSeparator: " - "
+            name: null,
+            rangeSeparator: " - ",
+            style: {
+                width: "200px"
+            }
         },
         monthrange: {
             type: "monthrange",
             startPlaceholder: "开始月份",
             endPlaceholder: "结束月份",
             valueFormat: "YYYY-MM",
+            name: null,
             rangeSeparator: "-"
         }
     }

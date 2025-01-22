@@ -1,5 +1,13 @@
+<!--
+ * @创建者: yujinjin9@126.com
+ * @创建时间: 2024-12-20 14:55:48
+ * @最后修改作者: yujinjin9@126.com
+ * @最后修改时间: 2025-01-21 17:40:42
+ * @项目的路径: \CMS-components\packages\components\web-editor\src\web-editor.vue
+ * @描述: web-editor 富文本框
+-->
 <template>
-    <div class="web-editor-container">
+    <div class="cms-web-editor-container">
         <div ref="webEditorRef" class="web-editor"></div>
         <input v-show="false" ref="inputFileRef" type="file" accept="image/*" @change="imgFileChangeHandle" />
         <slot></slot>
@@ -9,13 +17,16 @@
 import { onMounted, ref, watch, inject, type Ref } from "vue";
 import { type FormItemContext, type FormContext, formItemContextKey, formContextKey } from "element-plus";
 import Quill from "quill";
-import "quill/dist/quill.snow.css";
 import { debounce } from "@yujinjin/utils";
 import { webEditorProps, webEditorEmits } from "./web-editor";
 
 defineOptions({
     name: "WebEditor"
 });
+
+defineSlots<{
+    default(): any;
+}>();
 
 const props = defineProps(webEditorProps);
 
@@ -39,12 +50,12 @@ let quillInstance;
 // 输入内容变化操作
 const textChangeHandle = debounce(() => {
     emits("update:modelValue", quillInstance.getSemanticHTML());
-    elFormItem?.validate?.("change");
+    elFormItem?.validate?.("change", quillInstance.getSemanticHTML());
 }, 300);
 
 // 图片文件选择变化
 const imgFileChangeHandle = async function (e) {
-    const img = (await props.onImgUpload!({ file: e.target.files[0] })) as string;
+    const img = (await props.onImgUpload!(e.target.files[0])) as string;
     //图片上传成功之后的回调
     let range = quillInstance.getSelection();
     if (!range) {
@@ -102,21 +113,3 @@ onMounted(() => {
     initQuill();
 });
 </script>
-<style lang="less" scoped>
-.web-editor-container {
-    width: 100%;
-    min-height: 200px;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-
-    .web-editor {
-        width: 100%;
-        flex: 1;
-    }
-
-    .ql-toolbar.ql-snow {
-        width: 100%;
-    }
-}
-</style>

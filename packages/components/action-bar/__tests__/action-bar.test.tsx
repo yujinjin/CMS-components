@@ -15,7 +15,7 @@ describe("ActionBar", () => {
         {
             contents: "Button 2",
             handleCode: "btn2",
-            icon: "el-icon-edit",
+            customIcon: "el-icon-edit",
             click: vi.fn()
         },
         {

@@ -2,12 +2,12 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2025-01-09 11:58:34
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2025-01-10 17:02:50
+ * @最后修改时间: 2025-01-21 17:34:55
  * @项目的路径: \CMS-components\packages\components\search-page\src\search-page.vue
  * @描述: search-page 搜索页面组件
 -->
 <template>
-    <div v-loading="isLoadingForInit" class="search-page">
+    <div v-loading="isLoadingForInit" class="cms-search-page">
         <search-form
             v-if="searchFormProps"
             v-bind="searchFormProps"
@@ -46,22 +46,29 @@
     </div>
 </template>
 <script setup lang="ts">
-import { type Ref, onMounted, ref, useSlots, computed, watch, nextTick } from "vue";
+import { type Ref, onMounted, ref, computed, watch, nextTick } from "vue";
 import { extend } from "@yujinjin/utils";
 import { type SearchPageRef, searchPageProps, searchPageEmits } from "./search-page";
-import { type DataTableRef, type TableButton, DataTable } from "@yujinjin/cms-components-modules/data-table";
-import { type SearchFormRef, type SearchFormField, SearchForm } from "@yujinjin/cms-components-modules/search-form";
-import { type ActionBarRef, ActionBar } from "@yujinjin/cms-components-modules/action-bar";
+import { type DataTableRef, DataTable } from "@yujinjin/cms-components-modules/data-table";
+import { type SearchFormRef, type SearchFormSlotScope, type SearchFormField, SearchForm } from "@yujinjin/cms-components-modules/search-form";
+import { type ActionBarRef, type ActionButtonSlotScope, type ActionButton, ActionBar } from "@yujinjin/cms-components-modules/action-bar";
 
 defineOptions({
     name: "SearchPage"
 });
 
+const slots = defineSlots<
+    {
+        default(): any;
+        actionBar_default(): any;
+    } & Record<`searchForm_${string}`, (props: SearchFormSlotScope) => any> &
+        Record<`actionBar_${string}`, (props: ActionButtonSlotScope) => any> &
+        Record<`dataTable_${string}`, (props: any) => any>
+>();
+
 const props = defineProps(searchPageProps);
 
 const emits = defineEmits(searchPageEmits);
-
-const slots = useSlots();
 
 // 当前数据表格的筛选参数值（searchFormValue和props.dataTableProps.filters的并集）
 const dataTableFilters: Ref<Record<string, any>> = ref({});
@@ -196,7 +203,7 @@ defineExpose<SearchPageRef>({
     },
 
     // 修改当前生成的button按钮值
-    changeButtons: function (callback: (actionButtons: TableButton[]) => void) {
+    changeButtons: function (callback: (actionButtons: ActionButton[]) => void) {
         actionBarRef.value?.changeButtons(callback);
     },
 
@@ -209,10 +216,3 @@ defineExpose<SearchPageRef>({
     }
 });
 </script>
-<style lang="scss" scoped>
-.search-page {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-</style>

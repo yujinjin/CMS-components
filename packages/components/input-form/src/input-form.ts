@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2025-01-02 18:01:06
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2025-01-10 11:16:42
+ * @最后修改时间: 2025-01-15 11:32:30
  * @项目的路径: \CMS-components\packages\components\input-form\src\input-form.ts
  * @描述: input-form组件属性、事件声明
  */
@@ -15,6 +15,9 @@ import { type InputFieldProps } from "@yujinjin/cms-components-modules/input-fie
 export type InputFormField = InputFieldProps & {
     /** 查询项的名称，同时也是组件的双向绑定值属性 */
     name: string;
+
+    /** 当前数据字段插槽 */
+    slot?: string;
 
     /** 当前内容是否去除空格，只针对input输入框有效。默认false */
     trim?: boolean;
@@ -42,6 +45,20 @@ export type InputFormField = InputFieldProps & {
 
     /** Form Item 属性 */
     formItemProps?: Partial<NotReadonly<FormItemProps>>;
+};
+
+export type InputFormSlotScope = {
+    /** 当前表单字段 */
+    field: InputFormField;
+
+    /** 字段值 */
+    value: any;
+
+    /** 表单值 */
+    formValue: Record<string, any>;
+
+    /** 所有表单字段列表 */
+    formFields: InputFormField[];
 };
 
 export const inputFormProps = buildProps({

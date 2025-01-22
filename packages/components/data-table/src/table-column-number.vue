@@ -2,12 +2,12 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2024-12-30 10:16:17
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2025-01-02 09:35:43
+ * @最后修改时间: 2025-01-21 17:15:51
  * @项目的路径: \CMS-components\packages\components\data-table\src\table-column-number.vue
  * @描述: 数字数据列
 -->
 <template>
-    <div class="table-column-number">{{ numberText }}</div>
+    <div class="cms-table-column-number">{{ numberText }}</div>
 </template>
 <script setup lang="ts">
 import { computed } from "vue";

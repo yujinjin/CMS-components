@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2025-01-06 19:28:41
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2025-01-10 11:17:57
+ * @最后修改时间: 2025-01-17 17:46:52
  * @项目的路径: \CMS-components\packages\components\search-form\src\search-form.ts
  * @描述: search-form组件属性、事件声明
  */
@@ -30,13 +30,16 @@ export type SearchFormButton = NotReadonly<Partial<ButtonProps>> & {
     isShow?: boolean;
 
     /** 按钮点击函数事件 */
-    click?: (button: SearchFormButton) => Promise<void>;
+    click?: (button: SearchFormButton) => Promise<void> | void;
 };
 
 // 搜索表单字段
 export type SearchFormField = SearchFieldProps & {
     /** 查询项的名称，同时也是组件的双向绑定值属性 */
     name: string;
+
+    /** 当前数据字段插槽 */
+    slot?: string;
 
     /** 当前内容是否去除空格，只针对input输入框有效。默认false */
     trim?: boolean;
@@ -58,6 +61,14 @@ export type SearchFormField = SearchFieldProps & {
 
     /** 是否显示 */
     isShow?: boolean;
+};
+
+export type SearchFormSlotScope = {
+    // 当前表单字段
+    field: SearchFormField;
+
+    // 当前表单字段列表
+    formFields: SearchFormField[];
 };
 
 export const searchFormProps = buildProps({

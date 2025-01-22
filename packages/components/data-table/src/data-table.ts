@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2024-12-27 16:17:56
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2025-01-10 10:50:52
+ * @最后修改时间: 2025-01-20 15:01:15
  * @项目的路径: \CMS-components\packages\components\data-table\src\data-table.ts
  * @描述: data-table组件声明
  */
@@ -31,7 +31,7 @@ export type TableButton = NotReadonly<Partial<ButtonProps>> & {
     display?: (row: any) => boolean;
 
     /** 按钮点击函数事件 */
-    click?: (selectRows: Array<any>, button: TableButton) => Promise<void>;
+    click?: (selectRows: Array<any>, button: TableButton) => Promise<void> | void;
 };
 
 export interface DataTableColumn<T> extends Partial<TableColumnCtx<T>> {
@@ -66,7 +66,7 @@ export interface DataTableColumn<T> extends Partial<TableColumnCtx<T>> {
 export const dataTableProps = buildProps({
     // 当前列表查询函数, 可返回Promise
     query: {
-        type: Function as PropType<(...args) => Promise<any>>,
+        type: Function as PropType<(...args) => Promise<any> | any>,
         required: true
     },
     // type: "number|action|date|enum|image" // 数据列的自定义类型，可以不传
@@ -103,7 +103,7 @@ export const dataTableProps = buildProps({
     },
     // table 其他属性具体参照element plus table文档
     props: {
-        type: Object as PropType<TableProps<any>>,
+        type: Object as PropType<Partial<TableProps<any>>>,
         default() {
             return {};
         }

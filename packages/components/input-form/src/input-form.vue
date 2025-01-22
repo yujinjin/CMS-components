@@ -2,12 +2,12 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2025-01-02 18:01:10
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2025-01-08 16:11:21
+ * @最后修改时间: 2025-01-21 17:31:12
  * @项目的路径: \CMS-components\packages\components\input-form\src\input-form.vue
  * @描述: 输入表单
 -->
 <template>
-    <div v-loading="isLoading" class="input-form">
+    <div v-loading="isLoading" class="cms-input-form">
         <el-form v-bind="formProps" ref="inputFormRef" :model="inputFormValue">
             <el-row>
                 <template v-for="(field, index) in formFields" :key="(field.name || '') + '_' + index">
@@ -35,13 +35,17 @@
 import { type FormInstance, type FormValidateCallback, ElForm, ElRow, ElCol, ElFormItem } from "element-plus";
 import { type Ref, ref, watch } from "vue";
 import { setObjectProperty, getObjectProperty, extend } from "@yujinjin/utils";
-import { type InputFormField, type InputFormRef, inputFormProps, inputFormEmits } from "./input-form";
+import { type InputFormField, type InputFormRef, type InputFormSlotScope, inputFormProps, inputFormEmits } from "./input-form";
 import { INPUT_FORM_FIELD_DEFAULT_ATTRIBUTES } from "./constants";
 import { InputField } from "@yujinjin/cms-components-modules/input-field";
 
 defineOptions({
     name: "InputForm"
 });
+
+defineSlots<{
+    [key: string]: (props: InputFormSlotScope) => any;
+}>();
 
 const props = defineProps(inputFormProps);
 
@@ -58,6 +62,17 @@ const inputFormValue: Ref<Record<string, any>> = ref({});
 
 // 表单字段列表
 const formFields: Ref<InputFormField[]> = ref([]);
+
+// 输入字段列表（由于formField和inputField属性并不完全一致，使用"v-bind=formField" vue 会提示警告“Extraneous non-props attributes”）
+// const getInputFieldProps = function (field: InputFormField) {
+//     const props = {};
+//     Object.keys(inputFieldProps).forEach(key => {
+//         if (Object.prototype.hasOwnProperty.call(field, key)) {
+//             props[key] = field[key];
+//         }
+//     });
+//     return props;
+// };
 
 // 初始化表单数据
 const initInputFormValue = function () {
@@ -117,6 +132,9 @@ const generateFormFields = function () {
             newField.props!.style.width = newField.inputWidth + "px";
         } else {
             newField.props!.style = Object.assign({}, style, newField.props!.style);
+        }
+        if (newField.label) {
+            newField.formItemProps.label = newField.label;
         }
         if (newField.labelWidth) {
             newField.formItemProps.labelWidth = newField.labelWidth;

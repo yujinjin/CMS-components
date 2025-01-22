@@ -174,7 +174,7 @@ export default tseslint.config(
     },
     /** markdown 配置 */
     {
-        files: ["**/*.md/*.js", "**/*.md/*.ts", "packages/scripts/**/*.js", "packages/scripts/**/*.ts"],
+        files: ["**/*.md/*.js", "**/*.md/*.ts", "packages/scripts/**/*.js", "packages/scripts/**/*.ts", "play/**/*"],
         rules: {
             "no-console": "off",
             "import/no-unresolved": "off",

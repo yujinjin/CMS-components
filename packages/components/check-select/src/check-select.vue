@@ -7,9 +7,9 @@
  * @描述: 下拉选项带复选框的选项
 -->
 <template>
-    <el-select ref="checkboxSelectRef" v-model="modelValue" v-bind="selectProps || {}" @change="value => emits('change', value)" v-on="events || {}">
+    <el-select ref="checkSelectRef" v-model="modelValue" v-bind="selectProps || {}" @change="value => emits('change', value)" v-on="events || {}">
         <el-option v-if="isShowCheckAll" :created="true" value="" label="">
-            <div class="option-inner" @click.stop.prevent="checkAllChangeHandle">
+            <div class="cms-check-select_option-inner" @click.stop.prevent="checkAllChangeHandle">
                 <el-checkbox :model-value="checkAllStatus.isCheckAll" :indeterminate="checkAllStatus.isIndeterminate" />
                 <span>全选</span>
             </div>
@@ -21,7 +21,7 @@
             :value="item[optionValueKey || 'value']"
             :disabled="item.disabled === true"
         >
-            <div class="option-inner">
+            <div class="cms-check-select_option-inner">
                 <el-checkbox
                     :model-value="modelValue && modelValue.includes(item[optionValueKey || 'value'])"
                     :disabled="item.disabled === true"
@@ -48,7 +48,7 @@ const emits = defineEmits(checkSelectEmits);
 const modelValue = defineModel({ type: Array as PropType<Array<object | string | number>> });
 
 // select 实例
-const checkboxSelectRef = ref<InstanceType<typeof ElSelect>>();
+const checkSelectRef = ref<InstanceType<typeof ElSelect>>();
 
 const selectDataList: ComputedRef<Array<Record<string, any>>> = computed(() => {
     if (!props.data || props.data.length === 0) {
@@ -73,11 +73,11 @@ const selectProps = computed(() => {
 });
 
 const isShowCheckAll = computed(() => {
-    if (selectDataList.value.length === 0 || !checkboxSelectRef.value) {
+    if (selectDataList.value.length === 0 || !checkSelectRef.value) {
         return false;
     }
     let isShow = false;
-    checkboxSelectRef.value!.states.options.forEach(item => {
+    checkSelectRef.value!.states.options.forEach(item => {
         if (item.isDisabled !== true && item.visible && !item.created) {
             isShow = true;
         }
@@ -91,10 +91,10 @@ const checkAllStatus = computed(() => {
         isCheckAll: false,
         isIndeterminate: false
     };
-    if (!isShowCheckAll.value || !modelValue.value || modelValue.value.length === 0 || !checkboxSelectRef.value?.states) {
+    if (!isShowCheckAll.value || !modelValue.value || modelValue.value.length === 0 || !checkSelectRef.value?.states) {
         return status;
     }
-    checkboxSelectRef.value.states.options.forEach(item => {
+    checkSelectRef.value.states.options.forEach(item => {
         if (!item.visible || item.created || (!status.isCheckAll && status.isIndeterminate)) {
             return;
         }
@@ -111,7 +111,7 @@ const checkAllStatus = computed(() => {
 const checkAllChangeHandle = async function () {
     await nextTick();
     const values = modelValue.value || [];
-    checkboxSelectRef.value?.states.options.forEach(item => {
+    checkSelectRef.value?.states.options.forEach(item => {
         if (!item.visible || item.created) {
             return;
         }
@@ -140,13 +140,3 @@ const checkChangeHandle = function (isCheck, value) {
     emits("change", modelValue.value);
 };
 </script>
-<style lang="scss" scoped>
-.option-inner {
-    display: flex;
-    align-items: center;
-
-    span {
-        margin-left: 4px;
-    }
-}
-</style>

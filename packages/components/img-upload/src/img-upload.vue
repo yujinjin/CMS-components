@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2024-11-18 09:52:09
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-12-03 14:10:03
+ * @最后修改时间: 2025-01-16 17:36:59
  * @项目的路径: \CMS-components\packages\components\img-upload\src\img-upload.vue
  * @描述: 图片上传支持剪切的组件
 -->
@@ -16,8 +16,8 @@
                 <div class="el-upload__tip">只能上传图片文件，且不超过{{ maxSize > 1024 ? numberFormat(maxSize / 1024, 1) + "M" : maxSize + "KB" }}</div>
             </template>
         </el-upload>
-        <el-dialog v-model="isShowCropperDialog" class="cropper-dialog" title="图片裁剪" :append-to-body="true" :close-on-click-modal="false" width="1000px">
-            <div class="cropper-panel">
+        <el-dialog v-model="isShowCropperDialog" class="cms-cropper-dialog" title="图片裁剪" :append-to-body="true" :close-on-click-modal="false" width="1000px">
+            <div class="cms-cropper-panel">
                 <div class="cropper-box">
                     <img ref="cropperImgRef" :src="cropperImg" />
                 </div>
@@ -28,6 +28,7 @@
             </div>
             <template #footer>
                 <div class="dialog-footer">
+                    <el-button @click="closeCroppDialog()">取消</el-button>
                     <el-button @click="resetCropper">复位</el-button>
                     <el-button @click="rotateCropper">旋转</el-button>
                     <el-button @click="changeDirectionCropper">换向</el-button>
@@ -55,7 +56,6 @@ import {
 } from "element-plus";
 import { numberFormat } from "@yujinjin/utils";
 import Cropper from "cropperjs";
-import "cropperjs/dist/cropper.css";
 import { imgUploadProps } from "./img-upload";
 
 defineOptions({
@@ -225,6 +225,9 @@ const defaultUploadProps = {
     // 图片上传变化
     onChange: function (file: UploadFile, files: UploadFiles) {
         if (props.cropperProps) {
+            // 由于element plus upload组件上传之后会自动添加一个预览文件。
+            // 这里是自定义实现的文件上传请求，所以必须是上传完文件之后才展示处理， 这里删除掉
+            files.pop();
             startCroppHandle(file.raw!);
         }
     },
@@ -287,54 +290,3 @@ watch(
     }
 );
 </script>
-<style lang="scss" scoped>
-// 因为是dialog是放在body上的，所以不能在img-upload下写样式
-// 由于该插件不能动态计算宽高，所以只能在样式里指定宽高才会展示
-.cropper-panel {
-    display: flex;
-    width: 100%;
-    height: 500px;
-
-    .cropper-box {
-        width: 780px;
-        height: 500px;
-        border: solid 1px #ddd;
-    }
-
-    .preview-box {
-        display: inline-block;
-        width: 180px;
-        padding-left: 20px;
-
-        .tips-text {
-            line-height: 40px;
-            color: #000;
-        }
-
-        .preview-img-box {
-            width: 160px;
-            height: 160px;
-            overflow: hidden;
-        }
-    }
-}
-</style>
-<style lang="scss">
-.el-dialog.cropper-dialog {
-    .el-dialog__body {
-        padding: 12px 20px 0px;
-        overflow-y: auto;
-    }
-
-    .el-dialog__footer {
-        padding: 8px 20px;
-        box-shadow:
-            0px -1px 0px 0px #f5f5f5,
-            0px 1px 30px 0px rgba(0, 21, 41, 0.12);
-
-        .el-button {
-            min-width: 80px;
-        }
-    }
-}
-</style>

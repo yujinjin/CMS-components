@@ -2,11 +2,11 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2024-12-26 14:25:48
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2025-01-10 10:55:00
+ * @最后修改时间: 2025-01-15 11:03:23
  * @项目的路径: \CMS-components\packages\components\action-bar\src\action-bar.ts
  * @描述: action-bar组件入口
  */
-import { type PropType, type ExtractPublicPropTypes } from "vue";
+import { type PropType, type ExtractPublicPropTypes, type Component } from "vue";
 import { buildProps } from "@yujinjin/cms-components-utils";
 import { type ButtonProps } from "element-plus";
 import { type NotReadonly } from "/#/global";
@@ -21,6 +21,9 @@ export type ActionButton = NotReadonly<Partial<ButtonProps>> & {
     /** 自定义插槽名称（如有值其他选项无效） */
     slot?: string;
 
+    /** 自定义图标 */
+    customIcon?: string | Component;
+
     /** 按钮是否正在加载 */
     // isLoading?: boolean;
 
@@ -28,7 +31,11 @@ export type ActionButton = NotReadonly<Partial<ButtonProps>> & {
     isShow?: boolean;
 
     /** 按钮点击函数事件 */
-    click?: (selectRows: Array<any>, button: ActionButton) => Promise<void>;
+    click?: (selectRows: Array<any>, button: ActionButton) => Promise<void> | void;
+};
+
+export type ActionButtonSlotScope = {
+    button: ActionButton;
 };
 
 /** 列表操作栏实例 */
@@ -37,7 +44,7 @@ export interface ActionBarRef {
     changeButtons: (callback: (actionButtons: ActionButton[]) => void) => void;
 }
 
-export const actionButtonProps = buildProps({
+export const actionBarProps = buildProps({
     buttons: {
         type: Array as PropType<ActionButton[]>,
         default: function () {
@@ -58,4 +65,4 @@ export const actionButtonProps = buildProps({
     }
 });
 
-export type ActionButtonProps = NotReadonly<ExtractPublicPropTypes<typeof actionButtonProps>>;
+export type ActionBarProps = NotReadonly<ExtractPublicPropTypes<typeof actionBarProps>>;

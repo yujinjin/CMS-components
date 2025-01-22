@@ -2,12 +2,12 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2024-12-30 10:11:12
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-12-30 10:17:58
+ * @最后修改时间: 2025-01-21 17:15:17
  * @项目的路径: \CMS-components\packages\components\data-table\src\table-column-image.vue
  * @描述: 图片数据列
 -->
 <template>
-    <div class="table-column-img">
+    <div class="cms-table-column-img">
         <div v-if="!previewImgList || previewImgList.length === 0" class="no-image">没有图片</div>
         <template v-else>
             <el-image
@@ -63,31 +63,3 @@ const previewImgList = computed<string[]>(() => {
 // 初始预览图像索引
 const initialIndex = ref(0);
 </script>
-<style lang="scss" scoped>
-.table-column-img {
-    height: 50px;
-    display: flex;
-    overflow: hidden;
-    width: 100%;
-    .no-image {
-        height: 50px;
-        width: 60px;
-        border-radius: 4px;
-        background: #f5f7fa;
-        color: #909399;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 12px;
-    }
-
-    .el-image {
-        height: 50px;
-        flex-shrink: 0;
-
-        &:not(:first-child) {
-            margin-left: 4px;
-        }
-    }
-}
-</style>

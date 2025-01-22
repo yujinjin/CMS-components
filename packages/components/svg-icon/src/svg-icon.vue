@@ -7,7 +7,7 @@
  * @描述: svg 图标
 -->
 <template>
-    <i class="icon">
+    <i class="cms-icon">
         <svg class="svg-icon" aria-hidden="true">
             <use :xlink:href="'#icon-' + value" />
         </svg>
@@ -25,19 +25,3 @@ defineOptions({
 // 声明组件属性
 defineProps(svgIconProps);
 </script>
-<style lang="scss" scoped>
-.icon {
-    .svg-icon {
-        height: 1em;
-        width: 1em;
-        line-height: 1em;
-        display: inline-flex;
-        justify-content: center;
-        align-items: center;
-        position: relative;
-        fill: currentColor;
-        color: var(--color);
-        font-size: inherit;
-    }
-}
-</style>

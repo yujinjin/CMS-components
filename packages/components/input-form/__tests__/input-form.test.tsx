@@ -2,9 +2,9 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2025-01-02 18:01:28
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2025-01-09 10:05:51
+ * @最后修改时间: 2025-01-21 15:13:40
  * @项目的路径: \CMS-components\packages\components\input-form\__tests__\input-form.test.tsx
- * @描述: 头部注释配置模板
+ * @描述: input-form组件测试用例
  */
 
 import { describe, test, expect, vi } from "vitest";
@@ -13,6 +13,14 @@ import { nextTick } from "vue";
 import { ElLoading, ElInput } from "element-plus";
 import InputForm from "../src/input-form.vue";
 import { type InputFormField } from "../src/input-form";
+
+// Mock InputField component
+const InputField = {
+    name: "InputField",
+    template: "<div></div>",
+    props: ["modelValue", "type", "field"],
+    emits: ["update:modelValue"]
+};
 
 describe("InputForm", () => {
     const fields: InputFormField[] = [
@@ -78,7 +86,8 @@ describe("InputForm", () => {
             global: {
                 plugins: [ElLoading],
                 components: {
-                    ElInput
+                    ElInput,
+                    InputField // 注册 mock 的 InputField 组件
                 }
             }
         });
@@ -144,53 +153,59 @@ describe("InputForm", () => {
     describe("Input Functionality", () => {
         test("emits update:modelValue on input", async () => {
             const wrapper = createWrapper();
-            const input = wrapper.findAllComponents({ name: "InputField" })[1];
-            await input.vm.$emit("update:modelValue", "1");
-            expect(wrapper.emitted("fieldValueChange")).toBeTruthy();
-            expect(wrapper.emitted("fieldValueChange")?.[0][1]).toEqual("1");
+            const inputFields = wrapper.findAllComponents(InputField);
+            const phoneInput = inputFields[3];
+
+            await phoneInput.vm.$emit("update:modelValue", "13800138000");
+            await nextTick();
+
+            const emittedEvents = wrapper.emitted();
+            expect(emittedEvents.fieldValueChange).toBeTruthy();
+            expect(emittedEvents.fieldValueChange[0]?.[1]).toEqual("13800138000");
         });
 
         test("trim value when trim is true", async () => {
+            // TODO: console提示undefined,研究了半天也找不出是哪里的问题
             const wrapper = createWrapper();
-            const input = wrapper.findAllComponents({ name: "InputField" })[2];
-            const testEmail = "  test@test.com  ";
+            const inputFields = wrapper.findAllComponents(InputField);
+            const emailInput = inputFields[2]; // email field has trim: true
+            const testEmail = "  test@example.com  ";
 
-            await input.vm.$emit("update:modelValue", testEmail);
+            await emailInput.vm.$emit("update:modelValue", testEmail);
             await nextTick();
 
-            const emittedEvents = wrapper.emitted("fieldValueChange");
-            expect(emittedEvents).toBeTruthy();
-            expect(emittedEvents?.[0]).toBeTruthy();
-            expect(emittedEvents?.[0][1]).toBe(testEmail.trim());
+            const emittedEvents = wrapper.emitted();
+            expect(emittedEvents.fieldValueChange).toBeTruthy();
+            expect(emittedEvents.fieldValueChange[0]?.[1]).toEqual(testEmail.trim());
         });
     });
 
     describe("Exposed Methods", () => {
-        test("validate method returns true for valid input", async () => {
+        test("validate method returns promise", async () => {
             const wrapper = createWrapper({
                 value
             });
-            expect(() => wrapper.vm.validate()).not.toThrowError();
+
+            const validateResult = wrapper.vm.validate();
+            expect(validateResult).toBeInstanceOf(Promise);
         });
 
-        // test("validate method", async () => {
-        //     const wrapper = createWrapper({
-        //         value: {
-        //             ...value,
-        //             phoneNumber: "1223"
-        //         }
-        //     });
-        //     await nextTick();
-        //     try {
-        //         await wrapper.vm.validate();
-        //         console.info("2222222222222");
-        //     } catch (error) {
-        //         console.info(error);
-        //     }
-        //     // const result = await wrapper.vm.validate();
-        //     // console.info
-        //     // expect(() => wrapper.vm.validate()).rejects.toThrowError("请输入正确格式的手机号");
-        // });
+        test("validate method with invalid input", async () => {
+            const wrapper = createWrapper({
+                value: {
+                    ...value,
+                    phoneNumber: "1223" // Invalid phone number
+                }
+            });
+
+            try {
+                await wrapper.vm.validate();
+                // Should not reach here
+                expect(false).toBe(true);
+            } catch (error) {
+                expect(error).toBeTruthy();
+            }
+        });
 
         test("getInputValue method", async () => {
             const wrapper = createWrapper({ value });

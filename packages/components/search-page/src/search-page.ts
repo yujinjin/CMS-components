@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2025-01-09 11:58:30
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2025-01-10 11:18:23
+ * @最后修改时间: 2025-01-20 16:17:16
  * @项目的路径: \CMS-components\packages\components\search-page\src\search-page.ts
  * @描述: search-page组件属性、事件声明
  */
@@ -10,8 +10,8 @@ import { type PropType, type ExtractPublicPropTypes } from "vue";
 import { type NotReadonly } from "/#/global";
 import { buildProps } from "@yujinjin/cms-components-utils";
 import { type SearchFormProps, type SearchFormField } from "@yujinjin/cms-components-modules/search-form";
-import { type ActionButtonProps } from "@yujinjin/cms-components-modules/action-bar";
-import { type DataTableProps, type TableButton } from "@yujinjin/cms-components-modules/data-table";
+import { type ActionBarProps, type ActionButton } from "@yujinjin/cms-components-modules/action-bar";
+import { type DataTableProps } from "@yujinjin/cms-components-modules/data-table";
 
 export const searchPageProps = buildProps({
     // 初始化时正在加载
@@ -23,7 +23,7 @@ export const searchPageProps = buildProps({
         type: Object as PropType<SearchFormProps>
     },
     actionBarProps: {
-        type: Object as PropType<ActionButtonProps>
+        type: Object as PropType<ActionBarProps>
     },
     dataTableProps: {
         type: Object as PropType<DataTableProps>
@@ -59,7 +59,7 @@ export interface SearchPageRef {
     changeFormFields: (callback: (formFields: SearchFormField[]) => void) => void;
 
     // 修改当前生成的button按钮值
-    changeButtons: (callback: (actionButtons: TableButton[]) => void) => void;
+    changeButtons: (callback: (actionButtons: ActionButton[]) => void) => void;
 
     /**
      * 更新数据列显示状态

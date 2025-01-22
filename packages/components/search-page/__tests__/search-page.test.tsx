@@ -4,7 +4,7 @@ import { nextTick } from "vue";
 import { ElLoading } from "element-plus";
 import SearchPage from "../src/search-page.vue";
 import { type SearchFormProps } from "@yujinjin/cms-components-modules/search-form";
-import { type ActionButtonProps } from "@yujinjin/cms-components-modules/action-bar";
+import { type ActionBarProps } from "@yujinjin/cms-components-modules/action-bar";
 import { type DataTableProps } from "@yujinjin/cms-components-modules/data-table";
 
 describe("SearchPage", () => {
@@ -29,7 +29,7 @@ describe("SearchPage", () => {
         ]
     };
 
-    const mockActionBarProps: ActionButtonProps = {
+    const mockActionBarProps: ActionBarProps = {
         buttons: [
             { handleCode: "add", contents: "Add", click: vi.fn() },
             { handleCode: "delete", contents: "Delete", click: vi.fn() },
@@ -215,7 +215,10 @@ describe("SearchPage", () => {
                 },
                 slots: {
                     // eslint-disable-next-line camelcase
-                    searchForm_custom: '<div class="search-form-slot">Custom Search Form Content</div>'
+                    searchForm_custom: '<div class="search-form-slot">Custom Search Form Content</div>',
+                    default: "",
+                    // eslint-disable-next-line camelcase
+                    actionBar_default: ""
                 },
                 global: {
                     plugins: [ElLoading]
@@ -234,7 +237,10 @@ describe("SearchPage", () => {
                 },
                 slots: {
                     // eslint-disable-next-line camelcase
-                    actionBar_custom: '<div class="action-bar-slot">Custom Action Bar Content</div>'
+                    actionBar_custom: '<div class="action-bar-slot">Custom Action Bar Content</div>',
+                    default: "",
+                    // eslint-disable-next-line camelcase
+                    actionBar_default: ""
                 },
                 global: {
                     plugins: [ElLoading]
@@ -253,7 +259,10 @@ describe("SearchPage", () => {
                 },
                 slots: {
                     // eslint-disable-next-line camelcase
-                    dataTable_custom: '<div class="data-table-slot">Custom Data Table Content</div>'
+                    dataTable_custom: '<div class="data-table-slot">Custom Data Table Content</div>',
+                    default: "",
+                    // eslint-disable-next-line camelcase
+                    actionBar_default: ""
                 },
                 global: {
                     plugins: [ElLoading]

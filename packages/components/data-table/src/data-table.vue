@@ -2,13 +2,13 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2024-12-30 10:21:26
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2025-01-02 15:52:47
+ * @最后修改时间: 2025-01-21 17:10:39
  * @项目的路径: \CMS-components\packages\components\data-table\src\data-table.vue
  * @描述: 数据列表组件
 -->
 <template>
-    <div ref="dataTablePanelRef" class="data-table-panel">
-        <el-table v-loading="isLoadingForSearch" :data="dataList" v-bind="tableProps" element-loading-text="拼命加载中..." v-on="events" @selection-change="selectionChangeHandle">
+    <div ref="dataTablePanelRef" class="cms-data-table-panel">
+        <el-table v-loading="isLoadingForSearch" v-bind="tableProps" :data="dataList" element-loading-text="拼命加载中..." v-on="events" @selection-change="selectionChangeHandle">
             <template v-for="(columnItem, index) in columnList">
                 <el-table-column v-if="columnItem.isShow" :key="(columnItem.prop || '') + '_' + index" v-bind="columnItem">
                     <template v-if="columnItem.slotHeader" #header="scope">
@@ -51,6 +51,11 @@ defineOptions({
     name: "DataTable"
 });
 
+defineSlots<{
+    default(): any;
+    [key: string]: (props: any) => any;
+}>();
+
 const props = defineProps(dataTableProps);
 
 const emits = defineEmits(dataTableEmits);
@@ -92,9 +97,9 @@ const initPaginationData = function () {
         {
             pageSize: 20,
             layout: "total, sizes, prev, pager, next, jumper",
-            pageSizes: [10, 20, 30, 50, 100],
+            pageSizes: [10, 20, 30, 50, 100]
             // background: true,
-            size: "small"
+            // size: "small"
         },
         props.pagination,
         { total, currentPage }
@@ -123,11 +128,11 @@ const initTableProps = function () {
             stripe: true, // 隔行变色
             border: false, // 是否带有纵向边框
             rowKey: "id",
-            size: "small",
+            // size: "small",
             scrollbarAlwaysOn: true,
             tooltipEffect: "light",
             tooltipOptions: {
-                popperClass: "ellipsis-table-tooltip-popover"
+                popperClass: "cms-ellipsis-table-tooltip-popover"
             },
             style: {
                 width: "100%"
@@ -292,92 +297,3 @@ defineExpose<DataTableRef>({
     }
 });
 </script>
-<style lang="scss" scoped>
-.data-table-panel {
-    padding: 12px 16px 0px;
-    height: calc(100% - 20px);
-    flex: 1;
-    overflow-y: auto;
-
-    :deep(.el-table) {
-        // --el-border-color-lighter: #ebeef5;
-
-        .el-table__header {
-            thead tr {
-                background-color: #f7f7fa;
-                box-shadow: 0px 1px 0px 0px #f5f5f5;
-                border-radius: 4px 4px 0px 0px;
-
-                th {
-                    background-color: #f5f5f5;
-
-                    &.el-table__cell {
-                        padding: 10px 0px;
-                    }
-
-                    &:first-child {
-                        border-top-left-radius: 4px;
-                    }
-
-                    &:last-child {
-                        border-top-right-radius: 4px;
-                    }
-                    .cell {
-                        font-weight: 500;
-                        color: #262626;
-                        line-height: 20px;
-                    }
-                }
-            }
-        }
-
-        .el-table__body {
-            tbody tr {
-                td {
-                    &.el-table__cell {
-                        padding: 10px 0;
-                    }
-                    .cell {
-                        font-weight: 400;
-                        color: #595959;
-                    }
-                }
-            }
-        }
-
-        .el-table-column--selection .cell {
-            .el-checkbox__inner {
-                width: 16px;
-                height: 16px;
-            }
-            .el-checkbox__inner::after {
-                height: 8px;
-                left: 5px;
-            }
-        }
-    }
-
-    .pagination-wrapper {
-        display: flex;
-        justify-content: flex-end;
-        padding-top: 10px;
-    }
-}
-</style>
-<style lang="scss">
-.el-popper.ellipsis-table-tooltip-popover {
-    max-width: 500px;
-    background-color: #fff;
-    border: 0px;
-    box-shadow:
-        0px 9px 28px 8px rgba(0, 0, 0, 0.05),
-        0px 6px 16px 0px rgba(0, 0, 0, 0.08),
-        0px 3px 6px -4px rgba(0, 0, 0, 0.12);
-    color: #121736;
-    padding: 8px;
-    font-weight: 400;
-    color: #121736;
-    font-size: 14px;
-    line-height: 22px;
-}
-</style>

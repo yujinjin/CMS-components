@@ -2,12 +2,12 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2024-12-30 10:09:59
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2025-01-02 09:29:26
+ * @最后修改时间: 2025-01-21 17:13:59
  * @项目的路径: \CMS-components\packages\components\data-table\src\table-column-enum.vue
  * @描述: 枚举数据列
 -->
 <template>
-    <div class="table-column-enum">{{ enumText }}</div>
+    <div class="cms-table-column-enum">{{ enumText }}</div>
 </template>
 <script setup lang="ts">
 import { type PropType, computed } from "vue";
