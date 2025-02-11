@@ -4,11 +4,11 @@
  * @最后修改作者: yujinjin9@126.com
  * @最后修改时间: 2025-01-16 11:20:24
  * @项目的路径: \CMS-components\play\src\img-upload\example5.vue
- * @描述: img-upload组件的拖拽排序示例
+ * @描述: img-upload组件的拖拽上传示例
 -->
 <template>
     <div class="example-page">
-        <h3>拖拽排序</h3>
+        <h3>拖拽上传</h3>
         <img-upload v-model="values" :upload-request="uploadRequest" :upload-props="{ drag: true }">
             <el-icon class="el-icon--upload"><upload-filled /></el-icon>
             <div class="el-upload__text">

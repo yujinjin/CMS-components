@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2025-01-09 11:58:30
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2025-01-20 16:17:16
+ * @最后修改时间: 2025-02-11 10:26:46
  * @项目的路径: \CMS-components\packages\components\search-page\src\search-page.ts
  * @描述: search-page组件属性、事件声明
  */
@@ -58,7 +58,7 @@ export interface SearchPageRef {
     // 修改当前form字段的属性
     changeFormFields: (callback: (formFields: SearchFormField[]) => void) => void;
 
-    // 修改当前生成的button按钮值
+    // 修改当前生成的button按钮属性值
     changeButtons: (callback: (actionButtons: ActionButton[]) => void) => void;
 
     /**

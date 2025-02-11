@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2024-12-19 17:33:09
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2025-01-16 20:21:27
+ * @最后修改时间: 2025-02-11 11:03:28
  * @项目的路径: \CMS-components\packages\components\input-field\src\input-field.ts
  * @描述: 表单输入字段组件声明
  */
@@ -32,9 +32,10 @@ type FieldType =
     | "upload";
 
 export const inputFieldProps = buildProps({
-    /** 当前数据字段插槽 */
+    /** 是否使用插槽 */
     slot: {
-        type: [String, Boolean]
+        type: [String, Boolean],
+        default: false
     },
     /** 组件的类型 */
     type: {

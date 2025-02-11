@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2025-01-02 18:01:06
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2025-01-15 11:32:30
+ * @最后修改时间: 2025-02-11 15:32:50
  * @项目的路径: \CMS-components\packages\components\input-form\src\input-form.ts
  * @描述: input-form组件属性、事件声明
  */
@@ -22,7 +22,7 @@ export type InputFormField = InputFieldProps & {
     /** 当前内容是否去除空格，只针对input输入框有效。默认false */
     trim?: boolean;
 
-    /**  选项的标签名称 */
+    /**  字段标签 */
     label?: string;
 
     /** 选项的值 */
@@ -111,7 +111,7 @@ export interface InputFormRef {
     /** 设置表单的属性值 */
     setInputPropertyValue: (propertyName: string, value: any) => void;
 
-    /** 获取表单的value */
+    /** 修改表单字段属性 */
     changeFormFields: (callback: (formFields: InputFormField[]) => void) => void;
 
     // 获取form Ref

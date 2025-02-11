@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2023-03-09 14:58:06
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-11-15 17:18:06
+ * @最后修改时间: 2025-02-11 15:26:44
  * @项目的路径: \CMS-components\docs\.vitepress\config.ts
  * @描述: vitepress 配置
  */
@@ -29,21 +29,14 @@ export default defineConfig({
     themeConfig: {
         siteTitle: "CMS components",
         logo: "/vue-logo.svg",
-        editLink: {
-            pattern: "https://github.com/yujinjin/CMS-components/edit/main/pages/:path"
-        },
-        socialLinks: [{ icon: "github", link: "https://github.com/yujinjin/CMS-components" }],
-        lastUpdated: {
-            text: "上次更新",
-            formatOptions: {
-                dateStyle: "full",
-                timeStyle: "medium"
-            }
-        },
         nav: [
             { text: "指南", link: "/guide/installation", activeMatch: "/guide/" },
             { text: "组件", link: "/components/svg-icon", activeMatch: "/components/" }
         ],
+        outline: {
+            label: "页面导航",
+            level: [2, 4]
+        },
         sidebar: {
             "/guide/": [
                 {
@@ -67,12 +60,68 @@ export default defineConfig({
                 {
                     text: "check-select 下拉复选框",
                     link: "/components/check-select"
+                },
+                {
+                    text: "web-editor 富文本编辑器",
+                    link: "/components/web-editor"
+                },
+                {
+                    text: "img-upload 图片上传",
+                    link: "/components/img-upload"
+                },
+                {
+                    text: "action-bar 操作栏",
+                    link: "/components/action-bar"
+                },
+                {
+                    text: "input-field 输入字段",
+                    link: "/components/input-field"
+                },
+                {
+                    text: "search-field 搜索字段",
+                    link: "/components/search-field"
+                },
+                {
+                    text: "data-table 数据表格",
+                    link: "/components/data-table"
+                },
+                {
+                    text: "input-form 表单",
+                    link: "/components/input-form"
+                },
+                {
+                    text: "search-form 搜索表单",
+                    link: "/components/search-form"
+                },
+                {
+                    text: "dialog-form 弹窗表单",
+                    link: "/components/dialog-form"
+                },
+                {
+                    text: "search-page 搜索页面",
+                    link: "/components/search-page"
                 }
             ]
         },
+        docFooter: {
+            prev: "上一页",
+            next: "下一页"
+        },
+        editLink: {
+            pattern: "https://github.com/yujinjin/CMS-components/edit/main/pages/:path",
+            text: "在 GitHub 上编辑此页面"
+        },
+        socialLinks: [{ icon: "github", link: "https://github.com/yujinjin/CMS-components" }],
+        lastUpdated: {
+            text: "上次更新",
+            formatOptions: {
+                dateStyle: "full",
+                timeStyle: "medium"
+            }
+        },
         footer: {
             message: "Released under the MIT License.",
-            copyright: "Copyright © 2024-present Jack Yu"
+            copyright: "Copyright © 2025-present Jack Yu"
         }
     },
     vite: {

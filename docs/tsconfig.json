@@ -9,5 +9,5 @@
             "/#/*": ["./*"]
         }
     },
-    "include": ["examples", ".vitepress/**/*", "pages", "global.d.ts", "../typings"]
+    "include": ["examples/**/*", ".vitepress/**/*", "pages/**/*", "global.d.ts", "../typings"]
 }

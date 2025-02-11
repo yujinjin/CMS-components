@@ -221,6 +221,7 @@ const { ElementPlusResolver } = require('unplugin-vue-components/resolvers'); //
 -   2.组件库入口文件引入组件(packages/main/components.ts)
 
 -   3.docs:
+
     -   1.组件的vue示例代码(/examples/)
     -   2.编写组件的MD文档(/pages/)
     -   3.配置文档的路由地址(/.vitepress/config.ts)

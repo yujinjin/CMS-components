@@ -10,7 +10,7 @@ import { type PropType, type ExtractPublicPropTypes } from "vue";
 import { buildProps, isString } from "@yujinjin/cms-components-utils";
 import { type NotReadonly } from "/#/global";
 
-export type OnImgUploadFunction = (file: any) => Promise<string>;
+export type OnImgUploadFunction = (file: any) => Promise<string> | string;
 
 export const webEditorProps = buildProps({
     modelValue: String,

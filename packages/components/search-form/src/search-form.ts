@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2025-01-06 19:28:41
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2025-01-17 17:46:52
+ * @最后修改时间: 2025-02-10 16:31:39
  * @项目的路径: \CMS-components\packages\components\search-form\src\search-form.ts
  * @描述: search-form组件属性、事件声明
  */
@@ -103,12 +103,12 @@ export const searchFormProps = buildProps({
     // label宽度
     labelWidth: {
         type: Number,
-        default: 107
+        default: 120
     },
     // 表单宽度
     inputWidth: {
         type: Number,
-        default: 185
+        default: 200
     },
     // 标签的后缀
     labelSuffix: {

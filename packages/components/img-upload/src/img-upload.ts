@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2024-11-18 09:51:53
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2025-01-10 11:00:36
+ * @最后修改时间: 2025-02-06 15:28:05
  * @项目的路径: \CMS-components\packages\components\img-upload\src\img-upload.ts
  * @描述: img-upload 组件
  */
@@ -34,7 +34,7 @@ export const imgUploadProps = buildProps({
     },
     // 上传图片的接口回调函数(必传)
     uploadRequest: {
-        type: Function as PropType<(file: File) => Promise<string>>,
+        type: Function as PropType<(file: File) => Promise<string> | string>,
         required: true
     }
 });

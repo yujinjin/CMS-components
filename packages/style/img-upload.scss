@@ -1,6 +1,6 @@
 // @use "sass:meta";
 // @include meta.load-css("cropperjs/src/index.css");
-// @use "cropperjs/src/index.scss";
+@use "cropperjs/src/css/cropper.scss";
 // 因为是dialog是放在body上的，所以不能在img-upload下写样式
 // 由于该插件不能动态计算宽高，所以只能在样式里指定宽高才会展示
 .cms-cropper-panel {

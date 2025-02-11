@@ -1,4 +1,5 @@
-// @use "quill/dist/quill.snow.css";
+// @use "../../node_modules/quill/dist/quill.snow.css";
+@use "quill/dist/quill.snow.css";
 
 .cms-web-editor-container {
     width: 100%;
