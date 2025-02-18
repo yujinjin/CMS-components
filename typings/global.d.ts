@@ -1,14 +1,24 @@
-/*
- * @创建者: yujinjin9@126.com
- * @创建时间: 2023-03-30 20:35:15
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-11-28 11:19:32
- * @项目的路径: \CMS-components\typings\global.d.ts
- * @描述: 全局声明
- */
-/// <reference types="vite/client" />
-
 // 移除 readonly
 export type NotReadonly<T> = {
     -readonly [K in keyof T]: T[K];
 };
+
+declare module "vue" {
+    // GlobalComponents for Volar
+    export interface GlobalComponents {
+        SvgIcon: (typeof import("@yujinjin/cms-components"))["SvgIcon"];
+        CheckSelect: (typeof import("@yujinjin/cms-components"))["CheckSelect"];
+        ImgUpload: (typeof import("@yujinjin/cms-components"))["ImgUpload"];
+        WebEditor: (typeof import("@yujinjin/cms-components"))["WebEditor"];
+        InputField: (typeof import("@yujinjin/cms-components"))["InputField"];
+        ActionBar: (typeof import("@yujinjin/cms-components"))["ActionBar"];
+        SearchField: (typeof import("@yujinjin/cms-components"))["SearchField"];
+        DataTable: (typeof import("@yujinjin/cms-components"))["DataTable"];
+        InputForm: (typeof import("@yujinjin/cms-components"))["InputForm"];
+        SearchForm: (typeof import("@yujinjin/cms-components"))["SearchForm"];
+        DialogForm: (typeof import("@yujinjin/cms-components"))["DialogForm"];
+        SearchPage: (typeof import("@yujinjin/cms-components"))["SearchPage"];
+    }
+}
+
+export {};

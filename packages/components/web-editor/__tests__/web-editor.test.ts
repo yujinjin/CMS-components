@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2024-12-20 16:10:16
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-12-23 16:41:25
+ * @最后修改时间: 2025-02-12 17:37:03
  * @项目的路径: \CMS-components\packages\components\web-editor\__tests__\web-editor.test.ts
  * @描述: web-editor组件单元测试用例
  */
@@ -14,7 +14,7 @@ import WebEditor from "../src/web-editor.vue";
 describe("WebEditor", () => {
     let wrapper;
 
-    beforeEach(() => {
+    beforeEach(async () => {
         // Mock Quill
         vi.mock("quill", () => {
             return {
@@ -48,12 +48,12 @@ describe("WebEditor", () => {
     });
 
     it("renders properly", () => {
-        expect(wrapper.find(".web-editor-container").exists()).toBe(true);
+        expect(wrapper.find(".cms-web-editor-container").exists()).toBe(true);
         expect(wrapper.find(".web-editor").exists()).toBe(true);
         expect(wrapper.find('input[type="file"]').exists()).toBe(true);
     });
 
-    it("initializes Quill editor on mount", () => {
+    it("initializes Quill editor on mount", async () => {
         expect(Quill).toHaveBeenCalled();
     });
 

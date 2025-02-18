@@ -52,7 +52,7 @@ describe("InputField", () => {
             type: "label",
             modelValue: "Label Text"
         });
-        expect(wrapper.find(".label-contents").text()).toBe("Label Text");
+        expect(wrapper.find(".cms-input-field_label-contents").text()).toBe("Label Text");
     });
 
     test("renders imgUpload type correctly", () => {

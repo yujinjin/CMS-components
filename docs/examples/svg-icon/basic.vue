@@ -5,7 +5,7 @@
         <svg-icon value="fold" />
     </div>
 </template>
-<script lang="ts">
+<script lang="ts" setup>
 import "./svgs/exit-full-screen.svg";
 import "./svgs/fold.svg";
 import "./svgs/full-screen.svg";

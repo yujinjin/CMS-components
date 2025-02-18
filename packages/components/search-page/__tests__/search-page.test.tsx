@@ -92,7 +92,7 @@ describe("SearchPage", () => {
     describe("Component Initialization", () => {
         test("initializes with loading state", () => {
             const wrapper = createWrapper({ isLoadingForInit: true });
-            expect(wrapper.classes()).toContain("search-page");
+            expect(wrapper.classes()).toContain("cms-search-page");
             expect(wrapper.findComponent({ name: "SearchForm" }).exists()).toBe(true);
             expect(wrapper.findComponent({ name: "ActionBar" }).exists()).toBe(true);
             expect(wrapper.findComponent({ name: "DataTable" }).exists()).toBe(true);

@@ -1,144 +1,203 @@
-# CMS-components
+# CMS Components
 
-内容管理系统组件库
+CMS Components 是一个基于 Vue 3 和 Element Plus 的组件库，旨在为开发者提供一套高效、灵活且易于使用的 UI 组件，帮助快速构建现代化的管理系统和应用程序。
 
-## 1.安装
+## 文档
 
-```
-npm install --save @yujinjin/cms-components
-```
+[这里](https://yujinjin.github.io/cms-components/docs) 可以查看在线文档。
 
-## 2.快速开始
+## Playground
 
-## 3.项目目录结构
+[这里](https://yujinjin.github.io/cms-components/playground) 可以尝试快速体验和测试CMS Components 的各种功能。
 
-```
-├── docs(文档)
-│   ├── .vitepress(vitepress配置目录)
-│   │   ├── plugins(markdown文档中使用的特殊内容转换成自定义插件内容)
-│   │   │   ├── demo.ts (markdown文档中演示例子插件)
-│   │   │   ├── table-wrapper.ts (markdown文档table内容添加样式)
-│   │   │   ├── tooltip.ts (markdown文档中提示内容插件)
-│   │   │   ├── .....ts (markdown文档中其他插件)
-│   │   │   └── index.ts (markdown文档中引入的插件入口)
-│   │   ├── theme (自定义文档主题，在这里引入自定义插件)
-│   │   │   ├── components (markdown文档中的引入的组件列表)
-│   │   │   ├── fonts (markdown文档定义的icon列表)
-│   │   │   ├── style (markdown文档样式)
-│   │   │   └── index.ts (自定义文档主题入口)
-│   │   ├── utils
-│   │   └── config.ts (配置入口)
-│   ├── examples (markdown文档中引入的示例列表)
-│   │   ├── input-field (input-field组件的示例列表)
-│   │   │   ├── input.vue
-│   │   │   ├── select.vue
-│   │   │   └── ....vue
-│   │   ├── ... (组件1的示例列表)
-│   │   │   └── ....vue
-│   │   └── ... (组件2的示例列表)
-│   │       └── ....vue
-│   ├── pages (markdown文档列表)
-│   │   ├── input-field.md (input-field组件页面文档)
-│   │   ├── ....md (组件1页面文档)
-│   │   └── ....md (组件2页面文档)
-│   ├── public (静态资源服务的文件夹)
-│   ├── typings (声明文件)
-│   ├── tsconfig.json
-│   └── package.json (name: @yujinjin/cms-components-docs)
-│       ├── dev (本地运行文档服务)
-│       ├── preview (文档预览)
-│       └── build (文档构建)
-├── packages
-│   ├── components          # 组件库
-│   │   ├── input-field (表单输入字段组件)
-│   │   │   ├── __tests__
-│   │   │   ├── index.ts (组件库导出文件)
-│   │   │   └── src
-│   │   │       ├── input-field.ts
-│   │   │       └── input-field.vue (组件内容)
-│   │   ├── img-upload (图片上传组件，支持裁剪、旋转、SVGA)
-│   │   │   ├── __tests__
-│   │   │   ├── index.ts (组件库导出文件)
-│   │   │   └── src
-│   │   │       ├── img-upload.ts
-│   │   │       └── img-upload.vue (组件内容)
-│   │   ├── .... (组件1)
-│   │   │   ├── __tests__
-│   │   │   ├── index.ts (组件库导出文件)
-│   │   │   └── src
-│   │   │       ├── ....ts
-│   │   │       └── ....vue (组件内容)
-│   │   ├── index.ts (所有的组件库集合列表)
-│   │   └── package.json (name: @yujinjin/cms-components-modules)
-│   │       ├── test命令 (组件库测试)
-│   │       └── test:coverage命令 (测试覆盖率)
-│   ├── style          # 组件库样式
-│   │   ├── index.scss (组件库样式入口文件)
-│   │   ├── input-field.scss
-│   │   └── ....scss
-│   ├── main (组件入口)
-│   │   ├── component.ts  (所有的组件库（插件）集合列表)
-│   │   ├── index.ts
-│   │   └── package.json (name: @yujinjin/cms-components)
-│   ├── utils (工具库)
-│   │   ├── index.ts
-│   │   └── package.json (name: @yujinjin/cms-components-utils)
-│   ├── scripts (脚本)
-│   │   ├── tasks
-│   │   │   └── index.ts
-│   │   ├── utils
-│   │   │   ├── constants.ts
-│   │   │   ├── get-package-upgrade-version.ts
-│   │   │   ├── process.ts
-│   │   │   └── console.ts
-│   │   ├── build.ts
-│   │   ├── publish.ts
-│   │   └── package.json (name: @yujinjin/cms-components-scripts)
-│           ├── build命令 (组件库构建)
-│           ├── build:style命令 (组件库样式构建)
-│           └── publish命令 (组件库发布)
-├── play(在线演示)
-│   ├── src
-│   ├── vite.config.ts (vite配置)
-│   └── package.json (name: @yujinjin/cms-components-play)
-│       └── dev (本地运行服务)
-├── playground (演练场)
-├── typings(声明文件)
-│   ├── global.d.ts
-│   └── vue-shims.d.ts
-├── dist(打包目录)
-│   ├── types(临时生成的声明文件)
-│   ├── cms-commponents(打包的组件NPM目录)
-│   ├── playground(打包的playground目录)
-│   └── docs(组件文档目录)
-├── commitlint.config.js
-├── CHANGELOG.md
-├── README.md
-├── vitest.config.ts
-└── package.json (无name)
-    ├── clear
-    ├── build
-    ├── build:style
-    ├── publish
-    ├── test (组件库测试)
-    ├── test:coverage (组件库测试覆盖情况)
-    ├── coverage
-    ├── docs:dev
-    ├── docs:build
-    ├── docs:preview
-    ├── format
-    ├──
-    ├──
-    ├──
-    ├── prepare
-    ├── lint (组件库lint)
-    └── lint:fix
+## 特性
 
+-   **基于 Vue 3**: 利用 Vue 3 的响应式特性和组合 API，提供更好的开发体验。
+-   **Element Plus 兼容**: 组件库基于 Element Plus，提供了一致的设计风格和用户体验。
+-   **丰富的组件**: 提供多种常用组件，如表单、表格、弹窗、搜索框等，满足日常开发需求。
+-   **灵活的配置**: 组件支持丰富的配置选项，允许开发者根据需求自定义组件行为和样式。
+-   **良好的文档**: 提供详细的文档和示例，帮助开发者快速上手和使用组件。
+-   **TypeScript 支持**: 使用 TypeScript 开发，提供完整的类型定义。
+-   **主题定制**: 支持自定义主题，可以根据项目需求调整样式。
+-   **按需加载**: 支持按需引入组件，优化项目体积。
+
+## 环境支持
+
+-   现代浏览器和 IE11
+-   Vue 3.4+
+-   Element Plus 2.8+
+-   TypeScript 5.5+
+-   Node.js 18+
+
+## 技术栈
+
+### 核心技术
+- **Vue 3**: 使用 Vue 3 Composition API 开发
+- **TypeScript**: 采用 TypeScript 进行类型安全的开发
+- **Element Plus**: 基于 Element Plus UI 框架扩展
+- **Vite**: 使用 Vite 构建开发环境
+
+### 构建工具
+- **Rollup**: 用于组件库的打包构建
+- **pnpm**: 包管理器，采用 monorepo 结构管理项目
+- **Gulp**: 自动化构建工具，协调各个构建任务
+
+### 开发工具
+- **VitePress**: 文档站点构建
+- **Vitest**: 单元测试框架
+- **ESLint**: 代码质量检查
+- **Prettier**: 代码格式化
+- **Husky**: Git Hooks 管理
+- **commitlint**: Git 提交信息规范化
+
+### 样式开发
+- **Sass**: CSS 预处理器
+- **Less**: CSS 预处理器
+- **PostCSS**: CSS 后处理器
+
+### 依赖库
+- **Quill**: 富文本编辑器
+- **Cropper.js**: 图片裁剪功能
+- **clipboard**: 剪贴板操作
+
+## 安装
+
+### 使用包管理器
+
+我们建议您使用包管理器（如 NPM、Yarn、pnpm）安装 CMS Components，然后您就可以使用打包工具，例如 Vite 或 Webpack。
+
+#### NPM
+
+```shell
+$ npm install @yujinjin/cms-components --save
 ```
 
-TODO: 全面梳理packages目录下最小源码结构，验证组件库的所有任务命令的正确性
--- 1. 完善组件库、样式、单元测试
--- 2.梳理各个package.json 内的依赖包和命令
--- 2.组件库 build
--- 3.组件库单元测试
--- 4.发布组件包
+#### Yarn
+
+```shell
+$ yarn add @yujinjin/cms-components
+```
+
+#### pnpm
+
+```shell
+$ pnpm install @yujinjin/cms-components
+```
+
+### 浏览器直接引入
+
+直接通过浏览器的 HTML 标签导入 CMS Components，然后就可以使用了。
+
+#### unpkg
+
+```html
+<head>
+    <!-- Import style -->
+    <link rel="stylesheet" href="//unpkg.com/element-plus/dist/index.css" />
+    <link rel="stylesheet" href="//unpkg.com/@yujinjin/cms-components/dist/index.css" />
+    <!-- Import Vue 3 -->
+    <script src="//unpkg.com/vue@3"></script>
+    <!-- Import component library -->
+    <script src="//unpkg.com/element-plus"></script>
+    <script src="//unpkg.com/@yujinjin/cms-components"></script>
+</head>
+```
+
+#### jsDelivr
+
+```html
+<head>
+    <!-- Import style -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/element-plus/dist/index.css" />
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/@yujinjin/cms-components/dist/index.css" />
+
+    <!-- Import Vue 3 -->
+    <script src="//cdn.jsdelivr.net/npm/vue@3"></script>
+    <!-- Import component library -->
+    <script src="//cdn.jsdelivr.net/npm/element-plus"></script>
+    <script src="//cdn.jsdelivr.net/npm/@yujinjin/cms-components"></script>
+</head>
+```
+
+## 快速开始
+
+本节将介绍如何在项目中使用 CMS Components。
+
+### 完整引入
+
+如果你对打包后的文件大小不是很在乎，那么使用完整导入会更方便。
+
+```ts
+// main.ts
+import { createApp } from "vue";
+import ElementPlus from "element-plus";
+import "element-plus/dist/index.css";
+import App from "./App.vue";
+import CMSComponents from "@yujinjin/cms-components";
+import "@yujinjin/cms-components/dist/index.css";
+
+const app = createApp(App);
+
+app.use(ElementPlus);
+app.use(CMSComponents);
+app.mount("#app");
+```
+
+### 手动导入
+
+您可以选择手动导入所需的组件，以减小打包体积。
+
+```ts
+import { InputForm, SearchForm } from "@yujinjin/cms-components";
+```
+
+## 组件列表
+
+-   **SvgIcon**: SVG文件图标组件。
+-   **CheckSelect**: 多选下拉框选择组件，可快捷全选、选项有复选框勾选的选择器。适用那些下拉框数据量不大，但需要快捷全选的场景。
+-   **ImgUpload**: 图片上传组件，支持单图/多图上传、裁剪、限制图片上传尺寸特性。
+-   **WebEditor**: 富文本编辑器组件，基于 `Quill` 的富文本编辑器组件，提供所见即所得的内容编辑功能。
+-   **InputField**: 动态表单输入字段组件，支持多种输入类型,如文本、数字、单选、多选等，主要是和`InputForm`组件组合使用。
+-   **SearchField**: 动态表单搜索字段组件，支持多种输入类型,如文本、数字、单选、多选等，主要是和`SearchForm`组件组合使用。
+-   **ActionBar**: 操作栏组件，提供常用操作按钮的配置。
+-   **InputForm**: 动态表单组件，支持多种输入类型和验证。
+-   **SearchForm**: 搜索表单组件，支持多种搜索条件和自定义操作。
+-   **DataTable**: 数据表格组件，支持排序、筛选、分页等功能。
+-   **DialogForm**: 弹窗表单组件，支持表单验证和自定义内容。
+-   **SearchPage**: 搜索页面组件，结合搜索表单和数据表格，提供完整的搜索功能。
+
+### 本地开发
+
+```bash
+# 克隆项目
+git clone https://github.com/yujinjin/CMS-components.git
+
+# 安装依赖
+pnpm install
+
+# 构建组件库
+pnpm build
+
+# 构建文档
+pnpm docs:build
+
+# 启动文档开发服务
+pnpm docs:dev
+
+# 启动组件演示环境
+pnpm play:dev
+
+# 运行单元测试
+pnpm test:ui
+
+# 运行测试并查看覆盖率
+pnpm coverage
+```
+
+## 贡献
+
+欢迎任何形式的贡献！如果您发现了 bug 或有改进建议，请提交 issue 或 pull request。
+
+## License
+
+该项目使用 MIT 许可证，详细信息请查看 [LICENSE](./LICENSE) 文件。

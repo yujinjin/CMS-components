@@ -72,8 +72,7 @@
     "style": "dist/index.css",
     "sideEffects": [
         "dist/*",
-        "es/components/*/style/*",
-        "lib/components/*/style/*"
+        "style/*"
     ],
     "browserslist": [
         "> 1%",

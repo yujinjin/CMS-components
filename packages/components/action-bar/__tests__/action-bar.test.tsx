@@ -39,7 +39,7 @@ describe("ActionBar", () => {
 
     it("renders properly with default props", () => {
         const wrapper = createWrapper();
-        expect(wrapper.find(".action-bar-panel").exists()).toBe(true);
+        expect(wrapper.find(".cms-action-bar-panel").exists()).toBe(true);
         expect(wrapper.find(".buttons-panel").exists()).toBe(true);
         expect(wrapper.findAllComponents(ElButton)).toHaveLength(mockButtons.length);
     });

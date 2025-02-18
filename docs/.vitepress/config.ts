@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2023-03-09 14:58:06
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2025-02-11 15:26:44
+ * @最后修改时间: 2025-02-12 13:47:51
  * @项目的路径: \CMS-components\docs\.vitepress\config.ts
  * @描述: vitepress 配置
  */
@@ -120,8 +120,8 @@ export default defineConfig({
             }
         },
         footer: {
-            message: "Released under the MIT License.",
-            copyright: "Copyright © 2025-present Jack Yu"
+            message: "基于 MIT 许可发布",
+            copyright: `版权所有 © 2024-${new Date().getFullYear()} jack yu`
         }
     },
     vite: {
