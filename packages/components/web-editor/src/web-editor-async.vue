@@ -2,9 +2,13 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2024-12-20 14:55:48
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2025-02-21 10:54:16
+ * @最后修改时间: 2025-01-21 17:40:42
  * @项目的路径: \CMS-components\packages\components\web-editor\src\web-editor.vue
  * @描述: web-editor 富文本框
+ *  由于docs:build模式情况下，web-editor依赖的quill插件使用了document对象，在Node.js 环境构建会提示：“ReferenceError: document is not defined”问题。
+ *  这里只能折中一下使用动态导入 quill的方式。
+ *  本来是打算web-editor全写成动态导入 quill的方式，但这种情况下不支持umd build了，提示错误：Error: UMD and IIFE output formats are not supported for code-splitting builds。
+ *  所以不得已采取了两者并存的方案来解决。
 -->
 <template>
     <div class="cms-web-editor-container">
@@ -18,7 +22,6 @@
 <script setup lang="ts">
 import { onMounted, ref, watch, inject, computed, type Ref } from "vue";
 import { type FormItemContext, type FormContext, formItemContextKey, formContextKey } from "element-plus";
-import Quill from "quill";
 import { debounce } from "@yujinjin/utils";
 import { webEditorProps, webEditorEmits } from "./web-editor";
 
@@ -70,8 +73,9 @@ const imgFileChangeHandle = async function (e) {
 };
 
 // 初始化quill
-const initQuill = function () {
-    quillInstance = new Quill(webEditorRef.value!, {
+const initQuill = async function () {
+    const Quill = (await import("quill")).default;
+    quillInstance = new Quill!(webEditorRef.value!, {
         modules: {
             toolbar: {
                 container: ["bold", "italic", "underline", { header: 1 }, { header: 2 }, "blockquote", "code-block", "code", "link", { list: "ordered" }, { list: "bullet" }, "image", ["clean"]],

@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2023-03-09 14:58:06
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2025-02-12 13:47:51
+ * @最后修改时间: 2025-02-21 10:52:59
  * @项目的路径: \CMS-components\docs\.vitepress\config.ts
  * @描述: vitepress 配置
  */
@@ -134,6 +134,15 @@ export default defineConfig({
             createSvgSpritePlugin({
                 symbolId: "icon-[name]"
             })
-        ]
+        ],
+        resolve: {
+            alias: {
+                // 由于docs:build模式情况下，web-editor依赖的quill插件使用了document对象，在Node.js 环境构建会提示：“ReferenceError: document is not defined”问题
+                // 这里只能折中一下使用动态导入 quill的方式
+                // 本来是打算web-editor全写成动态导入 quill的方式，但这种情况下不支持umd build了，提示错误：Error: UMD and IIFE output formats are not supported for code-splitting builds
+                // 所以不得已采取了两者并存的方案来解决
+                "./src/web-editor.vue": "./src/web-editor-async.vue"
+            }
+        }
     }
 });

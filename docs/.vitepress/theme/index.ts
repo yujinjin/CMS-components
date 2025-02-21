@@ -18,10 +18,32 @@ import "../../../packages/style/index.scss";
 
 export default {
     ...DefaultTheme,
-    enhanceApp({ app }) {
+    async enhanceApp({ app }) {
         app.component("VpDemo", Demo);
         app.component("VpTooltip", Tooltip);
         app.use(ElementPlus, { locale: zhCn });
         app.use(CMSComponents, {});
+        // console.info("................enhanceApp");
+        // if (typeof document === "undefined") {
+        //     // 创建一个包含必要属性的模拟 Document 对象
+        //     const mockDocument = {
+        //         URL: "",
+        //         alinkColor: "",
+        //         all: [],
+        //         anchors: [],
+        //         createElement: () => ({}),
+        //         querySelector: () => null,
+        //         querySelectorAll: () => [],
+        //         getElementsByTagName: () => [],
+        //         getElementById: () => null
+        //     };
+        //     // 使用类型断言将模拟对象转换为 unknown，再转换为 Document
+        //     // eslint-disable-next-line no-global-assign
+        //     document = mockDocument as unknown as Document;
+        // }
+        // if (!import.meta.env.SSR) {
+        //     const plugin = await import("@yujinjin/cms-components/index");
+        //     app.use(plugin.default, {});
+        // }
     }
 } as Theme;
