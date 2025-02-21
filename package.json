@@ -6,7 +6,7 @@
         "clear": "pnpm -C packages/scripts clear",
         "build": "pnpm -C packages/scripts build",
         "build:style": "pnpm -C packages/scripts build:style",
-        "publish": "pnpm -C packages/scripts publish",
+        "publish": "pnpm -C packages/scripts pub",
         "test": "pnpm -C packages/components test",
         "test:ui": "pnpm -C packages/components test:ui",
         "coverage": "pnpm -C packages/components coverage",
