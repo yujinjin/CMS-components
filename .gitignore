@@ -1,15 +1,8 @@
 .idea
-
 node_modules
-
 .pnpm-debug.log*
-
 dist
-
 docs/.vitepress/cache
-
 .eslintcache
-
-pnpm-lock.yaml
-
-packages/main/version.ts
+/pnpm-lock.yaml
+/packages/main/version.ts
