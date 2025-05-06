@@ -1,0 +1,6 @@
+{
+    "name": "@yujinjin/cms-components-style",
+    "private": true,
+    "license": "MIT",
+    "style": "index.scss"
+}

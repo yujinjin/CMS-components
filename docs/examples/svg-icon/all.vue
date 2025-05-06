@@ -15,12 +15,12 @@ Object.keys(svgs).forEach(async key => {
     icons.value.push(key.match(/\.\/svgs\/(.*)\.svg/)![1]);
 });
 </script>
-<style lang="scss" scoped>
+<style scoped>
 .demo-box {
     max-width: 600px;
+}
 
-    i {
-        margin-right: 10px;
-    }
+.demo-box i {
+    margin-right: 10px;
 }
 </style>

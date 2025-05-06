@@ -28,6 +28,7 @@
         "lib": ["ESNext", "DOM"],
         "types": ["node"], // 需要包含的类型声明文件名列表
         "paths": {
+            "@yujinjin/cms-components-main/*": ["packages/main/*"],
             "@yujinjin/cms-components/*": ["packages/main/*"],
             "@yujinjin/cms-components-modules/*": ["packages/components/*"],
             "/#/*": ["typings/*"]

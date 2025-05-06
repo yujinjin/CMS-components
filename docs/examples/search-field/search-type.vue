@@ -22,7 +22,7 @@ const options = [
     { label: "选项3", value: "3" }
 ];
 </script>
-<style lang="scss" scoped>
+<style scoped>
 .demo-block {
     display: flex;
     flex-direction: column;

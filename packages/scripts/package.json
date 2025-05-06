@@ -2,6 +2,7 @@
     "name": "@yujinjin/cms-components-scripts",
     "version": "0.0.1",
     "description": "components",
+    "type": "module",
     "scripts": {
         "clear": "tsx src/clean.ts",
         "build": "cross-env vt=$npm_config_vt tsx src/build.ts",

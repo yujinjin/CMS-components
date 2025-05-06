@@ -3,6 +3,9 @@
     "compilerOptions": {
         "composite": true,
         "sourceMap": true
+        // "paths": {
+        //     "@yujinjin/cms-components/types": ["@yujinjin/cms-components-modules/types"]
+        // }
         // "types": ["node", "jsdom", "unplugin-vue-macros/macros-global"]
         // "typeRoots": ["types"],
     },

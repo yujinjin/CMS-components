@@ -14,10 +14,10 @@ hero:
     actions:
         - theme: brand
           text: 开始使用
-          link: /guide/
+          link: /guide/installation
         - theme: alt
           text: 浏览组件
-          link: /components/
+          link: /components/svg-icon
 features:
     - icon: ⚡
       title: 低代码组件库

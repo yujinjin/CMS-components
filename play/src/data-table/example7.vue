@@ -50,7 +50,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { type DataTableColumn, DataTable } from "@yujinjin/cms-components/index";
+import { type DataTableColumn, DataTable } from "@yujinjin/cms-components-main/index";
 import { ref } from "vue";
 import { QuestionFilled } from "@element-plus/icons-vue";
 import tableColumnCopy from "./table-column-copy.vue";

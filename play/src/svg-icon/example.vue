@@ -52,7 +52,7 @@
         <section class="demo-section">
             <h3>图标列表</h3>
             <div ref="iconListRef" class="icon-list">
-                <div v-for="icon in icons" :key="icon" class="icon-item" :data-clipboard-text="'<svg-icon value=\'' + icon + '\' />'">
+                <div v-for="icon in icons" :key="icon" class="icon-item" @click="copyTextHandle('<svg-icon value=\'' + icon + '\' />')">
                     <svg-icon :value="icon" />
                     <span class="icon-name">{{ icon }}</span>
                 </div>
@@ -62,10 +62,10 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from "vue";
-import Clipboard from "clipboard";
+import { ref } from "vue";
+import { useClipboard } from "@vueuse/core";
 import { ElMessage } from "element-plus";
-import { SvgIcon } from "@yujinjin/cms-components/index";
+import { SvgIcon } from "@yujinjin/cms-components-main/index";
 
 // 加载所有svg文件
 const svgs = import.meta.glob("./svgs/*.svg");
@@ -79,27 +79,20 @@ Object.keys(svgs).forEach(async key => {
     icons.value.push(key.match(/\.\/svgs\/(.*)\.svg/)![1]);
 });
 
-let clipboard: Clipboard;
+const { copy, isSupported } = useClipboard({ legacy: true });
 
-onMounted(() => {
-    // 初始化剪贴板
-    clipboard = new Clipboard(".icon-list > .icon-item", { container: iconListRef.value });
-    clipboard.on("success", function () {
-        ElMessage({
-            message: "已复制图标代码到剪贴板",
-            type: "success"
-        });
-    });
-    clipboard.on("error", function () {
-        ElMessage.error("复制失败");
-    });
-});
-
-onUnmounted(() => {
-    if (clipboard) {
-        clipboard.destroy();
+const copyTextHandle = async function (text) {
+    if (!isSupported.value) {
+        ElMessage.error("复制失败，您的浏览器不支持 Clipboard API");
+        return;
     }
-});
+    await copy(text);
+    ElMessage({
+        message: "复制成功",
+        type: "success",
+        duration: 1000
+    });
+};
 
 const handleClick = () => {
     ElMessage({

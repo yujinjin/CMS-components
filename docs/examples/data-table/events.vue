@@ -6,7 +6,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { ElMessage } from "element-plus";
-import { type DataTableColumn } from "@yujinjin/cms-components/index";
+import { type DataTableColumn } from "@yujinjin/cms-components-main/index";
 
 const tableRef = ref();
 const selectedRows = ref([]);

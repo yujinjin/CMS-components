@@ -25,7 +25,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import { type ActionButton } from "@yujinjin/cms-components/index";
+import { type ActionButton } from "@yujinjin/cms-components-main/index";
 import { ArrowDown } from "@element-plus/icons-vue";
 
 const tabValue = ref("全部");

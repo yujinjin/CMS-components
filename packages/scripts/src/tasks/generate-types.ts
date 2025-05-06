@@ -35,7 +35,7 @@ export default async function () {
         });
         const rewriteTasks = filePaths.map(async filePath => {
             const content = await fs.readFile(filePath, "utf8");
-            await fs.writeFile(filePath, content.replaceAll("@yujinjin/cms-components-modules", "./components"), "utf8");
+            await fs.writeFile(filePath, content.replaceAll("@yujinjin/cms-components-modules/", "@yujinjin/cms-components/es/components/"), "utf8");
         });
         console.info("    开始----------------main目录下的文件内容替换‘@yujinjin/cms-components-modules’ => ‘./components’");
         await Promise.all(rewriteTasks);
@@ -49,8 +49,15 @@ export default async function () {
         // 删除main文件夹
         await fs.remove(mainRoot);
     }
-
-    console.info("    开始----------------复制types文件到es和lib文件夹下");
+    // 在复制类型文件到 es 和 lib 文件夹之前添加
+    const componentsTypesPath = resolve(PROJECT_ROOT, "packages/components/types.d.ts");
+    if (fs.pathExistsSync(componentsTypesPath)) {
+        const targetPath = resolve(BUILD_ES_ROOT, "components/types.d.ts");
+        fs.ensureFileSync(targetPath);
+        fs.copyFileSync(componentsTypesPath, targetPath);
+        console.info("    复制 components/types.d.ts 文件成功");
+    }
+    console.info("    开始----------------复制types文件到es文件夹下");
     // 复制types文件到es和lib文件夹下
     await Promise.all([fs.copy(packagesRoot, BUILD_ES_ROOT), fs.copy(packagesRoot, BUILD_LIB_ROOT)]);
     console.success("    完成----------------复制types文件到es和lib文件夹下");

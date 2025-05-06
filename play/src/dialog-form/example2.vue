@@ -18,7 +18,7 @@
 <script setup lang="ts">
 import { ref, computed, reactive } from "vue";
 import { ElMessage } from "element-plus";
-import { DialogForm, type DialogFormButton, type InputFormProps, type DialogFormRef } from "@yujinjin/cms-components/index";
+import { DialogForm, type DialogFormButton, type InputFormProps, type DialogFormRef } from "@yujinjin/cms-components-main/index";
 
 const visible = ref(false);
 const isEdit = ref(false);

@@ -10,7 +10,7 @@ import { type PropType, type ExtractPublicPropTypes } from "vue";
 import { type UploadProps } from "element-plus";
 import type Cropper from "cropperjs";
 import { buildProps } from "@yujinjin/cms-components-utils";
-import { type NotReadonly } from "/#/global";
+import { type NotReadonly } from "../../types";
 
 export const imgUploadProps = buildProps({
     // 上传属性配置选项，具体见（element-plus upload文档）

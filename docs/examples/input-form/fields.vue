@@ -5,7 +5,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import { type InputFormField } from "@yujinjin/cms-components/index";
+import { type InputFormField } from "@yujinjin/cms-components-main/index";
 import { withBase } from "vitepress";
 
 const formData = ref({

@@ -36,7 +36,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { ElMessage } from "element-plus";
-import { type DialogFormRef, type DialogFormButton, type InputFormField, type InputFormSlotScope, DialogForm } from "@yujinjin/cms-components/index";
+import { type DialogFormRef, type DialogFormButton, type InputFormField, type InputFormSlotScope, DialogForm } from "@yujinjin/cms-components-main/index";
 
 const visible = ref(false);
 
@@ -105,17 +105,13 @@ const buttons = ref<DialogFormButton[]>([
     { type: "danger", contents: "取消", click: handleCancel }
 ]);
 </script>
-<style lang="scss" scoped>
-.specs-list {
-    .spec-item {
-        display: flex;
-        gap: 10px;
-        margin-bottom: 10px;
-    }
+<style scoped>
+.specs-list .spec-item {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
 }
-.dynamic-form {
-    :deep(.el-form) {
-        margin-bottom: 10px;
-    }
+.dynamic-form :deep(.el-form) {
+    margin-bottom: 10px;
 }
 </style>

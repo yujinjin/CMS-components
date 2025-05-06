@@ -14,7 +14,7 @@
 </template>
 <script setup lang="ts">
 import { reactive } from "vue";
-import { SearchPage, type SearchFormProps, type DataTableProps } from "@yujinjin/cms-components/index";
+import { SearchPage, type SearchFormProps, type DataTableProps } from "@yujinjin/cms-components-main/index";
 
 const searchFormProps = reactive<SearchFormProps>({
     fields: [

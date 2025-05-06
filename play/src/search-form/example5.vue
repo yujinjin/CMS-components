@@ -14,7 +14,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import { type SearchFormField, SearchForm } from "@yujinjin/cms-components/index";
+import { type SearchFormField, SearchForm } from "@yujinjin/cms-components-main/index";
 
 // 模拟数据
 const categories = [

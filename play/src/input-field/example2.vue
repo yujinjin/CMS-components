@@ -20,7 +20,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import { InputField } from "@yujinjin/cms-components/index";
+import { InputField } from "@yujinjin/cms-components-main/index";
 
 interface RestaurantItem {
     value: string;

@@ -17,7 +17,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { Download } from "@element-plus/icons-vue";
-import { type ActionButton, ActionBar } from "@yujinjin/cms-components/index";
+import { type ActionButton, ActionBar } from "@yujinjin/cms-components-main/index";
 
 const buttons = ref<ActionButton[]>([{ contents: "新增", type: "primary" }, { contents: "批量删除" }]);
 </script>

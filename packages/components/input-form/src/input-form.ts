@@ -8,8 +8,8 @@
  */
 import { type PropType, type ExtractPublicPropTypes } from "vue";
 import { type FormProps, type FormItemProps, type FormItemRule, type FormInstance, type FormValidateCallback, type FormValidationResult } from "element-plus";
-import { type NotReadonly } from "/#/global";
 import { buildProps } from "@yujinjin/cms-components-utils";
+import { type NotReadonly } from "../../types";
 import { type InputFieldProps } from "@yujinjin/cms-components-modules/input-field";
 
 export type InputFormField = InputFieldProps & {

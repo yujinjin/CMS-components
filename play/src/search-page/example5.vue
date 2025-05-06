@@ -55,7 +55,7 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue";
 import { ElMessage } from "element-plus";
-import { SearchPage, type SearchPageRef } from "@yujinjin/cms-components/index";
+import { SearchPage, type SearchPageRef } from "@yujinjin/cms-components-main/index";
 import { QuestionFilled } from "@element-plus/icons-vue";
 import tableColumnCopy from "./table-column-copy.vue";
 import useSearchPage from "./use-search-page";

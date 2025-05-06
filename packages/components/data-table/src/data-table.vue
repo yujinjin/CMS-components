@@ -36,7 +36,6 @@
     </div>
 </template>
 <script setup lang="ts">
-import { type NotReadonly } from "/#/global";
 import { type PaginationProps, type TableProps, ElTable, ElPagination, ElTableColumn } from "element-plus";
 import { type Ref, onMounted, onUnmounted, ref, watch, nextTick } from "vue";
 import { extend, debounce } from "@yujinjin/utils";
@@ -46,6 +45,7 @@ import tableColumnNumber from "./table-column-number.vue";
 import tableColumnImage from "./table-column-image.vue";
 import tableColumnEnum from "./table-column-enum.vue";
 import tableColumnAction from "./table-column-action.vue";
+import { type NotReadonly } from "@yujinjin/cms-components-modules/types";
 
 defineOptions({
     name: "DataTable"

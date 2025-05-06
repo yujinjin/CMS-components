@@ -8,7 +8,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { ElMessage } from "element-plus";
-import { DialogForm, type DialogFormButton, type InputFormField, type DialogFormRef } from "@yujinjin/cms-components/index";
+import { DialogForm, type DialogFormButton, type InputFormField, type DialogFormRef } from "@yujinjin/cms-components-main/index";
 
 const visible = ref(false);
 

@@ -17,7 +17,7 @@
 <script setup lang="ts">
 import { shallowRef } from "vue";
 import { Download, Plus, Edit } from "@element-plus/icons-vue";
-import { type ActionButton, ActionBar } from "@yujinjin/cms-components/index";
+import { type ActionButton, ActionBar } from "@yujinjin/cms-components-main/index";
 
 const buttons = shallowRef<ActionButton[]>([
     { contents: "新增", type: "primary", icon: Plus },

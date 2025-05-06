@@ -6,7 +6,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { ElMessage } from "element-plus";
-import { type SearchFormField } from "@yujinjin/cms-components/index";
+import { type SearchFormField } from "@yujinjin/cms-components-main/index";
 
 // 模拟数据
 const categories = [

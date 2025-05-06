@@ -17,7 +17,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { ElMessage } from "element-plus";
-import { type InputFormField, type InputFormRef } from "@yujinjin/cms-components/index";
+import { type InputFormField, type InputFormRef } from "@yujinjin/cms-components-main/index";
 
 const inputFormRef = ref<InputFormRef>();
 
@@ -67,7 +67,7 @@ const deleteField = (field: InputFormField) => {
     saveFormValue();
 };
 </script>
-<style lang="scss" scoped>
+<style scoped>
 .custom-field {
     display: flex;
     gap: 12px;

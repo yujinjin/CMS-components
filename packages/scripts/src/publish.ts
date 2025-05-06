@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2024-08-02 17:29:21
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2025-02-21 15:26:20
+ * @最后修改时间: 2025-02-21 16:14:03
  * @项目的路径: \CMS-components\packages\scripts\src\publish.ts
  * @描述: 发布脚本
  */
@@ -63,7 +63,7 @@ const addGitTag = async function () {
 const publish = async function () {
     try {
         console.info(`开始发布版本：${upgradeVersion}`);
-        // await run("npm publish", BUILD_ROOT);
+        await run("npm publish", BUILD_ROOT);
         // git 推送到远程
         await run("git push");
         // 发布tag到远程

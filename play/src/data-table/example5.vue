@@ -17,7 +17,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import { DataTable, type DataTableRef, type DataTableColumn } from "@yujinjin/cms-components/index";
+import { DataTable, type DataTableRef, type DataTableColumn } from "@yujinjin/cms-components-main/index";
 
 const tableRef = ref<DataTableRef>();
 

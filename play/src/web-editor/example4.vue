@@ -15,7 +15,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import { WebEditor } from "@yujinjin/cms-components/index";
+import { WebEditor } from "@yujinjin/cms-components-main/index";
 
 const content = ref(`
     <h2>这是一个标题</h2>

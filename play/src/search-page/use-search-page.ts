@@ -1,5 +1,5 @@
 import { ref, type Ref } from "vue";
-import { type ActionBarProps, type DataTableProps, type SearchFormProps } from "@yujinjin/cms-components/index";
+import { type ActionBarProps, type DataTableProps, type SearchFormProps } from "@yujinjin/cms-components-main/index";
 
 export default function ({ showDialogHandle, excelExportHandle, cancelOrderHandle, orertReportData }) {
     // 下单设备来源枚举值

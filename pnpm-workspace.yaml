@@ -5,3 +5,5 @@ packages:
     - docs
     # 组件演示
     - play
+    # 组件演练场
+    - playground

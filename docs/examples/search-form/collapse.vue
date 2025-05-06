@@ -4,7 +4,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { type SearchFormField } from "@yujinjin/cms-components/index";
+import { type SearchFormField } from "@yujinjin/cms-components-main/index";
 
 const fields: SearchFormField[] = [
     { name: "name", label: "名称", type: "input" },

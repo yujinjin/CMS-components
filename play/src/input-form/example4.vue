@@ -25,7 +25,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import { type InputFormField, type InputFormRef, InputForm } from "@yujinjin/cms-components/index";
+import { type InputFormField, type InputFormRef, InputForm } from "@yujinjin/cms-components-main/index";
 
 const inputFormRef = ref<InputFormRef>();
 

@@ -7,8 +7,8 @@
  * @描述: search-page组件属性、事件声明
  */
 import { type PropType, type ExtractPublicPropTypes } from "vue";
-import { type NotReadonly } from "/#/global";
 import { buildProps } from "@yujinjin/cms-components-utils";
+import { type NotReadonly } from "../../types";
 import { type SearchFormProps, type SearchFormField } from "@yujinjin/cms-components-modules/search-form";
 import { type ActionBarProps, type ActionButton } from "@yujinjin/cms-components-modules/action-bar";
 import { type DataTableProps } from "@yujinjin/cms-components-modules/data-table";

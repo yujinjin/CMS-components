@@ -13,7 +13,7 @@ import { FullScreen } from "@element-plus/icons-vue";
 
 const content = ref("<p>这是一个基础的富文本编辑器示例</p>");
 </script>
-<style lang="scss" scoped>
+<style scoped>
 .full-screen-icon {
     position: absolute;
     bottom: 1px;
@@ -25,9 +25,9 @@ const content = ref("<p>这是一个基础的富文本编辑器示例</p>");
     height: 16px;
     width: 16px;
     color: #999;
+}
 
-    &:hover {
-        color: var(--el-color-primary);
-    }
+.full-screen-icon:hover {
+    color: var(--el-color-primary);
 }
 </style>

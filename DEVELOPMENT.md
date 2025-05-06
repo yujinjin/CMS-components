@@ -148,11 +148,12 @@ git commit -m 'fix(components): [action-bar]修复 xxx 功能'
 │   ├── style          # 组件库样式
 │   │   ├── index.scss (组件库样式入口文件)
 │   │   ├── input-field.scss
-│   │   └── ....scss
+│   │   ├── ....scss
+│   │   └── package.json (name: @yujinjin/cms-components-style)
 │   ├── main (组件入口)
 │   │   ├── component.ts  (所有的组件库（插件）集合列表)
 │   │   ├── index.ts
-│   │   └── package.json (name: @yujinjin/cms-components)
+│   │   └── package.json (name: @yujinjin/cms-components-main)
 │   ├── utils (工具库)
 │   │   ├── index.ts
 │   │   └── package.json (name: @yujinjin/cms-components-utils)
@@ -176,6 +177,10 @@ git commit -m 'fix(components): [action-bar]修复 xxx 功能'
 │   └── package.json (name: @yujinjin/cms-components-play)
 │       └── dev (本地运行服务)
 ├── playground (演练场)
+│   ├── src
+│   ├── vite.config.ts (vite配置)
+│   └── package.json (name: @yujinjin/cms-components-playground)
+│       └── dev (本地运行服务)
 ├── typings(声明文件)
 │   ├── global.d.ts
 │   └── vue-shims.d.ts

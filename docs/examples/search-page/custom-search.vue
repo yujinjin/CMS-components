@@ -14,7 +14,7 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import { ElMessage } from "element-plus";
-import { SearchPage, type SearchFormProps, type DataTableProps, type ActionBarProps } from "@yujinjin/cms-components/index";
+import { SearchPage, type SearchFormProps, type DataTableProps, type ActionBarProps } from "@yujinjin/cms-components-main/index";
 
 const searchFormProps = reactive<SearchFormProps>({
     fields: [

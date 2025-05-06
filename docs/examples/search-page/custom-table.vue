@@ -23,7 +23,7 @@ import {
     type ActionBarProps,
     type DialogFormRef,
     type InputFormProps
-} from "@yujinjin/cms-components/index";
+} from "@yujinjin/cms-components-main/index";
 
 const searchPageRef = ref<SearchPageRef>();
 

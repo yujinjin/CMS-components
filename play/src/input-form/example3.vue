@@ -19,7 +19,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { ElMessage, type FormRules } from "element-plus";
-import { InputForm, type InputFormField, type InputFormRef } from "@yujinjin/cms-components/index";
+import { InputForm, type InputFormField, type InputFormRef } from "@yujinjin/cms-components-main/index";
 
 const inputFormRef = ref<InputFormRef>();
 

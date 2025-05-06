@@ -14,7 +14,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import { WebEditor } from "@yujinjin/cms-components/index";
+import { WebEditor } from "@yujinjin/cms-components-main/index";
 
 const content = ref("<p>这是一个基础的富文本编辑器示例</p>");
 </script>

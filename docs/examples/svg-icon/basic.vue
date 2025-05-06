@@ -10,12 +10,12 @@ import "./svgs/exit-full-screen.svg";
 import "./svgs/fold.svg";
 import "./svgs/full-screen.svg";
 </script>
-<style lang="scss" scoped>
+<style scoped>
 .demo-box {
     max-width: 600px;
+}
 
-    i {
-        margin-right: 10px;
-    }
+.demo-box i {
+    margin-right: 10px;
 }
 </style>

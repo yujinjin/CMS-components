@@ -14,7 +14,7 @@ export default defineConfig({
     titleTemplate: "CMS components",
     lang: "cn-ZH",
     lastUpdated: true,
-    base: "/pages",
+    base: process.env.NODE_ENV === "production" ? "/cms-components/docs" : "/",
     outDir: "../dist/docs",
     markdown: {
         theme: "material-theme-palenight",
@@ -108,7 +108,7 @@ export default defineConfig({
             next: "下一页"
         },
         editLink: {
-            pattern: "https://github.com/yujinjin/CMS-components/edit/main/pages/:path",
+            pattern: "https://github.com/yujinjin/CMS-components/edit/main/docs/:path",
             text: "在 GitHub 上编辑此页面"
         },
         socialLinks: [{ icon: "github", link: "https://github.com/yujinjin/CMS-components" }],
@@ -142,6 +142,7 @@ export default defineConfig({
                 // 本来是打算web-editor全写成动态导入 quill的方式，但这种情况下不支持umd build了，提示错误：Error: UMD and IIFE output formats are not supported for code-splitting builds
                 // 所以不得已采取了两者并存的方案来解决
                 "./src/web-editor.vue": "./src/web-editor-async.vue"
+                // "@yujinjin/cms-components-main": "@yujinjin/cms-components-main/index"
             }
         }
     }

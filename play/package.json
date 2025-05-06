@@ -3,11 +3,14 @@
     "version": "0.0.1",
     "description": "play",
     "private": true,
+    "type": "module",
     "scripts": {
         "dev": "vite"
     },
     "dependencies": {
-        "@yujinjin/cms-components": "workspace:*",
-        "vue-router": "^4.4.5"
+        "@yujinjin/cms-components-main": "workspace:*",
+        "@yujinjin/cms-components-style": "workspace:*",
+        "@yujinjin/cms-components-modules": "workspace:*",
+        "vue-router": "^4.5.0"
     }
 }

@@ -9,7 +9,7 @@
 
 import { type ExtractPublicPropTypes } from "vue";
 import { buildProps } from "@yujinjin/cms-components-utils";
-import { type NotReadonly } from "/#/global";
+import { type NotReadonly } from "../../types";
 
 export const svgIconProps = buildProps({
     // svg的link名称

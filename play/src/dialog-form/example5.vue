@@ -30,7 +30,7 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import { ElMessage } from "element-plus";
-import { type DialogFormRef, type DialogFormButton, type InputFormField, DialogForm } from "@yujinjin/cms-components/index";
+import { type DialogFormRef, type DialogFormButton, type InputFormField, DialogForm } from "@yujinjin/cms-components-main/index";
 
 const visible = ref(false);
 const currentStep = ref(0);

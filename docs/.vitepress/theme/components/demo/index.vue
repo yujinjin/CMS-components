@@ -16,7 +16,7 @@
             <ElDivider style="margin: 0px" />
 
             <div class="op-btns">
-                <ElTooltip content="去 playground 运行" :show-arrow="false" :trigger="['hover', 'focus']" :trigger-keys="[]">
+                <ElTooltip v-if="isShowPlayground !== 'false'" content="去 playground 运行" :show-arrow="false" :trigger="['hover', 'focus']" :trigger-keys="[]">
                     <ElIcon :size="16" aria-label="去 playground 运行" class="op-btn" tabindex="0" role="button" @click="gotoPlaygroundPage">
                         <i class="docs-icon-chemistry" />
                     </ElIcon>
@@ -66,6 +66,7 @@ import { CaretTop } from "@element-plus/icons-vue";
 import { type ComputedRef } from "vue";
 import { type Docs } from "/#/global";
 import { useClipboard } from "@vueuse/core";
+import { usePlayground } from "../../composables/use-playground";
 import Example from "./example.vue";
 import SourceCode from "./source-code.vue";
 
@@ -84,6 +85,11 @@ const props = defineProps({
     description: {
         type: String,
         default: ""
+    },
+    // 是否显示演练场按钮
+    isShowPlayground: {
+        type: String,
+        default: "true"
     }
 });
 
@@ -117,11 +123,17 @@ const decodeSourceList: ComputedRef<Docs.Source[]> = computed(() => {
 });
 
 // 复制操作
-const { copy, isSupported } = useClipboard({ legacy: true });
+const { copy, isSupported } = useClipboard({ legacy: true, read: false });
 
 // 跳转演练场页面
 const gotoPlaygroundPage = function () {
     // TODO: 去Playground页面
+    // const playgroundCodes: Record<string, string> = {};
+    // decodeSourceList.value.forEach(item => {
+    //     const fileName = "src/" + decodedMainVueFilePath.value === item.path ? "App.vue" : item.path.substring(item.path.lastIndexOf("/") + 1);
+    //     playgroundCodes[fileName] = item.source;
+    // });
+    window.open(usePlayground(decodeSourceList.value, decodedMainVueFilePath.value), "_blank");
 };
 
 // 复制代码操作

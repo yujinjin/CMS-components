@@ -9,7 +9,7 @@
 import { type PropType, type ExtractPublicPropTypes } from "vue";
 import { buildProps } from "@yujinjin/cms-components-utils";
 import { type TableProps, type PaginationProps, type TableColumnCtx, type ButtonProps } from "element-plus";
-import { type NotReadonly } from "/#/global";
+import { type NotReadonly } from "../../types";
 
 export type TableButton = NotReadonly<Partial<ButtonProps>> & {
     /** 当前按钮操作CODE */

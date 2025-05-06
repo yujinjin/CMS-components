@@ -8,7 +8,7 @@
  */
 import { type PropType, type ExtractPublicPropTypes } from "vue";
 import { buildProps, isString } from "@yujinjin/cms-components-utils";
-import { type NotReadonly } from "/#/global";
+import { type NotReadonly } from "../../types";
 
 export type OnImgUploadFunction = (file: any) => Promise<string> | string;
 

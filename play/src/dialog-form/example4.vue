@@ -51,7 +51,7 @@
 import { ref, reactive } from "vue";
 import { ArrowDown } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
-import { DialogForm, type InputFormProps, type DialogFormButton, type DialogFormRef, type InputFormSlotScope } from "@yujinjin/cms-components/index";
+import { DialogForm, type InputFormProps, type DialogFormButton, type DialogFormRef, type InputFormSlotScope } from "@yujinjin/cms-components-main/index";
 import img from "./head-photo-04.jpg";
 
 const visible = ref(false);

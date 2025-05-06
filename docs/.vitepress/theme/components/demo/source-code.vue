@@ -11,7 +11,7 @@
     <div class="example-source-wrapper">
         <div v-if="sources.length === 1" class="example-source language-vue" v-html="sources[index].highlightSourceHtml" />
         <el-tabs v-else :model-value="index" class="source-tabs" @tab-change="tabChangeHandle">
-            <el-tab-pane v-for="(sourceItem, i) in sources" :key="sourceItem.path" :label="sourceItem.path" :name="i">
+            <el-tab-pane v-for="(sourceItem, i) in sources" :key="sourceItem.path" :label="getFileName(sourceItem.path)" :name="i">
                 <div class="example-source" :class="['language-' + sourceItem.suffixName]" v-html="sourceItem.highlightSourceHtml" />
             </el-tab-pane>
         </el-tabs>
@@ -33,6 +33,10 @@ defineProps({
 });
 
 const emits = defineEmits(["update:index"]);
+
+const getFileName = function (path: string) {
+    return path.substring(path.indexOf("/") + 1);
+};
 
 // tab变化事件
 const tabChangeHandle = function (tabIndex) {

@@ -22,7 +22,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import { type DataTableColumn } from "@yujinjin/cms-components/index";
+import { type DataTableColumn } from "@yujinjin/cms-components-main/index";
 
 const columns = ref<DataTableColumn<any>[]>([
     { type: "expand", slot: "expand" },

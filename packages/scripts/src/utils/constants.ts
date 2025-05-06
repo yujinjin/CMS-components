@@ -6,7 +6,11 @@
  * @项目的路径: \CMS-components\packages\scripts\src\utils\constants.ts
  * @描述: 定义常量
  */
-import { resolve } from "path";
+import { fileURLToPath } from "url";
+import { dirname, resolve } from "path";
+
+// 获取当前文件的路径
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // 包名称
 export const PACEKAGE_NAME = "@yujinjin/cms-components";

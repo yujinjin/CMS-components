@@ -34,7 +34,7 @@ import { ref, reactive } from "vue";
 import { ArrowDown } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
 import { withBase } from "vitepress";
-import { DialogForm, type InputFormProps, type DialogFormButton, type DialogFormRef, type InputFormSlotScope } from "@yujinjin/cms-components/index";
+import { DialogForm, type InputFormProps, type DialogFormButton, type DialogFormRef, type InputFormSlotScope } from "@yujinjin/cms-components-main/index";
 
 const visible = ref(false);
 
@@ -69,7 +69,7 @@ const handleCancel = () => {
 
 const buttons = ref<DialogFormButton[]>([{ slot: "more" }, { type: "primary", contents: "提交", click: handleSubmit }, { type: "danger", contents: "取消", click: handleCancel }]);
 </script>
-<style lang="scss" scoped>
+<style scoped>
 .form-tips {
     margin-bottom: 20px;
 }

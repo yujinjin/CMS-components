@@ -8,8 +8,8 @@
  */
 import { type PropType, type ExtractPublicPropTypes, type Component } from "vue";
 import { type FormValidateCallback, type FormValidationResult, type ButtonProps, type DialogProps, type FormInstance } from "element-plus";
-import { type NotReadonly } from "/#/global";
 import { buildProps } from "@yujinjin/cms-components-utils";
+import { type NotReadonly } from "../../types";
 import { type InputFormProps, type InputFormField } from "@yujinjin/cms-components-modules/input-form";
 
 // 弹窗表单按钮

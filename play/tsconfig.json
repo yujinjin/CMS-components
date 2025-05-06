@@ -4,5 +4,5 @@
         "composite": true,
         "sourceMap": true
     },
-    "include": ["../typings", "src/**/*"]
+    "include": ["../typings", "src/**/*", "../packages/**/*"]
 }

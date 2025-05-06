@@ -16,7 +16,7 @@ const value2 = ref("");
 const value3 = ref("");
 const value4 = ref([]);
 </script>
-<style lang="scss" scoped>
+<style scoped>
 .demo-block {
     display: flex;
     flex-direction: column;

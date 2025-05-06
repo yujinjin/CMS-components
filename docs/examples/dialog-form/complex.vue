@@ -21,7 +21,7 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import { ElMessage } from "element-plus";
-import { type DialogFormRef, type DialogFormButton, type InputFormField, DialogForm } from "@yujinjin/cms-components/index";
+import { type DialogFormRef, type DialogFormButton, type InputFormField, DialogForm } from "@yujinjin/cms-components-main/index";
 
 const visible = ref(false);
 const currentStep = ref(0);
@@ -122,7 +122,7 @@ const buttons = ref<DialogFormButton[]>([
     { type: "danger", contents: "取消", click: handleCancel }
 ]);
 </script>
-<style lang="scss" scoped>
+<style scoped>
 .dialog-footer {
     text-align: right;
 }

@@ -8,7 +8,7 @@
  */
 import { type PropType, type ExtractPublicPropTypes } from "vue";
 import { buildProps } from "@yujinjin/cms-components-utils";
-import { type NotReadonly } from "/#/global";
+import { type NotReadonly } from "../../types";
 
 type FieldType = "input" | "inputNumber" | "select" | "checkSelect" | "datePicker";
 

@@ -15,7 +15,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { ElMessage } from "element-plus";
-import { WebEditor } from "@yujinjin/cms-components/index";
+import { WebEditor } from "@yujinjin/cms-components-main/index";
 
 const content = ref("<p>这是一个支持图片上传的富文本编辑器示例</p>");
 

@@ -9,7 +9,7 @@
 import { type PropType, type ExtractPublicPropTypes, type Component } from "vue";
 import { buildProps } from "@yujinjin/cms-components-utils";
 import { type ButtonProps } from "element-plus";
-import { type NotReadonly } from "/#/global";
+import { type NotReadonly } from "../../types";
 
 export type ActionButton = NotReadonly<Partial<ButtonProps>> & {
     /** 当前按钮操作CODE */

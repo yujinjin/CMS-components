@@ -6,12 +6,12 @@
  * @项目的路径: \CMS-components\play\src\main.ts
  * @描述: 入口页
  */
-import { createApp } from "vue";
+import { type Plugin, createApp } from "vue";
 import ElementPlus from "element-plus";
 import { type RouteRecordRaw, type Router, createRouter, createWebHashHistory } from "vue-router";
 import zhCn from "element-plus/es/locale/lang/zh-cn";
 import "element-plus/dist/index.css";
-import "../../packages/style/index.scss";
+import "@yujinjin/cms-components-style/index.scss";
 import App from "./index.vue";
 
 const router: Router = createRouter({
@@ -307,6 +307,6 @@ const router: Router = createRouter({
     strict: true
 });
 const app = createApp(App);
-app.use(router);
+app.use(router as Plugin);
 app.use(ElementPlus, { locale: zhCn });
 app.mount("#app");

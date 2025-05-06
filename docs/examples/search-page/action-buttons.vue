@@ -29,7 +29,7 @@
 import { ref, reactive } from "vue";
 import { ElMessage } from "element-plus";
 import { ArrowDown } from "@element-plus/icons-vue";
-import { SearchPage, type SearchPageRef, type SearchFormProps, type DataTableProps, type ActionBarProps, type ActionButton } from "@yujinjin/cms-components/index";
+import { SearchPage, type SearchPageRef, type SearchFormProps, type DataTableProps, type ActionBarProps, type ActionButton } from "@yujinjin/cms-components-main/index";
 
 const searchPageRef = ref<SearchPageRef>();
 

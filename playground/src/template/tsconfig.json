@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "target": "ESNext",
+        "jsx": "preserve",
+        "module": "ESNext",
+        "moduleResolution": "Bundler",
+        "types": ["element-plus/global.d.ts", "@yujinjin/cms-components/global.d.ts"],
+        "allowImportingTsExtensions": true,
+        "noEmit": true,
+        "allowJs": true,
+        "checkJs": true
+    },
+    "vueCompilerOptions": {
+        "target": 3.3
+    }
+}

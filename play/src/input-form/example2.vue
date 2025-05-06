@@ -14,7 +14,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import { type InputFormField, InputForm } from "@yujinjin/cms-components/index";
+import { type InputFormField, InputForm } from "@yujinjin/cms-components-main/index";
 import img from "./head-photo-04.jpg";
 
 const formData = ref({

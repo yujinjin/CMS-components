@@ -6,28 +6,15 @@
  * @项目的路径: \CMS-components\packages\main\index.ts
  * @描述: 引入全局组件的入口
  */
-import { type App } from "vue";
-import components from "./components";
-import { version } from "./version";
+import installer from "./defaults";
+export * from "@yujinjin/cms-components-modules/index";
 
-export * from "@yujinjin/cms-components-modules";
+export default installer;
 
-const INSTALLED_KEY = Symbol("CMS_INSTALLED_KEY");
+export const install = installer.install;
 
-interface InstallOptions {
-    size?: string;
-}
+export const version = installer.version;
 
-export const install = function (app: App, options: InstallOptions) {
-    if (app[INSTALLED_KEY]) return;
+export { default as quill } from "quill";
 
-    app[INSTALLED_KEY] = true;
-    if (options) {
-        // TODO: 设置全局属性
-    }
-    components.forEach(component => {
-        app.component(component.name!, component);
-    });
-};
-
-export default { install, version };
+export { default as cropperjs } from "cropperjs";

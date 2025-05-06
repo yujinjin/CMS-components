@@ -12,7 +12,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import { type InputFormField, type InputFormRef } from "@yujinjin/cms-components/index";
+import { type InputFormField, type InputFormRef } from "@yujinjin/cms-components-main/index";
 
 const inputFormRef = ref<InputFormRef>();
 
@@ -67,7 +67,7 @@ const handlePreview = () => {
     previewVisible.value = true;
 };
 </script>
-<style lang="scss" scoped>
+<style scoped>
 .button-panel {
     margin-top: 24px;
     text-align: center;

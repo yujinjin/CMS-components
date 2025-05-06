@@ -18,3 +18,4 @@ export * from "./input-form";
 export * from "./search-form";
 export * from "./dialog-form";
 export * from "./search-page";
+export * from "./types.d";

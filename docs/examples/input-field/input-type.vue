@@ -45,7 +45,7 @@ const querySearch = (queryString: string, cb: any) => {
     cb(results);
 };
 </script>
-<style lang="scss" scoped>
+<style scoped>
 .demo-block {
     display: flex;
     flex-direction: column;

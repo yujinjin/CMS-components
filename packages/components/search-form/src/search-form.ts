@@ -8,8 +8,8 @@
  */
 import { type PropType, type ExtractPublicPropTypes } from "vue";
 import { type ButtonProps } from "element-plus";
-import { type NotReadonly } from "/#/global";
 import { buildProps } from "@yujinjin/cms-components-utils";
+import { type NotReadonly } from "../../types";
 import { type SearchFieldProps } from "@yujinjin/cms-components-modules/search-field";
 
 // 搜索表单按钮

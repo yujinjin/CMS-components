@@ -174,7 +174,7 @@ export default tseslint.config(
     },
     /** markdown 配置 */
     {
-        files: ["**/*.md/*.vue", "**/*.md/*.js", "**/*.md/*.ts", "packages/scripts/**/*.js", "packages/scripts/**/*.ts", "play/**/*", "docs/**/*"],
+        files: ["**/*.md/*.vue", "**/*.md/*.js", "**/*.md/*.ts", "packages/scripts/**/*.js", "packages/scripts/**/*.ts", "play/**/*", "docs/**/*", "playground/**/*"],
         rules: {
             "no-console": "off",
             "import/no-unresolved": "off",
@@ -202,6 +202,6 @@ export default tseslint.config(
     },
     /** 忽略文件 */
     {
-        ignores: [".vscode/*", "node_modules", "dist", ".husky", "public", ".idea/", "docs/.vitepress/cache/*"]
+        ignores: [".vscode/*", "node_modules", "dist", ".husky", "public", ".idea/", "docs/.vitepress/cache/*", "playground/src/template/*"]
     }
 );

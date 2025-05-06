@@ -14,7 +14,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import { ImgUpload } from "@yujinjin/cms-components/index";
+import { ImgUpload } from "@yujinjin/cms-components-main/index";
 import img from "./03.jpeg";
 
 const values = ref([]);

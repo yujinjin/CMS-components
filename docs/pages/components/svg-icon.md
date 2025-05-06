@@ -146,7 +146,7 @@ svgs.keys().map(svgs);
 
 :::demo 指定引入svg文件，在组件中直接指定`value`属性为svg文件名即可使用。
 
-svg-icon/basic
+svg-icon/basic(svg-icon/svgs/exit-full-screen.svg|svg-icon/svgs/fold.svg|svg-icon/svgs/full-screen.svg)[hide-playground]
 
 :::
 
@@ -154,7 +154,7 @@ svg-icon/basic
 
 :::demo 该示例是基于vite的，从指定目录引入所有的svg文件。
 
-svg-icon/all
+svg-icon/all[hide-playground]
 
 :::
 

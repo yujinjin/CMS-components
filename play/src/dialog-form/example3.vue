@@ -17,7 +17,7 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue";
 import { ElMessage } from "element-plus";
-import { type DialogFormRef, type DialogFormButton, type InputFormProps, DialogForm } from "@yujinjin/cms-components/index";
+import { type DialogFormRef, type DialogFormButton, type InputFormProps, DialogForm } from "@yujinjin/cms-components-main/index";
 
 const visible = ref(false);
 

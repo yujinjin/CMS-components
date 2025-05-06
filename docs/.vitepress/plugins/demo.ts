@@ -25,7 +25,12 @@ export default function (markdownRenderer: MarkdownRenderer) {
                 // 源码路径文件列表
                 const sourceFilePathList: string[] = [];
                 // 文件路径，还有其他文件时放入"()"内，比如：action-bar/index(action-bar/config.js|action-bar/config2.js)
-                const sourceFileContent = sourceFileToken.children?.[0].content ?? "";
+                let sourceFileContent = sourceFileToken.children?.[0].content ?? "";
+                // 是否显示playground，如果内容带有"[hide-playground]"表示就不去演练场了
+                const isShowPlayground = sourceFileContent.indexOf("[hide-playground]") === -1;
+                if (!isShowPlayground) {
+                    sourceFileContent = sourceFileContent.replace("[hide-playground]", "");
+                }
                 if (sourceFileToken.type === "inline") {
                     const startBracketsIndex = sourceFileContent.indexOf("(");
                     const endBracketsIndex = sourceFileContent.indexOf(")");
@@ -60,7 +65,7 @@ export default function (markdownRenderer: MarkdownRenderer) {
                 });
                 return `<vp-demo sources="${encodeURIComponent(JSON.stringify(sourceFiles))}" mainVueFilePath="${encodeURIComponent(sourceFiles[0].path)}" description="${encodeURIComponent(
                     markdownRenderer.render(description)
-                )}">`;
+                )}" isShowPlayground="${isShowPlayground}">`;
             }
             return "</vp-demo>";
         }

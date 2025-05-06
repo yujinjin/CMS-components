@@ -10,7 +10,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { ElMessage, type FormRules } from "element-plus";
-import { type InputFormField, type InputFormRef } from "@yujinjin/cms-components/index";
+import { type InputFormField, type InputFormRef } from "@yujinjin/cms-components-main/index";
 
 const inputFormRef = ref<InputFormRef>();
 
@@ -75,7 +75,7 @@ const handleSubmit = async (data: any) => {
     ElMessage.success("提交数据:" + JSON.stringify(inputFormRef.value?.getInputValue()));
 };
 </script>
-<style lang="scss" scoped>
+<style scoped>
 .button-panel {
     margin-top: 24px;
     text-align: center;

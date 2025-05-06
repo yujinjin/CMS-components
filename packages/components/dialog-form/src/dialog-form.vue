@@ -35,7 +35,7 @@
 <script setup lang="ts">
 import { type Ref, ref, markRaw, watch, computed } from "vue";
 import { type DialogProps, type FormValidateCallback, ElDialog, ElButton, ElIcon } from "element-plus";
-import { type NotReadonly } from "/#/global";
+import { type NotReadonly } from "../../types";
 import { type DialogFormButton, type DialogFormRef, type DialogFormButtonSlotScope, dialogFormProps, dialogFormEmits } from "./dialog-form";
 import { type InputFormRef, type InputFormField, type InputFormSlotScope, InputForm } from "@yujinjin/cms-components-modules/input-form";
 

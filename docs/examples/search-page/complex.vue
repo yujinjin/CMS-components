@@ -54,7 +54,7 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue";
 import { ElMessage } from "element-plus";
-import { SearchPage, type SearchPageRef } from "@yujinjin/cms-components/index";
+import { SearchPage, type SearchPageRef } from "@yujinjin/cms-components-main/index";
 import { QuestionFilled } from "@element-plus/icons-vue";
 import tableColumnCopy from "./table-column-copy.vue";
 import useSearchPage from "./use-search-page";
@@ -97,40 +97,40 @@ const cancelOrderHandle = function (row: any) {
 
 const { searchFormProps, actionBarProps, dataTableProps } = useSearchPage({ showDialogHandle, excelExportHandle, cancelOrderHandle, orertReportData });
 </script>
-<style lang="scss" scoped>
+<style scoped>
 .order-status-header {
     display: flex;
     align-items: center;
+}
 
-    .el-icon {
-        color: #999;
-        font-size: 16px;
-        margin-left: 4px;
-    }
+.order-status-header .el-icon {
+    color: #999;
+    font-size: 16px;
+    margin-left: 4px;
 }
 .tips-popover {
     padding: 12px 24px;
     max-height: 300px;
     overflow-y: auto;
+}
 
-    .title-text {
-        text-align: center;
-        padding-bottom: 5px;
-        line-height: 30px;
-        font-size: 18px;
-        color: #000;
-    }
+.tips-popover .title-text {
+    text-align: center;
+    padding-bottom: 5px;
+    line-height: 30px;
+    font-size: 18px;
+    color: #000;
+}
 
-    .subtitle-text {
-        padding: 5px 0px;
-        line-height: 25px;
-        font-size: 15px;
-        color: #000;
-    }
+.tips-popover .subtitle-text {
+    padding: 5px 0px;
+    line-height: 25px;
+    font-size: 15px;
+    color: #000;
+}
 
-    .contents-text {
-        line-height: 20px;
-        font-size: 13px;
-    }
+.tips-popover .contents-text {
+    line-height: 20px;
+    font-size: 13px;
 }
 </style>

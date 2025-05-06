@@ -18,7 +18,7 @@ const value4 = ref([]);
 
 const options = Array.from({ length: 10 }, (value, index) => ({ value: index.toString(), label: `选项 ${index}`, disabled: index % 2 === 0 }));
 </script>
-<style lang="scss" scoped>
+<style scoped>
 .demo-block {
     display: flex;
     flex-direction: column;

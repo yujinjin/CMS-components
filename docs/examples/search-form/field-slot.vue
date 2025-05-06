@@ -13,7 +13,7 @@
 </template>
 <script setup lang="ts">
 import { ElMessage } from "element-plus";
-import { type SearchFormField } from "@yujinjin/cms-components/index";
+import { type SearchFormField } from "@yujinjin/cms-components-main/index";
 
 const fields: SearchFormField[] = [
     { name: "name", label: "名称", type: "input" },
@@ -33,14 +33,14 @@ const handleSearch = (data: any) => {
     ElMessage.success("搜索数据:" + JSON.stringify(data));
 };
 </script>
-<style lang="scss" scoped>
+<style scoped>
 .custom-range {
     display: flex;
     align-items: center;
     gap: 8px;
+}
 
-    .separator {
-        color: #909399;
-    }
+.custom-range .separator {
+    color: #909399;
 }
 </style>

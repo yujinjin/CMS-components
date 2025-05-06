@@ -13,7 +13,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { DocumentCopy } from "@element-plus/icons-vue";
-import Clipboard from "clipboard";
+import { useClipboard } from "@vueuse/core";
 import { ElMessage } from "element-plus";
 
 const props = defineProps({
@@ -29,52 +29,47 @@ const props = defineProps({
 
 const elIconRef = ref<HTMLDivElement>();
 
+const { copy, isSupported } = useClipboard({ source: props.value, legacy: true });
+
 // 复制操作
-const copyTextHandle = function () {
-    const clipboard = new Clipboard(elIconRef.value!, {
-        text: function () {
-            return props.value!;
-        }
-    });
-    clipboard.on("success", () => {
-        ElMessage({
-            message: "复制成功",
-            type: "success",
-            duration: 1000
-        });
-        clipboard.destroy();
-    });
-    clipboard.on("error", () => {
-        ElMessage.error("复制失败");
-        clipboard.destroy();
+const copyTextHandle = async function () {
+    if (!isSupported.value) {
+        ElMessage.error("复制失败，您的浏览器不支持 Clipboard API");
+        return;
+    }
+    await copy();
+    ElMessage({
+        message: "复制成功",
+        type: "success",
+        duration: 1000
     });
 };
 </script>
-<style lang="scss" scoped>
+<style scoped>
 .table-column-copy {
     width: 100%;
     display: flex;
     align-items: center;
+}
 
-    .text {
-        flex: 1;
-        display: -webkit-box;
-        word-break: break-all;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 1;
-    }
+.table-column-copy .text {
+    flex: 1;
+    display: -webkit-box;
+    word-break: break-all;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+}
 
-    .icon-box {
-        padding: 2px;
-        cursor: pointer;
-        text-align: center;
-        font-size: 16px;
+.table-column-copy .icon-box {
+    padding: 2px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 16px;
 
-        &:hover {
-            color: #15c359;
-        }
+    &:hover {
+        color: #15c359;
     }
 }
 </style>

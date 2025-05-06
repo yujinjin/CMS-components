@@ -10,11 +10,11 @@ import DefaultTheme from "vitepress/theme";
 import { type Theme } from "vitepress";
 import ElementPlus from "element-plus";
 import zhCn from "element-plus/es/locale/lang/zh-cn";
-import CMSComponents from "@yujinjin/cms-components/index";
+import CMSComponents from "@yujinjin/cms-components-main/index";
 import Demo from "./components/demo/index.vue";
 import Tooltip from "./components/tooltip/index.vue";
 import "./style/index.scss";
-import "../../../packages/style/index.scss";
+import "@yujinjin/cms-components-style/index.scss";
 
 export default {
     ...DefaultTheme,
@@ -42,7 +42,7 @@ export default {
         //     document = mockDocument as unknown as Document;
         // }
         // if (!import.meta.env.SSR) {
-        //     const plugin = await import("@yujinjin/cms-components/index");
+        //     const plugin = await import("@yujinjin/cms-components-main/index");
         //     app.use(plugin.default, {});
         // }
     }

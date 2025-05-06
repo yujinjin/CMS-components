@@ -14,7 +14,7 @@
 </template>
 <script setup lang="ts">
 import { ElMessage } from "element-plus";
-import { type SearchFormField, type SearchFormButton, SearchForm } from "@yujinjin/cms-components/index";
+import { type SearchFormField, type SearchFormButton, SearchForm } from "@yujinjin/cms-components-main/index";
 
 const fields: SearchFormField[] = [
     { name: "keyword", label: "关键词", type: "input" },

@@ -32,33 +32,38 @@ CMS Components 是一个基于 Vue 3 和 Element Plus 的组件库，旨在为�
 ## 技术栈
 
 ### 核心技术
-- **Vue 3**: 使用 Vue 3 Composition API 开发
-- **TypeScript**: 采用 TypeScript 进行类型安全的开发
-- **Element Plus**: 基于 Element Plus UI 框架扩展
-- **Vite**: 使用 Vite 构建开发环境
+
+-   **Vue 3**: 使用 Vue 3 Composition API 开发
+-   **TypeScript**: 采用 TypeScript 进行类型安全的开发
+-   **Element Plus**: 基于 Element Plus UI 框架扩展
+-   **Vite**: 使用 Vite 构建开发环境
 
 ### 构建工具
-- **Rollup**: 用于组件库的打包构建
-- **pnpm**: 包管理器，采用 monorepo 结构管理项目
-- **Gulp**: 自动化构建工具，协调各个构建任务
+
+-   **Rollup**: 用于组件库的打包构建
+-   **pnpm**: 包管理器，采用 monorepo 结构管理项目
+-   **Gulp**: 自动化构建工具，协调各个构建任务
 
 ### 开发工具
-- **VitePress**: 文档站点构建
-- **Vitest**: 单元测试框架
-- **ESLint**: 代码质量检查
-- **Prettier**: 代码格式化
-- **Husky**: Git Hooks 管理
-- **commitlint**: Git 提交信息规范化
+
+-   **VitePress**: 文档站点构建
+-   **Vitest**: 单元测试框架
+-   **ESLint**: 代码质量检查
+-   **Prettier**: 代码格式化
+-   **Husky**: Git Hooks 管理
+-   **commitlint**: Git 提交信息规范化
 
 ### 样式开发
-- **Sass**: CSS 预处理器
-- **Less**: CSS 预处理器
-- **PostCSS**: CSS 后处理器
+
+-   **Sass**: CSS 预处理器
+-   **Less**: CSS 预处理器
+-   **PostCSS**: CSS 后处理器
 
 ### 依赖库
-- **Quill**: 富文本编辑器
-- **Cropper.js**: 图片裁剪功能
-- **clipboard**: 剪贴板操作
+
+-   **Quill**: 富文本编辑器
+-   **Cropper.js**: 图片裁剪功能
+-   **@vueuse/core**: 基于组合式 API 的实用函数集合
 
 ## 安装
 
@@ -201,3 +206,11 @@ pnpm coverage
 ## License
 
 该项目使用 MIT 许可证，详细信息请查看 [LICENSE](./LICENSE) 文件。
+
+## todo:
+
+-   1.修复单元测试控制台提示的错误
+-   2.补充README.md文档内的示例、API文档入口链接
+-   3.检查打包后的文件ts类型有问题（es/components.mjs、es/index.mjs等）
+-
+-

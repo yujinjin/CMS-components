@@ -13,7 +13,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { CheckSelect } from "@yujinjin/cms-components/index";
+import { CheckSelect } from "@yujinjin/cms-components-main/index";
 import { ref } from "vue";
 
 const values = ref(["1", "2"]);

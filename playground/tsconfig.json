@@ -1,0 +1,9 @@
+{
+    "extends": "../tsconfig.base.json",
+    "compilerOptions": {
+        "composite": true,
+        "sourceMap": true
+    },
+    "include": ["../typings", "src/**/*"],
+    "exclude": ["node_modules", "src/template/**/*"]
+}

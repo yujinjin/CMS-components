@@ -285,7 +285,7 @@ const options = ref([
     }
 ]);
 </script>
-<style lang="scss" scoped>
+<style scoped>
 .demo-block {
     display: flex;
     flex-direction: column;

@@ -38,28 +38,28 @@ const handleBlur = () => {
     addLog("失去焦点");
 };
 </script>
-<style lang="scss" scoped>
+<style scoped>
 .event-log {
     margin-top: 20px;
     padding: 12px;
     background-color: #f5f7fa;
     border-radius: 4px;
+}
 
-    h4 {
-        margin: 0 0 12px;
-        color: #606266;
-    }
+.event-log h4 {
+    margin: 0 0 12px;
+    color: #606266;
+}
 
-    ul {
-        margin: 0;
-        padding: 0;
-        list-style: none;
+.event-log ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
 
-        li {
-            padding: 4px 0;
-            color: #909399;
-            font-size: 14px;
-        }
-    }
+.event-log ul li {
+    padding: 4px 0;
+    color: #909399;
+    font-size: 14px;
 }
 </style>
