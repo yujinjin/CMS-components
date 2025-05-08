@@ -14,7 +14,3 @@ export default installer;
 export const install = installer.install;
 
 export const version = installer.version;
-
-export { default as quill } from "quill";
-
-export { default as cropperjs } from "cropperjs";

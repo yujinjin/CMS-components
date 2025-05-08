@@ -1,6 +1,8 @@
 <template>
     <div class="demo-box">
-        <web-editor v-model="content" :disabled="readonly" />
+        <ClientOnly>
+            <web-editor v-model="content" :disabled="readonly" />
+        </ClientOnly>
     </div>
 </template>
 <script setup lang="ts">

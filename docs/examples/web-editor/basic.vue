@@ -1,6 +1,8 @@
 <template>
     <div class="demo-box">
-        <web-editor v-model="content" style="min-height: 200px; max-height: 400px" placeholder="请输入内容..." />
+        <ClientOnly>
+            <web-editor v-model="content" style="min-height: 200px; max-height: 400px" placeholder="请输入内容..." />
+        </ClientOnly>
     </div>
 </template>
 <script setup lang="ts">

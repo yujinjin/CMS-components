@@ -1,10 +1,12 @@
 <template>
     <div class="demo-box">
-        <web-editor v-model="content" placeholder="请输入内容...">
-            <el-tooltip content="全屏源码编辑">
-                <el-icon class="full-screen-icon"><FullScreen /></el-icon>
-            </el-tooltip>
-        </web-editor>
+        <ClientOnly>
+            <web-editor v-model="content" placeholder="请输入内容...">
+                <el-tooltip content="全屏源码编辑">
+                    <el-icon class="full-screen-icon"><FullScreen /></el-icon>
+                </el-tooltip>
+            </web-editor>
+        </ClientOnly>
     </div>
 </template>
 <script setup lang="ts">

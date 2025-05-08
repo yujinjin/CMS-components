@@ -8,7 +8,9 @@
 -->
 <template>
     <div class="demo-box">
-        <web-editor v-model="content" :on-img-upload="handleUploadImage" />
+        <ClientOnly>
+            <web-editor v-model="content" :on-img-upload="handleUploadImage" />
+        </ClientOnly>
     </div>
 </template>
 <script setup lang="ts">
