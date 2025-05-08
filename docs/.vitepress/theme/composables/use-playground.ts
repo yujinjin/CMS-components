@@ -15,6 +15,6 @@ export const usePlayground = function (decodeSourceList: Docs.Source[], mainFile
         const fileName = mainFilePath === item.path ? "App.vue" : item.path.substring(item.path.indexOf("/") + 1);
         playgroundCodes[fileName] = item.source;
     });
-    // return "https://yujinjin.github.io/cms-components/playground/#" + utoa(JSON.stringify(playgroundCodes));
-    return "http://10.96.144.203:8090/#" + utoa(JSON.stringify(playgroundCodes));
+    return "https://yujinjin.github.io/cms-components/playground/#" + utoa(JSON.stringify(playgroundCodes));
+    // return "http://10.96.144.203:8090/#" + utoa(JSON.stringify(playgroundCodes));
 };
