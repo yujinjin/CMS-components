@@ -12,9 +12,11 @@
         <section class="demo-section">
             <h3>基础用法</h3>
             <div class="demo-block">
-                <svg-icon value="fold" />
-                <svg-icon value="warning-sign" />
-                <svg-icon value="exit-full-screen" />
+                <svg-icon :value="ExitFullScreen" />
+                <svg-icon :value="WarningSign" />
+                <svg-icon :value="Fold" />
+                <svg-icon :value="FullScreen" />
+                <svg-icon :value="VueLogo" />
             </div>
         </section>
 
@@ -22,10 +24,10 @@
         <section class="demo-section">
             <h3>不同颜色</h3>
             <div class="demo-block">
-                <svg-icon value="fold" style="color: #67c23a" />
-                <svg-icon value="fold" style="color: #e6a23c" />
-                <svg-icon value="fold" style="color: #f56c6c" />
-                <svg-icon value="fold" style="color: #909399" />
+                <svg-icon :value="Fold" color="#67c23a" />
+                <svg-icon :value="Fold" color="#e6a23c" />
+                <svg-icon :value="Fold" color="#f56c6c" />
+                <svg-icon :value="Fold" color="#909399" />
             </div>
         </section>
 
@@ -33,10 +35,10 @@
         <section class="demo-section">
             <h3>不同尺寸</h3>
             <div class="demo-block">
-                <svg-icon value="warning-sign" style="font-size: 16px" />
-                <svg-icon value="warning-sign" style="font-size: 24px" />
-                <svg-icon value="warning-sign" style="font-size: 32px" />
-                <svg-icon value="warning-sign" style="font-size: 48px" />
+                <svg-icon :value="WarningSign" size="16px" />
+                <svg-icon :value="WarningSign" size="24px" />
+                <svg-icon :value="WarningSign" size="32px" />
+                <svg-icon :value="WarningSign" size="48px" />
             </div>
         </section>
 
@@ -44,40 +46,59 @@
         <section class="demo-section">
             <h3>点击事件</h3>
             <div class="demo-block">
-                <svg-icon value="full-screen" class="clickable" @click="handleClick" />
+                <svg-icon :value="ExitFullScreen" class="clickable" @click="handleClick" />
             </div>
         </section>
 
         <!-- 所有图标列表 -->
         <section class="demo-section">
             <h3>图标列表</h3>
-            <div ref="iconListRef" class="icon-list">
-                <div v-for="icon in icons" :key="icon" class="icon-item" @click="copyTextHandle('<svg-icon value=\'' + icon + '\' />')">
-                    <svg-icon :value="icon" />
-                    <span class="icon-name">{{ icon }}</span>
+            <div class="icon-list">
+                <div v-for="icon in icons" :key="icon.name" class="icon-item" @click="copyTextHandle('<svg-icon><' + icon.name + '/></svg-icon>')">
+                    <svg-icon>
+                        <component :is="icon.component" />
+                    </svg-icon>
+                    <span class="icon-name">{{ icon.name }}</span>
                 </div>
             </div>
         </section>
     </div>
 </template>
-
 <script setup lang="ts">
-import { ref } from "vue";
+import { shallowRef } from "vue";
 import { useClipboard } from "@vueuse/core";
 import { ElMessage } from "element-plus";
 import { SvgIcon } from "@yujinjin/cms-components-main/index";
+import ExitFullScreen from "./svgs/exit-full-screen.svg";
+import Fold from "./svgs/fold.svg";
+import WarningSign from "./svgs/warning-sign.svg";
+import FullScreen from "./svgs/full-screen.svg";
+import VueLogo from "./svgs/vue-logo.svg";
 
 // 加载所有svg文件
-const svgs = import.meta.glob("./svgs/*.svg");
-
-const iconListRef = ref<HTMLDivElement>();
-const icons = ref<string[]>([]);
-
-// 加载所有图标
-Object.keys(svgs).forEach(async key => {
-    await svgs[key]();
-    icons.value.push(key.match(/\.\/svgs\/(.*)\.svg/)![1]);
-});
+// const svgs = import.meta.glob("./svgs/*.svg");
+const icons = shallowRef([
+    {
+        name: "ExitFullScreen",
+        component: ExitFullScreen
+    },
+    {
+        name: "Fold",
+        component: Fold
+    },
+    {
+        name: "WarningSign",
+        component: WarningSign
+    },
+    {
+        name: "FullScreen",
+        component: FullScreen
+    },
+    {
+        name: "VueLogo",
+        component: VueLogo
+    }
+]);
 
 const { copy, isSupported } = useClipboard({ legacy: true });
 

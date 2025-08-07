@@ -7,15 +7,22 @@
  * @描述: svg icon
  */
 
-import { type ExtractPublicPropTypes } from "vue";
+import { type ExtractPublicPropTypes, type PropType, type Component } from "vue";
 import { buildProps } from "@yujinjin/cms-components-utils";
 import { type NotReadonly } from "../../types";
 
 export const svgIconProps = buildProps({
     // svg的link名称
     value: {
+        type: [String, Object] as PropType<string | Component>,
+        default: ""
+    },
+    color: {
         type: String,
-        required: true,
+        default: ""
+    },
+    size: {
+        type: [String, Number] as PropType<string | number>,
         default: ""
     }
 });

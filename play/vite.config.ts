@@ -10,15 +10,16 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import vueJsx from "@vitejs/plugin-vue-jsx";
-import createSvgSpritePlugin from "vite-plugin-svg-sprite";
+import svgLoader from "vite-svg-loader";
+
 export default () => {
     return defineConfig({
         mode: "production",
         plugins: [
             vue(),
             vueJsx(),
-            createSvgSpritePlugin({
-                symbolId: "icon-[name]"
+            svgLoader({
+                defaultImport: "component"
             })
         ],
         resolve: {

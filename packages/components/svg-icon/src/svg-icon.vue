@@ -7,10 +7,12 @@
  * @描述: svg 图标
 -->
 <template>
-    <i class="cms-icon">
-        <svg class="svg-icon" aria-hidden="true">
+    <i class="cms-icon" :style="{ color, fontSize: typeof size === 'number' || /^\d+$/.test(size) ? size + 'px' : size }">
+        <svg v-if="value && typeof value === 'string'" class="svg-icon" aria-hidden="true">
             <use :xlink:href="'#icon-' + value" />
         </svg>
+        <component :is="value" v-else-if="value" />
+        <slot />
     </i>
 </template>
 
