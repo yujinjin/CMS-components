@@ -34,7 +34,7 @@ export type TableButton = NotReadonly<Partial<ButtonProps>> & {
     click?: (selectRows: Array<any>, button: TableButton) => Promise<void> | void;
 };
 
-export interface DataTableColumn<T> extends Partial<TableColumnCtx<T>> {
+export interface DataTableColumn<T extends Record<string, any> = Record<string, any>> extends Partial<TableColumnCtx<T>> {
     /** 数据列的自定义类型 */
     type?: "selection" | "index" | "expand" | "number" | "action" | "date" | "enum" | "image";
 

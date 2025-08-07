@@ -39,13 +39,13 @@
 import { type PaginationProps, type TableProps, ElTable, ElPagination, ElTableColumn } from "element-plus";
 import { type Ref, onMounted, onUnmounted, ref, watch, nextTick } from "vue";
 import { extend, debounce } from "@yujinjin/utils";
+import { type NotReadonly } from "../../types";
 import { type DataTableColumn, type DataTableRef, dataTableProps, dataTableEmits } from "./data-table";
 import tableColumnDate from "./table-column-date.vue";
 import tableColumnNumber from "./table-column-number.vue";
 import tableColumnImage from "./table-column-image.vue";
 import tableColumnEnum from "./table-column-enum.vue";
 import tableColumnAction from "./table-column-action.vue";
-import { type NotReadonly } from "@yujinjin/cms-components-modules/types";
 
 defineOptions({
     name: "DataTable"
