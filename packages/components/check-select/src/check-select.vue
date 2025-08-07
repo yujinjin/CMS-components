@@ -115,15 +115,15 @@ const checkAllChangeHandle = async function () {
         if (!item.visible || item.created) {
             return;
         }
-        const findIndex = values.indexOf(item.value);
+        const findIndex = values.indexOf(item.value as string | number | object);
         if (checkAllStatus.value.isCheckAll && findIndex !== -1) {
             values.splice(findIndex, 1);
         } else if (!checkAllStatus.value.isCheckAll && findIndex === -1) {
-            values.push(item.value);
+            values.push(item.value as string | number | object);
         }
     });
     modelValue.value = values;
-    emits("change", modelValue.value);
+    emits("change", values);
 };
 
 const checkChangeHandle = function (isCheck, value) {
@@ -137,6 +137,6 @@ const checkChangeHandle = function (isCheck, value) {
         values.push(value);
     }
     modelValue.value = values;
-    emits("change", modelValue.value);
+    emits("change", values);
 };
 </script>
