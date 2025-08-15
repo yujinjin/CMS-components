@@ -12,58 +12,58 @@ CMS Components 是一个基于 Vue 3 和 Element Plus 的组件库，旨在为�
 
 ## 特性
 
--   **基于 Vue 3**: 利用 Vue 3 的响应式特性和组合 API，提供更好的开发体验。
--   **Element Plus 兼容**: 组件库基于 Element Plus，提供了一致的设计风格和用户体验。
--   **丰富的组件**: 提供多种常用组件，如表单、表格、弹窗、搜索框等，满足日常开发需求。
--   **灵活的配置**: 组件支持丰富的配置选项，允许开发者根据需求自定义组件行为和样式。
--   **良好的文档**: 提供详细的文档和示例，帮助开发者快速上手和使用组件。
--   **TypeScript 支持**: 使用 TypeScript 开发，提供完整的类型定义。
--   **主题定制**: 支持自定义主题，可以根据项目需求调整样式。
--   **按需加载**: 支持按需引入组件，优化项目体积。
+- **基于 Vue 3**: 利用 Vue 3 的响应式特性和组合 API，提供更好的开发体验。
+- **Element Plus 兼容**: 组件库基于 Element Plus，提供了一致的设计风格和用户体验。
+- **丰富的组件**: 提供多种常用组件，如表单、表格、弹窗、搜索框等，满足日常开发需求。
+- **灵活的配置**: 组件支持丰富的配置选项，允许开发者根据需求自定义组件行为和样式。
+- **良好的文档**: 提供详细的文档和示例，帮助开发者快速上手和使用组件。
+- **TypeScript 支持**: 使用 TypeScript 开发，提供完整的类型定义。
+- **主题定制**: 支持自定义主题，可以根据项目需求调整样式。
+- **按需加载**: 支持按需引入组件，优化项目体积。
 
 ## 环境支持
 
--   现代浏览器和 IE11
--   Vue 3.4+
--   Element Plus 2.8+
--   TypeScript 5.5+
--   Node.js 18+
+- 现代浏览器和 IE11
+- Vue 3.4+
+- Element Plus 2.8+
+- TypeScript 5.5+
+- Node.js 18+
 
 ## 技术栈
 
 ### 核心技术
 
--   **Vue 3**: 使用 Vue 3 Composition API 开发
--   **TypeScript**: 采用 TypeScript 进行类型安全的开发
--   **Element Plus**: 基于 Element Plus UI 框架扩展
--   **Vite**: 使用 Vite 构建开发环境
+- **Vue 3**: 使用 Vue 3 Composition API 开发
+- **TypeScript**: 采用 TypeScript 进行类型安全的开发
+- **Element Plus**: 基于 Element Plus UI 框架扩展
+- **Vite**: 使用 Vite 构建开发环境
 
 ### 构建工具
 
--   **Rollup**: 用于组件库的打包构建
--   **pnpm**: 包管理器，采用 monorepo 结构管理项目
--   **Gulp**: 自动化构建工具，协调各个构建任务
+- **Rollup**: 用于组件库的打包构建
+- **pnpm**: 包管理器，采用 monorepo 结构管理项目
+- **Gulp**: 自动化构建工具，协调各个构建任务
 
 ### 开发工具
 
--   **VitePress**: 文档站点构建
--   **Vitest**: 单元测试框架
--   **ESLint**: 代码质量检查
--   **Prettier**: 代码格式化
--   **Husky**: Git Hooks 管理
--   **commitlint**: Git 提交信息规范化
+- **VitePress**: 文档站点构建
+- **Vitest**: 单元测试框架
+- **ESLint**: 代码质量检查
+- **Prettier**: 代码格式化
+- **Husky**: Git Hooks 管理
+- **commitlint**: Git 提交信息规范化
 
 ### 样式开发
 
--   **Sass**: CSS 预处理器
--   **Less**: CSS 预处理器
--   **PostCSS**: CSS 后处理器
+- **Sass**: CSS 预处理器
+- **Less**: CSS 预处理器
+- **PostCSS**: CSS 后处理器
 
 ### 依赖库
 
--   **Quill**: 富文本编辑器
--   **Cropper.js**: 图片裁剪功能
--   **@vueuse/core**: 基于组合式 API 的实用函数集合
+- **Quill**: 富文本编辑器
+- **Cropper.js**: 图片裁剪功能
+- **@vueuse/core**: 基于组合式 API 的实用函数集合
 
 ## 安装
 
@@ -158,18 +158,18 @@ import { InputForm, SearchForm } from "@yujinjin/cms-components";
 
 ## 组件列表
 
--   **SvgIcon**: SVG文件图标组件。
--   **CheckSelect**: 多选下拉框选择组件，可快捷全选、选项有复选框勾选的选择器。适用那些下拉框数据量不大，但需要快捷全选的场景。
--   **ImgUpload**: 图片上传组件，支持单图/多图上传、裁剪、限制图片上传尺寸特性。
--   **WebEditor**: 富文本编辑器组件，基于 `Quill` 的富文本编辑器组件，提供所见即所得的内容编辑功能。
--   **InputField**: 动态表单输入字段组件，支持多种输入类型,如文本、数字、单选、多选等，主要是和`InputForm`组件组合使用。
--   **SearchField**: 动态表单搜索字段组件，支持多种输入类型,如文本、数字、单选、多选等，主要是和`SearchForm`组件组合使用。
--   **ActionBar**: 操作栏组件，提供常用操作按钮的配置。
--   **InputForm**: 动态表单组件，支持多种输入类型和验证。
--   **SearchForm**: 搜索表单组件，支持多种搜索条件和自定义操作。
--   **DataTable**: 数据表格组件，支持排序、筛选、分页等功能。
--   **DialogForm**: 弹窗表单组件，支持表单验证和自定义内容。
--   **SearchPage**: 搜索页面组件，结合搜索表单和数据表格，提供完整的搜索功能。
+- **SvgIcon**: SVG文件图标组件。
+- **CheckSelect**: 多选下拉框选择组件，可快捷全选、选项有复选框勾选的选择器。适用那些下拉框数据量不大，但需要快捷全选的场景。
+- **ImgUpload**: 图片上传组件，支持单图/多图上传、裁剪、限制图片上传尺寸特性。
+- **WebEditor**: 富文本编辑器组件，基于 `Quill` 的富文本编辑器组件，提供所见即所得的内容编辑功能。
+- **InputField**: 动态表单输入字段组件，支持多种输入类型,如文本、数字、单选、多选等，主要是和`InputForm`组件组合使用。
+- **SearchField**: 动态表单搜索字段组件，支持多种输入类型,如文本、数字、单选、多选等，主要是和`SearchForm`组件组合使用。
+- **ActionBar**: 操作栏组件，提供常用操作按钮的配置。
+- **InputForm**: 动态表单组件，支持多种输入类型和验证。
+- **SearchForm**: 搜索表单组件，支持多种搜索条件和自定义操作。
+- **DataTable**: 数据表格组件，支持排序、筛选、分页等功能。
+- **DialogForm**: 弹窗表单组件，支持表单验证和自定义内容。
+- **SearchPage**: 搜索页面组件，结合搜索表单和数据表格，提供完整的搜索功能。
 
 ### 本地开发
 
@@ -181,22 +181,22 @@ git clone https://github.com/yujinjin/CMS-components.git
 pnpm install
 
 # 构建组件库
-pnpm build
+npm run build
 
 # 构建文档
-pnpm docs:build
+npm run docs:build
 
 # 启动文档开发服务
-pnpm docs:dev
+npm run docs:dev
 
 # 启动组件演示环境
-pnpm play:dev
+npm run play:dev
 
 # 运行单元测试
-pnpm test:ui
+npm run test:ui
 
 # 运行测试并查看覆盖率
-pnpm coverage
+npm run coverage
 ```
 
 ## 贡献
@@ -206,11 +206,3 @@ pnpm coverage
 ## License
 
 该项目使用 MIT 许可证，详细信息请查看 [LICENSE](./LICENSE) 文件。
-
-## todo:
-
--   1.修复单元测试控制台提示的错误
--   2.补充README.md文档内的示例、API文档入口链接
--   3.检查打包后的文件ts类型有问题（es/components.mjs、es/index.mjs等）
--
--

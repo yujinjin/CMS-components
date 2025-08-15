@@ -221,3 +221,9 @@ svg-icon/all[hide-playground]
 | value  | svg文件名/svg组件 | ^[string] / ^[Component] | -      |
 | size   | 图标大小          | ^[string] / ^[number]    | -      |
 | color  | 图标颜色          | ^[string]                | -      |
+
+### SvgIcon 插槽
+
+| 插槽名  | 说明           | 作用域 |
+| ------- | -------------- | ------ |
+| default | 自定义默认内容 | -      |

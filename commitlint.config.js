@@ -9,6 +9,8 @@
  *        2.fix(components): [action-bar]修复 xxx 功能
  *        3.chore(all): 项目框架搭建
  *        4.chore(docs): vitepress文档框架构建优化
+ *        5.docs(components): [action-bar]文档更新
+
  */
 export default {
     extends: ["@commitlint/config-conventional"],
