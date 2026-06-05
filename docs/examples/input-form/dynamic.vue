@@ -21,7 +21,7 @@ import { type InputFormField, type InputFormRef } from "@yujinjin/cms-components
 
 const inputFormRef = ref<InputFormRef>();
 
-const formData = ref({
+const formData = ref<Record<string, any>>({
     field1: "",
     field2: ""
 });

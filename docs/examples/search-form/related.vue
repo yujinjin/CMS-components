@@ -14,7 +14,7 @@ const categories = [
     { label: "服装", value: "clothing" }
 ];
 
-const subCategoryData = {
+const subCategoryData: Record<string, any[]> = {
     electronics: [
         { label: "手机", value: "phone" },
         { label: "电脑", value: "computer" }
@@ -25,7 +25,7 @@ const subCategoryData = {
     ]
 };
 
-const productData = {
+const productData: Record<string, any[]> = {
     phone: [
         { label: "iPhone", value: "iphone" },
         { label: "华为", value: "huawei" }

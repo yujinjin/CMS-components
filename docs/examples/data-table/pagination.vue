@@ -27,7 +27,7 @@ const columns = ref<DataTableColumn<any>[]>([
 const loadingText = "加载中...";
 const emptyText = "暂无数据";
 
-const queryList = async params => {
+const queryList = async (params: any) => {
     // 模拟异步请求
     await new Promise(resolve => setTimeout(resolve, 1000));
 

@@ -1,7 +1,25 @@
-import { ref, type Ref } from "vue";
+import { ref, type Ref, type Reactive } from "vue";
 import { type ActionBarProps, type DataTableProps, type SearchFormProps } from "@yujinjin/cms-components-main";
 
-export default function ({ showDialogHandle, excelExportHandle, cancelOrderHandle, orertReportData }) {
+export default function ({
+    showDialogHandle,
+    excelExportHandle,
+    cancelOrderHandle,
+    orertReportData
+}: {
+    showDialogHandle: (rows: any[], { handleCode }: { handleCode: string }) => void;
+    excelExportHandle: (rows: any[]) => void;
+    cancelOrderHandle: (rows: any[]) => void;
+    orertReportData: Reactive<{
+        allCount: number;
+        pendingCount: number;
+        paidCount: number;
+        deliveredCount: number;
+        completedCount: number;
+        cancelledCount: number;
+        refundedCount: number;
+    }>;
+}) {
     // 下单设备来源枚举值
     const DEVICE_SOURCE_ENUM = [
         {
@@ -113,7 +131,6 @@ export default function ({ showDialogHandle, excelExportHandle, cancelOrderHandl
                 contents: "新增订单",
                 handleCode: "CREATE",
                 click: showDialogHandle,
-
                 type: "primary"
             },
             {

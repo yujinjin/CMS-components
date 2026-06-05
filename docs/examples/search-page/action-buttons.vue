@@ -33,7 +33,7 @@ import { SearchPage, type SearchPageRef, type SearchFormProps, type DataTablePro
 
 const searchPageRef = ref<SearchPageRef>();
 
-const selectRows = ref([]);
+const selectRows = ref<any[]>([]);
 
 const tabValue = ref("全部");
 
@@ -100,7 +100,7 @@ const dataTableProps: DataTableProps = {
     }
 };
 
-const selectRowsChangeHandle = function (rows) {
+const selectRowsChangeHandle = function (rows: any[]) {
     selectRows.value = rows;
     searchPageRef.value?.changeButtons((butttons: ActionButton[]) => {
         butttons[2].disabled = rows.length === 0;

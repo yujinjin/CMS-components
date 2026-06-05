@@ -62,7 +62,15 @@ import useSearchPage from "./use-search-page";
 const searchPageRef = ref<SearchPageRef>();
 
 // 当前订单统计数据
-const orertReportData = reactive({
+const orertReportData = reactive<{
+    allCount: number;
+    pendingCount: number;
+    paidCount: number;
+    deliveredCount: number;
+    completedCount: number;
+    cancelledCount: number;
+    refundedCount: number;
+}>({
     allCount: 0,
     pendingCount: 0,
     paidCount: 0,
@@ -76,7 +84,7 @@ const refreshHandle = function () {
     searchPageRef.value?.query();
 };
 
-const showDialogHandle = function (rows, { handleCode }) {
+const showDialogHandle = function (rows: any[], { handleCode }: { handleCode: string }) {
     if (handleCode === "CREATE") {
         ElMessage.info("新建");
     } else if (handleCode === "CUSTOMCOLUMN") {
