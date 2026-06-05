@@ -102,7 +102,7 @@ const icons = shallowRef([
 
 const { copy, isSupported } = useClipboard({ legacy: true });
 
-const copyTextHandle = async function (text) {
+const copyTextHandle = async function (text: string) {
     if (!isSupported.value) {
         ElMessage.error("复制失败，您的浏览器不支持 Clipboard API");
         return;

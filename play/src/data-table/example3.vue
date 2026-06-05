@@ -19,13 +19,13 @@ import { DataTable } from "@yujinjin/cms-components-main/index";
 import { type DataTableColumn } from "@yujinjin/cms-components-main/index";
 
 const tableRef = ref();
-const selectedRows = ref([]);
+const selectedRows = ref<any[]>([]);
 
-function handleEdit(row) {
+function handleEdit(row: any) {
     ElMessage.success(`编辑：${row.name}`);
 }
 
-function handleDelete(row) {
+function handleDelete(row: any) {
     ElMessage.success(`删除：${row.name}`);
 }
 
@@ -55,15 +55,15 @@ const queryList = async () => {
     };
 };
 
-function handleSelectionChange(rows) {
+function handleSelectionChange(rows: any[]) {
     selectedRows.value = rows;
 }
 
-function handleRowClick(row) {
+function handleRowClick(row: any) {
     ElMessage.info(`点击了行：${row.name}`);
 }
 
-function handleSortChange({ prop, order }) {
+function handleSortChange({ prop, order }: { prop: string; order: string }) {
     ElMessage.info(`排序：${prop} ${order}`);
 }
 </script>

@@ -28,12 +28,12 @@ const provinces = [
     { label: "上海", value: "shanghai" }
 ];
 
-const cities = {
+const cities: Record<string, any[]> = {
     beijing: [{ label: "北京市", value: "beijingCity" }],
-    shanghai: [{ label: "上海市", value: "beijingCity" }]
+    shanghai: [{ label: "上海市", value: "shanghaiCity" }]
 };
 
-const areas = {
+const areas: Record<string, any[]> = {
     beijingCity: [
         { label: "朝阳区", value: "chaoyang" },
         { label: "海淀区", value: "haidian" }

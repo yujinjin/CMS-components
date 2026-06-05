@@ -9,7 +9,7 @@
                     <div v-for="(spec, index) in (scope as InputFormSlotScope).value" :key="index" class="spec-item">
                         <el-input v-model="spec.name" placeholder="规格名称" />
                         <el-input v-model="spec.value" placeholder="规格值" />
-                        <el-button type="danger" @click="removeSpec(index, (scope as InputFormSlotScope).value)">删除</el-button>
+                        <el-button type="danger" @click="removeSpec(index as number, (scope as InputFormSlotScope).value)">删除</el-button>
                     </div>
                     <el-button type="primary" @click="addSpec((scope as InputFormSlotScope).value)">添加规格</el-button>
                 </div>
@@ -25,7 +25,7 @@
                             <el-input v-model="attr.value" placeholder="属性值" />
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="danger" @click="removeAttribute(index, (scope as InputFormSlotScope).value)">删除</el-button>
+                            <el-button type="danger" @click="removeAttribute(index as number, (scope as InputFormSlotScope).value)">删除</el-button>
                         </el-form-item>
                     </el-form>
                     <el-button type="primary" @click="addAttribute((scope as InputFormSlotScope).value)">添加属性</el-button>

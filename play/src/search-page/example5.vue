@@ -77,7 +77,7 @@ const refreshHandle = function () {
     searchPageRef.value?.query();
 };
 
-const showDialogHandle = function (rows, { handleCode }) {
+const showDialogHandle = function (rows: any[], { handleCode }: { handleCode: string }) {
     if (handleCode === "CREATE") {
         ElMessage.info("新建");
     } else if (handleCode === "CUSTOMCOLUMN") {
