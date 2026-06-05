@@ -29,7 +29,7 @@
         "quill": "^2.0.2",
         "@vueuse/core": "^12.7.0",
         "fflate": "^0.8.2",
-        "@yujinjin/utils": "^0.0.3",
+        "@yujinjin/utils": "^0.0.5",
         "@yujinjin/cms-components-modules": "workspace:*",
         "@yujinjin/cms-components-main": "workspace:*",
         "@yujinjin/cms-components-utils": "workspace:*",

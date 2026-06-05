@@ -4,7 +4,7 @@
         "jsx": "preserve",
         "module": "ESNext",
         "moduleResolution": "Bundler",
-        "types": ["element-plus/global.d.ts", "@yujinjin/cms-components/global.d.ts"],
+        "types": ["element-plus/global.d.ts"],
         "allowImportingTsExtensions": true,
         "noEmit": true,
         "allowJs": true,
