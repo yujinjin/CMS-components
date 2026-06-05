@@ -98,12 +98,12 @@ const inputFormFieldValueChange = function (field: InputFormField, fieldValue: a
 };
 
 // 按钮点击操作
-const clickHandle = async function (button) {
+const clickHandle = async function (button: DialogFormButton) {
     if (button.loading) {
         return;
     }
     button.loading = true;
-    let canClose = true;
+    let canClose: boolean | void = true;
     try {
         if (button.click) {
             canClose = await button.click(inputFormRef.value!.getInputValue(), inputFormRef.value!.getFormRef(), button);

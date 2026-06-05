@@ -22,7 +22,7 @@
 
         .label-text {
             text-align: right;
-            line-height: 32px;
+            line-height: var(--el-input-height, var(--el-component-size));
         }
         .input-box {
             flex: 1;

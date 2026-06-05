@@ -61,6 +61,7 @@ const slots = defineSlots<
     {
         default(): any;
         actionBar_default(): any;
+        [key: string]: (props: any) => any;
     } & Record<`searchForm_${string}`, (props: SearchFormSlotScope) => any> &
         Record<`actionBar_${string}`, (props: ActionButtonSlotScope) => any> &
         Record<`dataTable_${string}`, (props: any) => any>

@@ -111,10 +111,10 @@ describe("CheckSelect", () => {
         const values = ref();
         const data: Array<{ id: string; name: string }> = Array.from({ length: 10 }, (value, index) => ({ id: index.toString(), name: `option ${index}` }));
         const changeValue = ref();
-        const onChange = function (value) {
+        const onChange = function (value: string[]) {
             changeValue.value = value;
         };
-        const wrapper = mount(() => <SelectCheck v-model={values.value} data={data} optionValueKey="id" optionLabelKey="name" onChange={onChange} />);
+        const wrapper = mount(() => <SelectCheck v-model={values.value} data={data} optionValueKey="id" optionLabelKey="name" {...{ onChange }} />);
         wrapper.find(".el-select__wrapper").trigger("click");
         await nextTick();
         wrapper.findAllComponents({ name: "ElOption" })[1].trigger("click");

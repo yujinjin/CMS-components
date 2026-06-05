@@ -8,12 +8,12 @@
 -->
 <template>
     <div class="img-upload">
-        <el-upload v-bind="uploadInnerProps" ref="updloadRef" v-model:file-list="fileList">
+        <el-upload v-bind="uploadInnerProps" ref="updloadRef" v-model:file-list="fileList" :disabled="isDisabled">
             <template #default>
                 <slot><el-button type="primary">点击上传</el-button></slot>
             </template>
-            <template v-if="maxSize > 0" #tip>
-                <div class="el-upload__tip">只能上传图片文件，且不超过{{ maxSize > 1024 ? numberFormat(maxSize / 1024, 1) + "M" : maxSize + "KB" }}</div>
+            <template #tip>
+                <div v-if="maxSize > 0" class="el-upload__tip">只能上传图片文件，且不超过{{ maxSize > 1024 ? numberFormat(maxSize / 1024, 1) + "M" : maxSize + "KB" }}</div>
             </template>
         </el-upload>
         <el-dialog v-model="isShowCropperDialog" class="cms-cropper-dialog" title="图片裁剪" :append-to-body="true" :close-on-click-modal="false" width="1000px">
@@ -39,7 +39,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { type Ref, type PropType, ref, watch, nextTick } from "vue";
+import { type Ref, type PropType, ref, watch, nextTick, inject, computed } from "vue";
 import {
     type UploadProps,
     type UploadRequestOptions,
@@ -52,7 +52,9 @@ import {
     ElMessageBox,
     ElUpload,
     ElButton,
-    genFileId
+    genFileId,
+    formItemContextKey,
+    formContextKey
 } from "element-plus";
 import { numberFormat } from "@yujinjin/utils";
 import Cropper from "cropperjs";
@@ -66,6 +68,12 @@ const props = defineProps(imgUploadProps);
 
 // 上传的组件的值
 const modelValue = defineModel({ type: [String, Array] as PropType<string | string[]> });
+
+// 当前elForm实例
+const elForm = inject(formContextKey);
+
+// 当前elFormItem实例
+const elFormItem = inject(formItemContextKey);
 
 // 上传组件内部属性
 const uploadInnerProps: Ref<Partial<UploadProps>> = ref({});
@@ -95,6 +103,8 @@ let newModelValue = "";
 
 // 剪切图片的方向
 let directionCropper = false;
+
+const isDisabled = computed(() => props.uploadProps?.disabled === true || (elForm?.disabled === true && props.uploadProps?.disabled !== false));
 
 // 把当前modelValue转换成upload组件所用的文件格式列表
 const generateFileList = function () {
@@ -181,6 +191,7 @@ const fileListChange = function () {
         newModelValue = fileList.value.map(item => item.url).join(props.separator);
         modelValue.value = newModelValue;
     }
+    elFormItem?.validate("change");
 };
 
 // 复位
@@ -232,7 +243,7 @@ const defaultUploadProps = {
         }
     },
     // 图片上传前操作
-    beforeUpload: async function (file) {
+    beforeUpload: async function (file: UploadRawFile) {
         if (file.size / 1024 > props.maxSize) {
             ElMessage.error("文件大小超出限制！");
             return false;

@@ -7,7 +7,7 @@
  * @描述: input-form组件常量集合
  */
 // 数据输入表单中的组件默认属性
-export const INPUT_FORM_FIELD_DEFAULT_ATTRIBUTES = {
+export const INPUT_FORM_FIELD_DEFAULT_ATTRIBUTES: Record<string, any> = {
     // input 输入框默认配置选项(具体见element plus Input 输入框文档)
     input: {
         placeholder: "请输入",
@@ -55,7 +55,7 @@ export const INPUT_FORM_FIELD_DEFAULT_ATTRIBUTES = {
             type: "date",
             placeholder: "请选择",
             valueFormat: "YYYY-MM-DD",
-            disabledDate: function (time) {
+            disabledDate: function (time: Date) {
                 return time.getTime() > Date.now();
             }
         },

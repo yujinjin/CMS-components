@@ -49,24 +49,24 @@ const elFormItem = inject(formItemContextKey, {} as FormItemContext);
 const isBrowser = computed(() => typeof window !== "undefined");
 
 // quill富文本框编辑器实例
-let quillInstance;
+let quillInstance: Quill | null = null;
 
 // 输入内容变化操作
 const textChangeHandle = debounce(() => {
-    emits("update:modelValue", quillInstance.getSemanticHTML());
-    elFormItem?.validate?.("change", quillInstance.getSemanticHTML());
+    emits("update:modelValue", quillInstance!.getSemanticHTML());
+    elFormItem?.validate?.("change");
 }, 300);
 
 // 图片文件选择变化
-const imgFileChangeHandle = async function (e) {
-    const img = (await props.onImgUpload!(e.target.files[0])) as string;
+const imgFileChangeHandle = async function (e: Event) {
+    const img = (await props.onImgUpload!((e.target as HTMLInputElement).files![0])) as string;
     //图片上传成功之后的回调
-    let range = quillInstance.getSelection();
+    let range = quillInstance!.getSelection();
     if (!range) {
-        quillInstance.focus();
-        range = quillInstance.getSelection();
+        quillInstance!.focus();
+        range = quillInstance!.getSelection();
     }
-    quillInstance.insertEmbed(range.index, "image", img); //将上传好的图片，插入到富文本的range.index（当前光标处）
+    quillInstance!.insertEmbed(range!.index, "image", img); //将上传好的图片，插入到富文本的range.index（当前光标处）
 };
 
 // 初始化quill

@@ -81,7 +81,7 @@ const generateFormFields = function () {
             console.error("字段没有属性name值", field);
             return;
         }
-        const newField = extend(true, { isShow: true, type: "primary", value: null }, field);
+        const newField = extend(true, { isShow: true, type: "primary", value: null }, field) as SearchFormField;
         if (Object.prototype.hasOwnProperty.call(newField, "defaultValue")) {
             newField.value = newField.defaultValue;
         }
@@ -91,8 +91,8 @@ const generateFormFields = function () {
             }
             if (newField.type === "datePicker") {
                 newField.props = Object.assign({}, SEARCH_FORM_FIELD_DEFAULT_ATTRIBUTES[newField.type][newField.props.type || "date"], newField.props);
-                if (newField.defaultValue && newField.props.valueFormat) {
-                    newField.value = dateFormat(newField.defaultValue, newField.props.valueFormat);
+                if (newField.defaultValue && newField.props!.valueFormat) {
+                    newField.value = dateFormat(newField.defaultValue, newField.props!.valueFormat);
                 }
             } else {
                 if (!newField.props.placeholder) {
@@ -162,18 +162,18 @@ const resetHandle = function () {
 };
 
 // 查询表单数值变化
-const changeHandle = function (field) {
+const changeHandle = function (field: SearchFormField) {
     emits("change", field, formFields.value);
 };
 
 // 扩展按钮点击事件
-const extendButtonClickHandle = async function (button) {
+const extendButtonClickHandle = async function (button: SearchFormButton) {
     if (!button.click || button.loading) {
         return;
     }
     button.loading = true;
     try {
-        await button.click();
+        await button.click(button);
     } catch (error) {
         console.error(error);
     }

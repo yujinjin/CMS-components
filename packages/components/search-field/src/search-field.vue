@@ -56,7 +56,7 @@ const allProps = computed(() => {
     };
 });
 
-const changeValue = function (value) {
+const changeValue = function (value: any) {
     emits("update:modelValue", value);
     emits("change", value);
 };

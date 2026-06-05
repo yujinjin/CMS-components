@@ -36,7 +36,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { type PaginationProps, type TableProps, ElTable, ElPagination, ElTableColumn } from "element-plus";
+import { type PaginationProps, type TableProps, type TableColumnCtx, ElTable, ElPagination, ElTableColumn } from "element-plus";
 import { type Ref, onMounted, onUnmounted, ref, watch, nextTick } from "vue";
 import { extend, debounce } from "@yujinjin/utils";
 import { type NotReadonly } from "../../types";
@@ -83,7 +83,7 @@ const dataTablePanelRef: Ref<HTMLDivElement | null> = ref(null);
 const paginationRef: Ref<HTMLDivElement | null> = ref(null);
 
 // 当选择项发生变化时会触发该事件
-const selectionChangeHandle = function (selectRows) {
+const selectionChangeHandle = function (selectRows: Record<string, any>[]) {
     emits("update:selectRows", selectRows);
 };
 
@@ -158,14 +158,14 @@ const initColumns = function () {
                 newColumnItem.label = "操作";
             }
         } else if (newColumnItem.type === "index" && !newColumnItem.index) {
-            newColumnItem.index = function (index) {
+            newColumnItem.index = function (index: number) {
                 if (props.isShowPagination) {
                     return (paginationData.value.currentPage! - 1) * paginationData.value.pageSize! + index + 1;
                 }
                 return index + 1;
             };
         } else if (!newColumnItem.type && !newColumnItem.formatter) {
-            newColumnItem.formatter = function (row, column, cellValue) {
+            newColumnItem.formatter = function (row: any, column: TableColumnCtx<any>, cellValue: any, index: number) {
                 return cellValue === null || cellValue === undefined ? "-" : cellValue;
             };
         }
@@ -206,9 +206,9 @@ const queryDataList = async function (isInit = true) {
 };
 
 // 获取当前数据列的值
-const getCellValue = function (row, columnItem, index: number) {
+const getCellValue = function (row: any, columnItem: DataTableColumn<any>, index: number) {
     if (columnItem.formatter) {
-        return columnItem.formatter(row, columnItem, columnItem.prop ? row[columnItem.prop] : null, index);
+        return columnItem.formatter(row, columnItem as TableColumnCtx<any>, columnItem.prop ? row[columnItem.prop] : null, index);
     }
     if (!columnItem.prop) {
         return null;
@@ -226,7 +226,7 @@ const pageSizeChangeHandle = function (pageSize: number) {
 };
 
 // 分页中的当前页码变换
-const currentPageChangeHandle = function (currentPage) {
+const currentPageChangeHandle = function (currentPage: number) {
     paginationData.value.currentPage = currentPage;
     queryDataList(false);
 };

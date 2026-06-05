@@ -96,7 +96,7 @@ describe("TableColumnAction", () => {
             {
                 contents: "Conditional",
                 handleCode: "conditional",
-                display: row => row.showButton
+                display: (row: any) => row.showButton
             }
         ];
 

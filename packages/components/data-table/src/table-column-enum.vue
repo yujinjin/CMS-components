@@ -25,8 +25,7 @@ const props = defineProps({
         type: Array as PropType<Record<string, any>[]>,
         default: function () {
             return [];
-        },
-        required: true
+        }
     },
     // 分隔符，value值用','隔开时
     separator: {

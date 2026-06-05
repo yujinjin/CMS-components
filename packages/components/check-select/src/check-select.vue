@@ -33,7 +33,7 @@
     </el-select>
 </template>
 <script setup lang="ts">
-import { ElSelect, ElOption, ElCheckbox } from "element-plus";
+import { ElSelect, ElOption, ElCheckbox, type CheckboxValueType } from "element-plus";
 import { type PropType, type ComputedRef, ref, computed, nextTick } from "vue";
 import { checkSelectProps, checkSelectEmits } from "./check-select";
 
@@ -126,7 +126,7 @@ const checkAllChangeHandle = async function () {
     emits("change", values);
 };
 
-const checkChangeHandle = function (isCheck, value) {
+const checkChangeHandle = function (isCheck: CheckboxValueType, value: object | string | number) {
     const values = modelValue.value || [];
     if (isCheck) {
         values.splice(

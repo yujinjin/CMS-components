@@ -31,7 +31,7 @@ export type TableButton = NotReadonly<Partial<ButtonProps>> & {
     display?: (row: any) => boolean;
 
     /** 按钮点击函数事件 */
-    click?: (selectRows: Array<any>, button: TableButton) => Promise<void> | void;
+    click?: (selectRow: Record<string, any>, button: TableButton) => Promise<void> | void;
 };
 
 export interface DataTableColumn<T extends Record<string, any> = Record<string, any>> extends Partial<TableColumnCtx<T>> {
@@ -66,7 +66,7 @@ export interface DataTableColumn<T extends Record<string, any> = Record<string, 
 export const dataTableProps = buildProps({
     // 当前列表查询函数, 可返回Promise
     query: {
-        type: Function as PropType<(...args) => Promise<any> | any>,
+        type: Function as PropType<(...args: any[]) => Promise<any> | any>,
         required: true
     },
     // type: "number|action|date|enum|image" // 数据列的自定义类型，可以不传

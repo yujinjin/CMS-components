@@ -7,7 +7,7 @@
  * @描述: search-form组件常量集合
  */
 // 查询表单中的组件默认属性
-export const SEARCH_FORM_FIELD_DEFAULT_ATTRIBUTES = {
+export const SEARCH_FORM_FIELD_DEFAULT_ATTRIBUTES: Record<string, any> = {
     // input 输入框默认配置选项(具体见element Input 输入框文档)
     input: {
         placeholder: "请输入",
@@ -42,7 +42,7 @@ export const SEARCH_FORM_FIELD_DEFAULT_ATTRIBUTES = {
             type: "date",
             placeholder: "请选择",
             valueFormat: "YYYY-MM-DD",
-            disabledDate: function (time) {
+            disabledDate: function (time: Date) {
                 return time.getTime() > Date.now();
             }
         },

@@ -33,7 +33,7 @@ export type DialogFormButton = NotReadonly<Partial<ButtonProps>> & {
     isShow?: boolean;
 
     /** 按钮点击函数事件（注入：返回false或者异常不会自动关闭弹窗） */
-    click?: (inputFormValue: Record<string, any>, formRef: FormInstance | null, button: DialogFormButton) => Promise<void | boolean> | void | boolean;
+    click?: (inputFormValue: Record<string, any> | null, formRef: FormInstance | null, button: DialogFormButton) => Promise<void | boolean> | void | boolean;
 };
 
 export type DialogFormButtonSlotScope = {

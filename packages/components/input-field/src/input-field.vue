@@ -14,16 +14,16 @@
     <div v-else-if="type === 'label'" class="cms-input-field_label-contents">{{ modelValue }}</div>
 
     <!-- input -->
-    <el-input v-else-if="type === 'input'" v-bind="allProps" :model-value="modelValue" @update:model-value="value => changeValue(value)" v-on="events" />
+    <el-input v-else-if="type === 'input'" v-bind="allProps" :model-value="modelValue" @update:model-value="changeValue" v-on="events" />
 
     <!-- 图片上传 -->
-    <img-upload v-else-if="type === 'imgUpload'" v-bind="allProps" :model-value="modelValue" :upload-request="allProps!.uploadRequest" @update:model-value="value => changeValue(value)" />
+    <img-upload v-else-if="type === 'imgUpload'" v-bind="allProps" :model-value="modelValue" :upload-request="allProps!.uploadRequest" @update:model-value="changeValue" />
 
     <!-- 富文本框 -->
-    <web-editor v-else-if="type === 'webEditor'" v-bind="allProps" :model-value="modelValue" @update:model-value="value => changeValue(value)" />
+    <web-editor v-else-if="type === 'webEditor'" v-bind="allProps" :model-value="modelValue" @update:model-value="changeValue" />
 
     <!-- select -->
-    <el-select v-else-if="type === 'select'" v-bind="allProps" :model-value="modelValue" @update:model-value="value => changeValue(value)" v-on="events">
+    <el-select v-else-if="type === 'select'" v-bind="allProps" :model-value="modelValue" @update:model-value="changeValue" v-on="events">
         <el-option v-for="(item, index) in data" :key="(item[optionValueKey] || '') + '_' + index" :label="item[optionLabelKey]" :value="item[optionValueKey]" :disabled="item.disabled === true" />
     </el-select>
 
@@ -31,21 +31,21 @@
     <check-select v-else-if="type === 'checkSelect'" v-bind="allProps" :model-value="modelValue" :data="data" @update:model-value="changeValue" v-on="events" />
 
     <!-- checkbox -->
-    <el-checkbox-group v-else-if="type === 'checkbox'" v-bind="allProps" :model-value="modelValue" @update:model-value="value => changeValue(value)" v-on="events">
+    <el-checkbox-group v-else-if="type === 'checkbox'" v-bind="allProps" :model-value="modelValue" @update:model-value="changeValue" v-on="events">
         <el-checkbox v-for="(item, index) in data" :key="(item[optionValueKey] || '') + '_' + index" :value="item[optionValueKey]" :disabled="item.disabled === true">
             {{ item[optionLabelKey] }}
         </el-checkbox>
     </el-checkbox-group>
 
     <!-- radio -->
-    <el-radio-group v-else-if="type === 'radio'" v-bind="allProps" :model-value="modelValue" @update:model-value="value => changeValue(value)" v-on="events">
+    <el-radio-group v-else-if="type === 'radio'" v-bind="allProps" :model-value="modelValue" @update:model-value="changeValue" v-on="events">
         <el-radio v-for="(item, index) in data" :key="(item[optionValueKey] || '') + '_' + index" :value="item[optionValueKey]" :disabled="item.disabled === true">
             {{ item[optionLabelKey] }}
         </el-radio>
     </el-radio-group>
 
     <!-- element 组件 -->
-    <component :is="getElComponentName(type)" v-else-if="!!type" v-bind="allProps" :model-value="modelValue" @update:model-value="value => changeValue(value)" v-on="events" />
+    <component :is="getElComponentName(type)" v-else-if="!!type" v-bind="allProps" :model-value="modelValue" @update:model-value="changeValue" v-on="events" />
 </template>
 <script setup lang="ts">
 import { computed, useAttrs } from "vue";
@@ -79,11 +79,11 @@ const allProps = computed(() => {
 });
 
 // 获取elment 组件名称
-const getElComponentName = function (type) {
+const getElComponentName = function (type: string) {
     return "el-" + type?.replace(/([A-Z])/g, "-$1").toLowerCase();
 };
 
-const changeValue = function (value) {
+const changeValue = function (value: any) {
     emits("update:modelValue", value);
 };
 </script>

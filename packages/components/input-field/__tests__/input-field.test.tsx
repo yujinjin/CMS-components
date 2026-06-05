@@ -29,7 +29,7 @@ describe("InputField", () => {
         vi.restoreAllMocks();
     });
 
-    const createWrapper = (props, components = {}) => {
+    const createWrapper = (props: Record<string, any>, components = {}) => {
         return mount(InputField, {
             props,
             global: {
@@ -140,10 +140,11 @@ describe("InputField", () => {
     });
 
     test("emits update:modelValue when value changes", async () => {
-        const wrapper = createWrapper({});
+        const wrapper = createWrapper({ type: "input" });
         const newValue = "new value";
 
-        await wrapper.vm.changeValue(newValue);
+        await wrapper.findComponent({ name: "ElInput" }).vm.$emit("update:modelValue", newValue);
+        await nextTick();
 
         expect(wrapper.emitted("update:modelValue")).toBeTruthy();
         expect(wrapper.emitted("update:modelValue")?.[0]).toEqual([newValue]);

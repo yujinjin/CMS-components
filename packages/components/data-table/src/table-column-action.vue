@@ -29,7 +29,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { type PropType, markRaw, ref, watch, computed } from "vue";
+import { type PropType, markRaw, ref, watch, computed, type Ref, type ComputedRef } from "vue";
 import { ElButton, ElDropdown, ElDropdownMenu, ElDropdownItem, ElIcon } from "element-plus";
 import { Loading } from "@element-plus/icons-vue";
 import { type TableButton } from "./data-table";
@@ -59,13 +59,13 @@ const props = defineProps({
 });
 
 // 实际数据列中的操作按钮列表
-const actionButtons = ref<TableButton[]>([]);
+const actionButtons: Ref<Array<TableButton>> = ref([]);
 
-const showStatusButtons = computed(() => {
+const showStatusButtons: ComputedRef<Array<TableButton>> = computed(() => {
     return actionButtons.value.filter(button => button.isShow);
 });
 
-const hideStatusButtons = computed(() => {
+const hideStatusButtons: ComputedRef<Array<TableButton>> = computed(() => {
     return actionButtons.value.filter(button => !button.isShow);
 });
 
@@ -89,7 +89,7 @@ const initActionButtons = function () {
 };
 
 // 按钮点击操作
-const clickHandle = async function (button) {
+const clickHandle = async function (button: TableButton) {
     if (button.loading) {
         return;
     }
@@ -105,7 +105,7 @@ const clickHandle = async function (button) {
 };
 
 // dropdown 按钮点击事件
-const dropdownCommandHandle = function (index) {
+const dropdownCommandHandle = function (index: number) {
     clickHandle(actionButtons.value[showStatusButtons.value.length + index]);
 };
 

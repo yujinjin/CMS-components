@@ -52,7 +52,7 @@ const elFormItem = inject(formItemContextKey, {} as FormItemContext);
 const isBrowser = computed(() => typeof window !== "undefined");
 
 // quill富文本框编辑器实例
-let quillInstance;
+let quillInstance: any;
 
 // 输入内容变化操作
 const textChangeHandle = debounce(() => {
@@ -61,8 +61,8 @@ const textChangeHandle = debounce(() => {
 }, 300);
 
 // 图片文件选择变化
-const imgFileChangeHandle = async function (e) {
-    const img = (await props.onImgUpload!(e.target.files[0])) as string;
+const imgFileChangeHandle = async function (e: Event) {
+    const img = (await props.onImgUpload!((e.target as HTMLInputElement).files![0])) as string;
     //图片上传成功之后的回调
     let range = quillInstance.getSelection();
     if (!range) {

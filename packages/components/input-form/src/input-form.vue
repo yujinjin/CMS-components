@@ -8,7 +8,7 @@
 -->
 <template>
     <div v-loading="isLoading" class="cms-input-form">
-        <el-form v-bind="formProps" ref="inputFormRef" :model="inputFormValue">
+        <el-form v-bind="formProps" ref="inputFormRef" :model="inputFormValue" v-on="events">
             <el-row>
                 <template v-for="(field, index) in formFields" :key="(field.name || '') + '_' + index">
                     <el-col v-if="field.isShow !== false" :key="index" :span="field.span">
@@ -107,7 +107,7 @@ const generateFormFields = function () {
             console.error("字段没有属性name值", field);
             return;
         }
-        const newField: InputFormField = extend(true, { isShow: true, type: "input" }, field);
+        const newField: InputFormField = extend(true, { isShow: true, type: "input" }, field) as InputFormField;
         if (!newField.span) {
             newField.span = 24 / props.columns;
         }
@@ -151,7 +151,7 @@ const generateFormFields = function () {
 };
 
 // 设置字段的值
-const setFieldValue = function (fieldValue, field: InputFormField) {
+const setFieldValue = function (fieldValue: any, field: InputFormField) {
     if (field.type === "input" && field.trim === true && fieldValue) {
         // 注意：当trim为true用户手动输入的内容无法空格，除非通过粘贴方式或回过头来在内容中间空格
         fieldValue = fieldValue.trim();

@@ -12,7 +12,7 @@ import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { ElLoading, ElInput } from "element-plus";
 import InputForm from "../src/input-form.vue";
-import { type InputFormField } from "../src/input-form";
+import { type InputFormField, type InputFormSlotScope } from "../src/input-form";
 
 describe("InputForm", () => {
     const fields: InputFormField[] = [
@@ -129,7 +129,7 @@ describe("InputForm", () => {
                         value={{ ...value, numberValue: 12 }}
                     >
                         {{
-                            numberValue: ({ value }) => <div class="city-number-value">{value}</div>
+                            numberValue: ({ value }: InputFormSlotScope) => <div class="city-number-value">{value}</div>
                         }}
                     </InputForm>
                 ),
@@ -157,7 +157,7 @@ describe("InputForm", () => {
 
             const emittedEvents = wrapper.emitted();
             expect(emittedEvents.fieldValueChange).toBeTruthy();
-            expect(emittedEvents.fieldValueChange[0]?.[1]).toEqual("13800138000");
+            expect((emittedEvents.fieldValueChange as any[])[0]?.[1]).toEqual("13800138000");
         });
 
         test("trim value when trim is true", async () => {
@@ -172,7 +172,7 @@ describe("InputForm", () => {
 
             const emittedEvents = wrapper.emitted();
             expect(emittedEvents.fieldValueChange).toBeTruthy();
-            expect(emittedEvents.fieldValueChange[0]?.[1]).toEqual(testEmail.trim());
+            expect((emittedEvents.fieldValueChange as any[])[0]?.[1]).toEqual(testEmail.trim());
         });
     });
 

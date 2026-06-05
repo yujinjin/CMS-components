@@ -20,7 +20,7 @@ describe("ImgUpload", () => {
 
     test("render test & class", async () => {
         const uploadRequest = vi.fn(async () => "/static/img/1.jpg");
-        const wrapper = mount(() => <ImgUpload upload-request={uploadRequest} />);
+        const wrapper = mount(() => <ImgUpload uploadRequest={uploadRequest} />);
         expect(wrapper.classes()).toContain("img-upload");
         expect(wrapper.findComponent({ name: "ElUpload" }).exists()).toBe(true);
         expect(wrapper.findComponent({ name: "ElDialog" }).exists()).toBe(true);
@@ -29,7 +29,7 @@ describe("ImgUpload", () => {
     test("default value", async () => {
         const uploadRequest = vi.fn(async () => "/static/img/1.jpg");
         const value = ref<string | string[]>("/static/img/1.jpg");
-        const wrapper = mount(() => <ImgUpload v-model={value.value} upload-request={uploadRequest} />);
+        const wrapper = mount(() => <ImgUpload v-model={value.value} uploadRequest={uploadRequest} />);
         expect(wrapper.findComponent({ name: "ElUpload" }).vm.fileList).toMatchObject([{ name: "1.jpg", url: "/static/img/1.jpg" }]);
         value.value = "/static/img/1.jpg|/static/img/2.jpg";
         await nextTick();
@@ -48,7 +48,7 @@ describe("ImgUpload", () => {
     test("prop separator", async () => {
         const uploadRequest = vi.fn(async () => "/static/img/3.jpg");
         const value = ref<string>("/static/img/1.jpg,/static/img/2.jpg");
-        const wrapper = mount(() => <ImgUpload v-model={value.value} separator="," upload-request={uploadRequest} />);
+        const wrapper = mount(() => <ImgUpload v-model={value.value} separator="," uploadRequest={uploadRequest} />);
         expect(wrapper.findComponent({ name: "ElUpload" }).vm.fileList).toMatchObject([
             { name: "1.jpg", url: "/static/img/1.jpg" },
             { name: "2.jpg", url: "/static/img/2.jpg" }
@@ -58,7 +58,7 @@ describe("ImgUpload", () => {
     test("upload file", async () => {
         const uploadRequest = vi.fn(async () => "/static/img/1.jpg");
         const value = ref<string>();
-        const wrapper = mount(() => <ImgUpload v-model={value.value} upload-request={uploadRequest} />);
+        const wrapper = mount(() => <ImgUpload v-model={value.value} uploadRequest={uploadRequest} />);
         const file = new File([""], "file.png", { type: "image/png" });
         Object.defineProperty(file, "size", { value: 1024 * 1024 * 1 });
         // 实现上传文件模拟
@@ -71,7 +71,7 @@ describe("ImgUpload", () => {
     test("prop maxSize", async () => {
         const uploadRequest = vi.fn(async () => "/static/img/1.jpg");
         const value = ref<string>();
-        const wrapper = mount(() => <ImgUpload v-model={value.value} upload-request={uploadRequest} />);
+        const wrapper = mount(() => <ImgUpload v-model={value.value} uploadRequest={uploadRequest} />);
         const file = new File([""], "file.png", { type: "image/png" });
         Object.defineProperty(file, "size", { value: 1024 * 1024 * 3 });
         // 实现上传文件模拟
@@ -84,7 +84,7 @@ describe("ImgUpload", () => {
         const uploadRequest = vi.fn(async () => "/static/img/1.jpg");
         const onExceed = vi.fn();
         const value = ref<string[]>(["/static/img/1.jpg", "/static/img/2.jpg"]);
-        const wrapper = mount(() => <ImgUpload v-model={value.value} uploadProps={{ limit: 2, onExceed }} upload-request={uploadRequest} />);
+        const wrapper = mount(() => <ImgUpload v-model={value.value} uploadProps={{ limit: 2, onExceed }} uploadRequest={uploadRequest} />);
 
         const file = new File([""], "file3.png", { type: "image/png" });
         Object.defineProperty(file, "size", { value: 1024 * 1024 * 1 });
@@ -101,7 +101,7 @@ describe("ImgUpload", () => {
     test("prop cropper", async () => {
         const uploadRequest = vi.fn(async () => "/static/img/1.jpg");
         const value = ref<string>();
-        const wrapper = mount(() => <ImgUpload v-model={value.value} cropperProps upload-request={uploadRequest} />);
+        const wrapper = mount(() => <ImgUpload v-model={value.value} cropperProps uploadRequest={uploadRequest} />);
 
         const file = new File(["Hello, world!"], "file.png", { type: "image/png" });
         Object.defineProperty(file, "size", { value: 1024 * 1024 * 1 });
