@@ -54,7 +54,7 @@ export default function (serializedState?: string) {
 
     const state: StoreState & ToRefs<{ loading: boolean }> = toRefs(
         reactive({
-            files: {},
+            files: {} as Record<string, File>,
             activeFilename: APP_FILE,
             loading: false,
             mainFile: MAIN_FILE,
@@ -62,20 +62,21 @@ export default function (serializedState?: string) {
                 welcomeSFC: welcomeCode,
                 newSFC: newVueCode
             },
-            builtinImportMap: undefined!,
-            errors: [],
+            builtinImportMap: undefined as unknown as ImportMap,
+            errors: [] as (string | Error)[],
             showOutput: true,
-            outputMode: "preview",
+            outputMode: "preview" as const,
             sfcOptions: {},
+            ssrOutput: { html: "", context: undefined },
             compiler: shallowRef(defaultCompiler),
-            vueVersion: "latest",
-            locale: undefined,
+            vueVersion: "latest" as string | null,
+            locale: undefined as string | undefined,
             typescriptVersion: "latest",
             dependencyVersion: {
                 elementPlus: "latest",
                 CMSComponents: "latest"
-            },
-            reloadLanguageTools: undefined
+            } as Record<string, string>,
+            reloadLanguageTools: undefined as (() => void) | undefined
         })
     );
 

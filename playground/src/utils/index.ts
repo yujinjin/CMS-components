@@ -8,9 +8,11 @@ import { strFromU8, strToU8, unzlibSync, zlibSync } from "fflate";
  * @returns Function
  */
 export function debounce(callback: (...args: any[]) => void, wait: number = 100) {
-    let timeout;
+    let timeout: number | null = null;
     return function (this: any, ...args: any[]) {
-        clearTimeout(timeout);
+        if (timeout) {
+            clearTimeout(timeout);
+        }
         timeout = window.setTimeout(() => {
             callback.apply(this, args);
         }, wait);
