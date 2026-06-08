@@ -134,4 +134,46 @@ describe("CheckSelect", () => {
         expect(checkboxVm.checked).toBe(false);
         expect(checkboxVm.indeterminate).toBe(false);
     });
+
+    test("checkChangeHandle adds value when checked", async () => {
+        const values = ref<string[]>([]);
+        const data = ["1", "2", "3"];
+        const wrapper = mount(() => <SelectCheck v-model={values.value} data={data} />);
+        wrapper.find(".el-select__wrapper").trigger("click");
+        await nextTick();
+        // 模拟勾选复选框：isCheck=true 时应添加值
+        const checkboxWrappers = wrapper.findAllComponents({ name: "ElCheckbox" });
+        await checkboxWrappers[1].vm.$emit("change", true);
+        await nextTick();
+        expect(values.value).toContain("1");
+    });
+
+    test("checkChangeHandle removes value when unchecked", async () => {
+        const values = ref<string[]>(["1", "2"]);
+        const data = ["1", "2", "3"];
+        const wrapper = mount(() => <SelectCheck v-model={values.value} data={data} />);
+        wrapper.find(".el-select__wrapper").trigger("click");
+        await nextTick();
+        // 模拟取消勾选复选框：isCheck=false 时应移除值
+        const checkboxWrappers = wrapper.findAllComponents({ name: "ElCheckbox" });
+        await checkboxWrappers[1].vm.$emit("change", false);
+        await nextTick();
+        expect(values.value).not.toContain("1");
+        expect(values.value).toContain("2");
+    });
+
+    test("isShowCheckAll is false when all options are disabled", async () => {
+        const values = ref<string[]>([]);
+        const data: Array<{ value: string; label: string; disabled: boolean }> = [
+            { value: "1", label: "Option 1", disabled: true },
+            { value: "2", label: "Option 2", disabled: true }
+        ];
+        const wrapper = mount(() => <SelectCheck v-model={values.value} data={data} />);
+        wrapper.find(".el-select__wrapper").trigger("click");
+        await nextTick();
+        // 所有选项都禁用时，全选复选框不应显示
+        const checkboxWrappers = wrapper.findAllComponents({ name: "ElCheckbox" });
+        // 只有选项的 checkbox，没有全选 checkbox（全选 checkbox 是第一个）
+        expect(checkboxWrappers.length).toBe(data.length);
+    });
 });

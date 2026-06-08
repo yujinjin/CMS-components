@@ -73,11 +73,11 @@ const selectProps = computed(() => {
 });
 
 const isShowCheckAll = computed(() => {
-    if (selectDataList.value.length === 0 || !checkSelectRef.value) {
+    if (selectDataList.value.length === 0 || !checkSelectRef.value?.states?.options) {
         return false;
     }
     let isShow = false;
-    checkSelectRef.value!.states.options.forEach(item => {
+    checkSelectRef.value.states.options.forEach(item => {
         if (item.isDisabled !== true && item.visible && !item.created) {
             isShow = true;
         }
@@ -91,7 +91,7 @@ const checkAllStatus = computed(() => {
         isCheckAll: false,
         isIndeterminate: false
     };
-    if (!isShowCheckAll.value || !modelValue.value || modelValue.value.length === 0 || !checkSelectRef.value?.states) {
+    if (!isShowCheckAll.value || !modelValue.value || modelValue.value.length === 0 || !checkSelectRef.value?.states?.options) {
         return status;
     }
     checkSelectRef.value.states.options.forEach(item => {
@@ -111,14 +111,19 @@ const checkAllStatus = computed(() => {
 const checkAllChangeHandle = async function () {
     await nextTick();
     const values = modelValue.value || [];
-    checkSelectRef.value?.states.options.forEach(item => {
+    if (!checkSelectRef.value?.states?.options) {
+        return;
+    }
+    checkSelectRef.value.states.options.forEach(item => {
         if (!item.visible || item.created) {
             return;
         }
-        const findIndex = values.indexOf(item.value as string | number | object);
+        const findIndex = values.findIndex(v => v === item.value);
         if (checkAllStatus.value.isCheckAll && findIndex !== -1) {
+            // 当前全选状态，点击全选则取消所有选中
             values.splice(findIndex, 1);
         } else if (!checkAllStatus.value.isCheckAll && findIndex === -1) {
+            // 当前非全选状态，点击全选则选中所有
             values.push(item.value as string | number | object);
         }
     });
@@ -129,12 +134,16 @@ const checkAllChangeHandle = async function () {
 const checkChangeHandle = function (isCheck: CheckboxValueType, value: object | string | number) {
     const values = modelValue.value || [];
     if (isCheck) {
-        values.splice(
-            values.findIndex(item => item === value),
-            1
-        );
+        // 勾选时添加值
+        if (!values.includes(value)) {
+            values.push(value);
+        }
     } else {
-        values.push(value);
+        // 取消勾选时移除值
+        const findIndex = values.findIndex(item => item === value);
+        if (findIndex !== -1) {
+            values.splice(findIndex, 1);
+        }
     }
     modelValue.value = values;
     emits("change", values);
