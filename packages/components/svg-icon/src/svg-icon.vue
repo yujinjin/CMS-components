@@ -7,7 +7,7 @@
  * @描述: svg 图标
 -->
 <template>
-    <i class="cms-icon" :style="{ color, fontSize: typeof size === 'number' || /^\d+$/.test(size) ? size + 'px' : size }">
+    <i class="cms-icon" :style="iconStyle" :aria-label="value && typeof value === 'string' ? value : undefined">
         <svg v-if="value && typeof value === 'string'" class="svg-icon" aria-hidden="true">
             <use :xlink:href="'#icon-' + value" />
         </svg>
@@ -17,6 +17,7 @@
 </template>
 
 <script lang="ts" setup>
+import { computed } from "vue";
 import { svgIconProps } from "./svg-icon";
 
 // 声明组件名称
@@ -25,5 +26,18 @@ defineOptions({
 });
 
 // 声明组件属性
-defineProps(svgIconProps);
+const props = defineProps(svgIconProps);
+
+// 计算图标样式，将模板内复杂表达式提取为 computed
+const iconStyle = computed(() => {
+    const style: Record<string, string> = {};
+    if (props.color) {
+        style.color = props.color;
+    }
+    if (props.size) {
+        // size 为数字或纯数字字符串时添加 px 单位，否则直接使用原值
+        style.fontSize = typeof props.size === "number" || /^\d+$/.test(String(props.size)) ? props.size + "px" : String(props.size);
+    }
+    return style;
+});
 </script>
