@@ -136,4 +136,35 @@ describe("ActionBar", () => {
         expect(callback).toHaveBeenCalled();
         expect((wrapper.vm as any).actionButtons[0].disabled).toBe(true);
     });
+
+    it("renders button with custom slot", () => {
+        const buttonsWithSlot: ActionButton[] = [{ handleCode: "custom", slot: "customSlot", contents: "Custom" }];
+        const wrapper = mount(() => (
+            <ActionBar buttons={buttonsWithSlot}>
+                {{
+                    customSlot: ({ button }: { button: ActionButton }) => <span class="custom-slot-btn">{button.handleCode}</span>
+                }}
+            </ActionBar>
+        ));
+        expect(wrapper.find(".custom-slot-btn").exists()).toBe(true);
+        expect(wrapper.find(".custom-slot-btn").text()).toBe("custom");
+    });
+
+    it("does not pollute original button data", () => {
+        const originalButton: ActionButton = { contents: "Test", handleCode: "test", click: vi.fn() };
+        mount(ActionBar, {
+            props: {
+                buttons: [originalButton],
+                selectRows: [],
+                align: "left"
+            }
+        });
+        // 验证原始对象没有被添加 loading 属性
+        expect(Object.prototype.hasOwnProperty.call(originalButton, "loading")).toBe(false);
+    });
+
+    it("renders empty buttons panel when buttons array is empty", () => {
+        const wrapper = createWrapper({ buttons: [] });
+        expect(wrapper.find(".buttons-panel").exists()).toBe(false);
+    });
 });

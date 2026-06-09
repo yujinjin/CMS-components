@@ -50,14 +50,15 @@ const actionButtons = ref<ActionButton[]>([]);
 const initActionButtons = function () {
     actionButtons.value = [];
     props.buttons.forEach(button => {
-        button = Object.assign({ loading: false }, button);
-        if (button.customIcon && typeof button.customIcon === "object") {
-            button.customIcon = markRaw(button.customIcon);
+        // 使用展开运算符创建新对象，避免修改外部传入的原始数据
+        const newButton: ActionButton = { ...button, loading: false };
+        if (newButton.customIcon && typeof newButton.customIcon === "object") {
+            newButton.customIcon = markRaw(newButton.customIcon);
         }
-        if (button.icon && typeof button.icon === "object") {
-            button.icon = markRaw(button.icon);
+        if (newButton.icon && typeof newButton.icon === "object") {
+            newButton.icon = markRaw(newButton.icon);
         }
-        actionButtons.value.push(button);
+        actionButtons.value.push(newButton);
     });
 };
 
