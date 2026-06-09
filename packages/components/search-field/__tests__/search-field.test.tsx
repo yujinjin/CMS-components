@@ -86,6 +86,32 @@ describe("SearchField", () => {
             expect(wrapper.emitted("update:modelValue")?.[0]).toEqual(["1"]);
             expect(wrapper.emitted("change")?.[0]).toEqual(["1"]);
         });
+
+        it("renders select with custom optionValueKey and optionLabelKey", () => {
+            const customData = [
+                { id: "a", name: "Item A" },
+                { id: "b", name: "Item B" }
+            ];
+            const wrapper = createWrapper({
+                type: "select",
+                data: customData,
+                optionValueKey: "id",
+                optionLabelKey: "name"
+            });
+            const options = wrapper.findAllComponents({ name: "ElOption" });
+            expect(options).toHaveLength(2);
+            expect(options[0].props("value")).toBe("a");
+            expect(options[0].props("label")).toBe("Item A");
+        });
+
+        it("renders select with empty data", () => {
+            const wrapper = createWrapper({
+                type: "select",
+                data: []
+            });
+            expect(wrapper.findComponent({ name: "ElSelect" }).exists()).toBe(true);
+            expect(wrapper.findAllComponents({ name: "ElOption" })).toHaveLength(0);
+        });
     });
 
     describe("CheckSelect type", () => {
@@ -113,6 +139,14 @@ describe("SearchField", () => {
 
             expect(wrapper.emitted("update:modelValue")?.[0]).toEqual([["1", "2"]]);
             expect(wrapper.emitted("change")?.[0]).toEqual([["1", "2"]]);
+        });
+
+        it("renders check-select with empty data", () => {
+            const wrapper = createWrapper({
+                type: "checkSelect",
+                data: []
+            });
+            expect(wrapper.findComponent({ name: "CheckSelect" }).exists()).toBe(true);
         });
     });
 
