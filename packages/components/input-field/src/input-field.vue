@@ -17,7 +17,7 @@
     <el-input v-else-if="type === 'input'" v-bind="allProps" :model-value="modelValue" @update:model-value="changeValue" v-on="events" />
 
     <!-- 图片上传 -->
-    <img-upload v-else-if="type === 'imgUpload'" v-bind="allProps" :model-value="modelValue" :upload-request="allProps!.uploadRequest" @update:model-value="changeValue" />
+    <img-upload v-else-if="type === 'imgUpload'" v-bind="allProps" :model-value="modelValue" :upload-request="allProps?.uploadRequest" @update:model-value="changeValue" />
 
     <!-- 富文本框 -->
     <web-editor v-else-if="type === 'webEditor'" v-bind="allProps" :model-value="modelValue" @update:model-value="changeValue" />
@@ -78,9 +78,12 @@ const allProps = computed(() => {
     };
 });
 
-// 获取elment 组件名称
-const getElComponentName = function (type: string) {
-    return "el-" + type?.replace(/([A-Z])/g, "-$1").toLowerCase();
+// 获取 element 组件名称，将驼峰转为 kebab-case 并添加 el- 前缀
+const getElComponentName = function (type: string): string {
+    if (!type) {
+        return "";
+    }
+    return "el-" + type.replace(/([A-Z])/g, "-$1").toLowerCase();
 };
 
 const changeValue = function (value: any) {

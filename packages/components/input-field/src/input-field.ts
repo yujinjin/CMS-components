@@ -28,8 +28,7 @@ type FieldType =
     | "autocomplete"
     | "cascader"
     | "checkbox"
-    | "colorPicker"
-    | "upload";
+    | "colorPicker";
 
 export const inputFieldProps = buildProps({
     /** 是否使用插槽 */
@@ -42,7 +41,7 @@ export const inputFieldProps = buildProps({
         type: String as PropType<FieldType>,
         default: "input"
     },
-    /** 组件的数值 */
+    /** 组件的数值（类型由 type 属性决定，静态推断无法精确约束，因此使用 any） */
     modelValue: {
         type: [String, Number, Object, Boolean, Array] as PropType<any>,
         default: null // 必须设置默认值，否则在没有值绑定的情况vue3会设置成false

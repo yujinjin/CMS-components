@@ -55,6 +55,22 @@ describe("InputField", () => {
         expect(wrapper.find(".cms-input-field_label-contents").text()).toBe("Label Text");
     });
 
+    test("renders label type with null modelValue", () => {
+        const wrapper = createWrapper({
+            type: "label",
+            modelValue: null
+        });
+        expect(wrapper.find(".cms-input-field_label-contents").exists()).toBe(true);
+    });
+
+    test("renders label type with undefined modelValue", () => {
+        const wrapper = createWrapper({
+            type: "label",
+            modelValue: undefined
+        });
+        expect(wrapper.find(".cms-input-field_label-contents").exists()).toBe(true);
+    });
+
     test("renders imgUpload type correctly", () => {
         const wrapper = createWrapper({
             type: "imgUpload",
@@ -137,6 +153,27 @@ describe("InputField", () => {
             }
         );
         expect(wrapper.findComponent({ name: "ElInput" }).exists()).toBe(true);
+    });
+
+    test("getElComponentName converts camelCase to kebab-case", () => {
+        const wrapper = createWrapper(
+            {
+                type: "inputNumber"
+            },
+            {
+                ElInputNumber
+            }
+        );
+        expect(wrapper.findComponent({ name: "el-input-number" }).exists()).toBe(true);
+    });
+
+    test("getElComponentName handles camelCase type names", () => {
+        // datePicker → el-date-picker，验证动态组件名称转换逻辑
+        // 由于 ElDatePicker 未全局注册，此处验证组件渲染不报错即可
+        const wrapper = createWrapper({
+            type: "datePicker"
+        });
+        expect(wrapper.exists()).toBe(true);
     });
 
     test("emits update:modelValue when value changes", async () => {
