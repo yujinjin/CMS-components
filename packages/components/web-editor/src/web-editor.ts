@@ -20,6 +20,10 @@ export const webEditorProps = buildProps({
     },
     onImgUpload: {
         type: Function as PropType<OnImgUploadFunction>
+    },
+    /** 自定义工具栏配置，不传则使用默认配置 */
+    toolbar: {
+        type: [String, Array, Object] as PropType<string | Record<string, any> | any[]>
     }
 });
 

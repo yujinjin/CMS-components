@@ -16,7 +16,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { onMounted, ref, watch, inject, computed, type Ref } from "vue";
+import { onMounted, onUnmounted, ref, watch, inject, computed, type Ref } from "vue";
 import { type FormItemContext, type FormContext, formItemContextKey, formContextKey } from "element-plus";
 import Quill from "quill";
 import { debounce } from "@yujinjin/utils";
@@ -35,7 +35,7 @@ const props = defineProps(webEditorProps);
 const emits = defineEmits(webEditorEmits);
 
 // web 编辑器ref
-const webEditorRef = ref(null);
+const webEditorRef: Ref<HTMLElement | null> = ref(null);
 
 // inputFile ref
 const inputFileRef: Ref<HTMLInputElement | null> = ref(null);
@@ -51,32 +51,50 @@ const isBrowser = computed(() => typeof window !== "undefined");
 // quill富文本框编辑器实例
 let quillInstance: Quill | null = null;
 
+// 默认工具栏配置
+const defaultToolbar = ["bold", "italic", "underline", { header: 1 }, { header: 2 }, "blockquote", "code-block", "code", "link", { list: "ordered" }, { list: "bullet" }, "image", ["clean"]];
+
 // 输入内容变化操作
 const textChangeHandle = debounce(() => {
-    emits("update:modelValue", quillInstance!.getSemanticHTML());
+    if (!quillInstance) {
+        return;
+    }
+    emits("update:modelValue", quillInstance.getSemanticHTML());
     elFormItem?.validate?.("change");
 }, 300);
 
 // 图片文件选择变化
 const imgFileChangeHandle = async function (e: Event) {
-    const img = (await props.onImgUpload!((e.target as HTMLInputElement).files![0])) as string;
-    //图片上传成功之后的回调
-    let range = quillInstance!.getSelection();
-    if (!range) {
-        quillInstance!.focus();
-        range = quillInstance!.getSelection();
+    if (!props.onImgUpload || !quillInstance) {
+        return;
     }
-    quillInstance!.insertEmbed(range!.index, "image", img); //将上传好的图片，插入到富文本的range.index（当前光标处）
+    const files = (e.target as HTMLInputElement).files;
+    if (!files || files.length === 0) {
+        return;
+    }
+    const img = (await props.onImgUpload(files[0])) as string;
+    // 图片上传成功之后的回调
+    let range = quillInstance.getSelection();
+    if (!range) {
+        quillInstance.focus();
+        range = quillInstance.getSelection();
+    }
+    if (range) {
+        quillInstance.insertEmbed(range.index, "image", img); // 将上传好的图片，插入到富文本的range.index（当前光标处）
+    }
 };
 
 // 初始化quill
 const initQuill = function () {
-    quillInstance = new Quill(webEditorRef.value!, {
+    if (!webEditorRef.value) {
+        return;
+    }
+    quillInstance = new Quill(webEditorRef.value, {
         modules: {
             toolbar: {
-                container: ["bold", "italic", "underline", { header: 1 }, { header: 2 }, "blockquote", "code-block", "code", "link", { list: "ordered" }, { list: "bullet" }, "image", ["clean"]],
+                container: props.toolbar || defaultToolbar,
                 handlers: {
-                    image: props.onImgUpload ? () => inputFileRef.value!.click() : undefined
+                    image: props.onImgUpload ? () => inputFileRef.value?.click() : undefined
                 }
             }
         },
@@ -85,22 +103,26 @@ const initQuill = function () {
         placeholder: "输入内容..."
     });
     if (props.modelValue) {
-        // quillInstance.pasteHTML(props.modelValue);
         quillInstance.setContents(quillInstance.clipboard.convert({ html: props.modelValue }));
     }
-    // if (elForm?.disabled === true && props.disabled !== false) {
-    //     quillInstance.enable(false);
-    // }
     quillInstance.on("text-change", function () {
         textChangeHandle();
     });
+};
+
+// 销毁 Quill 实例，防止内存泄漏
+const destroyQuill = function () {
+    if (quillInstance) {
+        quillInstance.off("text-change");
+        // Quill 没有提供 destroy 方法，但需要清除事件监听和引用
+        quillInstance = null;
+    }
 };
 
 watch(
     () => props.modelValue,
     value => {
         if (!quillInstance || value === quillInstance.getSemanticHTML()) return;
-        // quillInstance.pasteHTML(props.modelValue);
         quillInstance.setContents(quillInstance.clipboard.convert({ html: props.modelValue }));
     }
 );
@@ -117,5 +139,9 @@ onMounted(() => {
     if (isBrowser.value) {
         initQuill();
     }
+});
+
+onUnmounted(() => {
+    destroyQuill();
 });
 </script>

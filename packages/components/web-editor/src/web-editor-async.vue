@@ -5,7 +5,7 @@
  * @最后修改时间: 2025-01-21 17:40:42
  * @项目的路径: \CMS-components\packages\components\web-editor\src\web-editor.vue
  * @描述: web-editor 富文本框
- *  由于docs:build模式情况下，web-editor依赖的quill插件使用了document对象，在Node.js 环境构建会提示：“ReferenceError: document is not defined”问题。
+ *  由于docs:build模式情况下，web-editor依赖的quill插件使用了document对象，在Node.js 环境构建会提示："ReferenceError: document is not defined"问题。
  *  这里只能折中一下使用动态导入 quill的方式。
  *  本来是打算web-editor全写成动态导入 quill的方式，但这种情况下不支持umd build了，提示错误：Error: UMD and IIFE output formats are not supported for code-splitting builds。
  *  所以不得已采取了两者并存的方案来解决。
@@ -20,8 +20,9 @@
     </div>
 </template>
 <script setup lang="ts">
-import { onMounted, ref, watch, inject, computed, type Ref } from "vue";
+import { onMounted, onUnmounted, ref, watch, inject, computed, type Ref } from "vue";
 import { type FormItemContext, type FormContext, formItemContextKey, formContextKey } from "element-plus";
+import type Quill from "quill";
 import { debounce } from "@yujinjin/utils";
 import { webEditorProps, webEditorEmits } from "./web-editor";
 
@@ -38,7 +39,7 @@ const props = defineProps(webEditorProps);
 const emits = defineEmits(webEditorEmits);
 
 // web 编辑器ref
-const webEditorRef = ref(null);
+const webEditorRef: Ref<HTMLElement | null> = ref(null);
 
 // inputFile ref
 const inputFileRef: Ref<HTMLInputElement | null> = ref(null);
@@ -52,35 +53,53 @@ const elFormItem = inject(formItemContextKey, {} as FormItemContext);
 const isBrowser = computed(() => typeof window !== "undefined");
 
 // quill富文本框编辑器实例
-let quillInstance: any;
+let quillInstance: Quill | null = null;
+
+// 默认工具栏配置
+const defaultToolbar = ["bold", "italic", "underline", { header: 1 }, { header: 2 }, "blockquote", "code-block", "code", "link", { list: "ordered" }, { list: "bullet" }, "image", ["clean"]];
 
 // 输入内容变化操作
 const textChangeHandle = debounce(() => {
+    if (!quillInstance) {
+        return;
+    }
     emits("update:modelValue", quillInstance.getSemanticHTML());
-    elFormItem?.validate?.("change", quillInstance.getSemanticHTML());
+    elFormItem?.validate?.("change");
 }, 300);
 
 // 图片文件选择变化
 const imgFileChangeHandle = async function (e: Event) {
-    const img = (await props.onImgUpload!((e.target as HTMLInputElement).files![0])) as string;
-    //图片上传成功之后的回调
+    if (!props.onImgUpload || !quillInstance) {
+        return;
+    }
+    const files = (e.target as HTMLInputElement).files;
+    if (!files || files.length === 0) {
+        return;
+    }
+    const img = (await props.onImgUpload(files[0])) as string;
+    // 图片上传成功之后的回调
     let range = quillInstance.getSelection();
     if (!range) {
         quillInstance.focus();
         range = quillInstance.getSelection();
     }
-    quillInstance.insertEmbed(range.index, "image", img); //将上传好的图片，插入到富文本的range.index（当前光标处）
+    if (range) {
+        quillInstance.insertEmbed(range.index, "image", img); // 将上传好的图片，插入到富文本的range.index（当前光标处）
+    }
 };
 
-// 初始化quill
+// 初始化quill（异步动态导入）
 const initQuill = async function () {
-    const Quill = (await import("quill")).default;
-    quillInstance = new Quill!(webEditorRef.value!, {
+    if (!webEditorRef.value) {
+        return;
+    }
+    const QuillModule = (await import("quill")).default;
+    quillInstance = new QuillModule(webEditorRef.value, {
         modules: {
             toolbar: {
-                container: ["bold", "italic", "underline", { header: 1 }, { header: 2 }, "blockquote", "code-block", "code", "link", { list: "ordered" }, { list: "bullet" }, "image", ["clean"]],
+                container: props.toolbar || defaultToolbar,
                 handlers: {
-                    image: props.onImgUpload ? () => inputFileRef.value!.click() : undefined
+                    image: props.onImgUpload ? () => inputFileRef.value?.click() : undefined
                 }
             }
         },
@@ -89,22 +108,25 @@ const initQuill = async function () {
         placeholder: "输入内容..."
     });
     if (props.modelValue) {
-        // quillInstance.pasteHTML(props.modelValue);
         quillInstance.setContents(quillInstance.clipboard.convert({ html: props.modelValue }));
     }
-    // if (elForm?.disabled === true && props.disabled !== false) {
-    //     quillInstance.enable(false);
-    // }
     quillInstance.on("text-change", function () {
         textChangeHandle();
     });
+};
+
+// 销毁 Quill 实例，防止内存泄漏
+const destroyQuill = function () {
+    if (quillInstance) {
+        quillInstance.off("text-change");
+        quillInstance = null;
+    }
 };
 
 watch(
     () => props.modelValue,
     value => {
         if (!quillInstance || value === quillInstance.getSemanticHTML()) return;
-        // quillInstance.pasteHTML(props.modelValue);
         quillInstance.setContents(quillInstance.clipboard.convert({ html: props.modelValue }));
     }
 );
@@ -121,5 +143,9 @@ onMounted(() => {
     if (isBrowser.value) {
         initQuill();
     }
+});
+
+onUnmounted(() => {
+    destroyQuill();
 });
 </script>
