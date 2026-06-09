@@ -45,9 +45,9 @@ const props = defineProps({
 const enumText = computed(() => {
     if (typeof props.value === "number" || typeof props.value === "boolean") {
         const findItem = props.data.find(dateItem => dateItem[props.valueKey] === props.value);
-        return findItem ? findItem[props.textKey] : props.value;
+        return findItem ? findItem[props.textKey] : String(props.value);
     }
-    if (!props.value) {
+    if (!props.value || typeof props.value !== "string") {
         return "-";
     }
     return props.value

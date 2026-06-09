@@ -54,4 +54,19 @@ describe("TableColumnNumber", () => {
         });
         expect(wrapper.text()).toBe("1,234,001,234.57");
     });
+
+    test("renders negative number correctly", () => {
+        const wrapper = createWrapper({ value: -1234.5, digit: 1 });
+        expect(wrapper.text()).toContain("-");
+    });
+
+    test("renders string number with digit", () => {
+        const wrapper = createWrapper({ value: "1234.5678", digit: 2 });
+        expect(wrapper.text()).toBe("1,234.57");
+    });
+
+    test("renders number with zero digit", () => {
+        const wrapper = createWrapper({ value: 1234.5678, digit: 0 });
+        expect(wrapper.text()).toBe("1,235");
+    });
 });

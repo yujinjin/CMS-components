@@ -18,12 +18,12 @@ defineOptions({
 });
 
 const props = defineProps({
-    // 日期值
+    // 数值
     value: {
         type: [String, Number],
         default: null
     },
-    // 日期格式化字符串
+    // 数字格式化小数点位数
     digit: {
         type: Number,
         default: 0

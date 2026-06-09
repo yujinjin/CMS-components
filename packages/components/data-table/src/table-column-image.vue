@@ -35,7 +35,7 @@ import { ElImage, ElIcon } from "element-plus";
 import { Picture } from "@element-plus/icons-vue";
 
 defineOptions({
-    name: "TableColumnImgage"
+    name: "TableColumnImage"
 });
 
 // TODO: 支持SVGA 图片格式

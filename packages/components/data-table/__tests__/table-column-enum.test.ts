@@ -97,5 +97,58 @@ describe("TableColumnEnum", () => {
             });
             expect(wrapper.text()).toBe("Active,999,Pending");
         });
+
+        test("handles empty items in separated value", () => {
+            const wrapper = createWrapper({
+                value: "1,,2"
+            });
+            expect(wrapper.text()).toBe("Active,,Pending");
+        });
+
+        test("handles string value matching number enum", () => {
+            const wrapper = createWrapper({
+                value: "1"
+            });
+            expect(wrapper.text()).toBe("Active");
+        });
+    });
+
+    describe("Custom Key Configuration", () => {
+        test("uses custom valueKey correctly", () => {
+            const customEnums = [
+                { name: "Active", code: "A" },
+                { name: "Inactive", code: "I" }
+            ];
+            const wrapper = createWrapper({
+                value: "A",
+                data: customEnums,
+                valueKey: "code",
+                textKey: "name"
+            });
+            expect(wrapper.text()).toBe("Active");
+        });
+    });
+
+    describe("Boolean Value", () => {
+        test("handles boolean false correctly", () => {
+            const boolEnums = [
+                { label: "Yes", value: true },
+                { label: "No", value: false }
+            ];
+            const wrapper = createWrapper({
+                value: false,
+                data: boolEnums
+            });
+            expect(wrapper.text()).toBe("No");
+        });
+
+        test("does not call split on boolean value", () => {
+            const wrapper = createWrapper({
+                value: true,
+                data: [{ label: "Yes", value: true }]
+            });
+            // Boolean 类型不应走 split 逻辑，应直接匹配
+            expect(wrapper.text()).toBe("Yes");
+        });
     });
 });

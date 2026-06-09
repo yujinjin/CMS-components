@@ -66,7 +66,7 @@ describe("DataTable", () => {
             expect(wrapper.findComponent({ name: "TableColumnAction" }).exists()).toBe(true);
             expect(wrapper.findComponent({ name: "TableColumnDate" }).exists()).toBe(true);
             expect(wrapper.findComponent({ name: "TableColumnEnum" }).exists()).toBe(true);
-            expect(wrapper.findComponent({ name: "TableColumnImgage" }).exists()).toBe(true);
+            expect(wrapper.findComponent({ name: "TableColumnImage" }).exists()).toBe(true);
             expect(wrapper.findComponent({ name: "TableColumnNumber" }).exists()).toBe(true);
         });
 
@@ -207,6 +207,76 @@ describe("DataTable", () => {
             await nextTick();
             const columns = wrapper.findAllComponents({ name: "ElTableColumn" });
             expect(columns).toHaveLength(4);
+        });
+    });
+
+    describe("Query Processing", () => {
+        test("applies queryParametersProcess before query", async () => {
+            vi.useFakeTimers();
+            const processFn = vi.fn(params => ({ ...params, extra: "test" }));
+            const wrapper = createWrapper({ queryParametersProcess: processFn });
+            vi.runAllTimers();
+            await flushPromises();
+            expect(processFn).toHaveBeenCalled();
+            const queryMock = wrapper.props("query") as ReturnType<typeof vi.fn>;
+            const lastCall = queryMock.mock.calls[queryMock.mock.calls.length - 1];
+            expect(lastCall[0]).toHaveProperty("extra", "test");
+        });
+
+        test("applies queryResponseProcess after query", async () => {
+            const processFn = vi.fn(result => result);
+            createWrapper({
+                queryResponseProcess: processFn,
+                // 使用同步返回值避免 isLoadingForSearch 锁问题
+                query: vi.fn(() => ({ rows: mockData, total: 100 }))
+            });
+            await flushPromises();
+            await nextTick();
+            expect(processFn).toHaveBeenCalled();
+        });
+    });
+
+    describe("Multi-Property Column", () => {
+        test("handles comma-separated prop with getCellValue", async () => {
+            const multiPropColumns: DataTableColumn<any>[] = [{ prop: "firstName,lastName", label: "Full Name" }];
+            const multiPropData = [{ firstName: "John", lastName: "Doe" }];
+            const wrapper = mount(DataTable, {
+                props: {
+                    columns: multiPropColumns,
+                    query: vi.fn(() => Promise.resolve({ rows: multiPropData, total: 1 })),
+                    isShowPagination: true
+                },
+                global: { plugins: [ElLoading] }
+            });
+            await flushPromises();
+            await nextTick();
+            expect((wrapper.vm as any).dataList).toEqual(multiPropData);
+        });
+    });
+
+    describe("Column Slot", () => {
+        test("renders column with slot name without error", () => {
+            const slotColumns: DataTableColumn<any>[] = [{ prop: "id", label: "ID", slot: "idSlot" }];
+            const wrapper = mount(DataTable, {
+                props: {
+                    columns: slotColumns,
+                    query: vi.fn(() => ({ rows: [], total: 0 }))
+                },
+                global: { plugins: [ElLoading] }
+            });
+            expect(wrapper.findComponent({ name: "ElTable" }).exists()).toBe(true);
+        });
+
+        test("renders column with slotHeader name without error", () => {
+            const slotHeaderColumns: DataTableColumn<any>[] = [{ prop: "id", label: "ID", slotHeader: "idHeaderSlot" }];
+            const wrapper = mount(DataTable, {
+                props: {
+                    columns: slotHeaderColumns,
+                    query: vi.fn(() => ({ rows: [], total: 0 }))
+                },
+                global: { plugins: [ElLoading] }
+            });
+            expect(wrapper.findComponent({ name: "ElTable" }).exists()).toBe(true);
         });
     });
 });

@@ -74,4 +74,32 @@ describe("TableColumnImage", () => {
             expect(imageComponents[1].props("src")).toBe(images.split(",")[1]);
         });
     });
+
+    describe("Preview Configuration", () => {
+        test("sets preview-src-list for image preview", () => {
+            const wrapper = createWrapper({ value: "https://example.com/image.jpg" });
+            const image = wrapper.findComponent({ name: "ElImage" });
+            expect(image.props("previewSrcList")).toEqual(["https://example.com/image.jpg"]);
+        });
+
+        test("sets preview-src-list for multiple images", () => {
+            const images = ["https://example.com/img1.jpg", "https://example.com/img2.jpg"];
+            const wrapper = createWrapper({ value: images });
+            const image = wrapper.findComponent({ name: "ElImage" });
+            expect(image.props("previewSrcList")).toEqual(images);
+        });
+
+        test("renders no-image text when value is null", () => {
+            const wrapper = createWrapper({ value: null });
+            expect(wrapper.find(".no-image").exists()).toBe(true);
+            expect(wrapper.find(".no-image").text()).toBe("没有图片");
+        });
+    });
+
+    describe("Component Name", () => {
+        test("has correct component name", () => {
+            const wrapper = createWrapper({ value: "https://example.com/image.jpg" });
+            expect(wrapper.findComponent({ name: "TableColumnImage" }).exists()).toBe(true);
+        });
+    });
 });

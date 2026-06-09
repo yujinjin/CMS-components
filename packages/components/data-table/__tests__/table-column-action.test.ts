@@ -156,4 +156,34 @@ describe("TableColumnAction", () => {
         await nextTick();
         expect((wrapper.vm as any).actionButtons[0].loading).toBe(false);
     });
+
+    test("does not pollute original button data", () => {
+        const originalButton = { contents: "Test", handleCode: "test", click: vi.fn() };
+        mount(TableColumnAction, {
+            props: {
+                buttons: [originalButton],
+                row: {},
+                maxNumShow: 3
+            }
+        });
+        // 验证原始对象没有被添加 loading/isShow/link/type 属性
+        expect(Object.prototype.hasOwnProperty.call(originalButton, "loading")).toBe(false);
+        expect(Object.prototype.hasOwnProperty.call(originalButton, "isShow")).toBe(false);
+    });
+
+    test("renders no buttons when all buttons have display returning false", () => {
+        const hiddenButtons = [{ contents: "Hidden", handleCode: "hidden", display: () => false }];
+        const wrapper = createWrapper({ buttons: hiddenButtons });
+        expect(wrapper.findComponent({ name: "ElButton" }).exists()).toBe(false);
+        expect(wrapper.findComponent({ name: "ElDropdown" }).exists()).toBe(false);
+    });
+
+    test("renders no dropdown when buttons count <= maxNumShow", () => {
+        const fewButtons = [
+            { contents: "Btn1", handleCode: "btn1", click: vi.fn() },
+            { contents: "Btn2", handleCode: "btn2", click: vi.fn() }
+        ];
+        const wrapper = createWrapper({ buttons: fewButtons, maxNumShow: 3 });
+        expect(wrapper.findComponent({ name: "ElDropdown" }).exists()).toBe(false);
+    });
 });

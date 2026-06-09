@@ -114,11 +114,15 @@ const initTableMaxHeight = async function () {
         return;
     }
     await nextTick();
-    tableProps.value.maxHeight = dataTablePanelRef.value!.clientHeight - (paginationRef.value ? paginationRef.value.offsetHeight : 0) - 15;
+    if (!dataTablePanelRef.value) {
+        return;
+    }
+    const panelHeight = dataTablePanelRef.value.clientHeight;
+    const paginationHeight = paginationRef.value ? paginationRef.value.offsetHeight : 0;
+    tableProps.value.maxHeight = panelHeight - paginationHeight - 15;
     if (tableProps.value.maxHeight < 100) {
         tableProps.value.maxHeight = 100;
     }
-    // console.info("=========initTableMaxHeight", dataTablePanelRef.value.clientHeight, paginationRef.value.offsetHeight);
 };
 
 // 初始化table属性
@@ -213,8 +217,10 @@ const getCellValue = function (row: any, columnItem: DataTableColumn<any>, index
     if (!columnItem.prop) {
         return null;
     }
-    if (columnItem.prop.split(",").length > 1) {
-        return columnItem.prop.split(",").map(key => row[key]);
+    // 支持多属性获取，使用 separator（默认逗号）分隔 prop 中的多个属性名
+    const separator = columnItem.separator || ",";
+    if (columnItem.prop.includes(separator)) {
+        return columnItem.prop.split(separator).map(key => row[key.trim()]);
     }
     return row[columnItem.prop];
 };

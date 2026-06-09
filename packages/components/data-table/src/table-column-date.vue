@@ -39,12 +39,12 @@ const dateText = computed(() => {
     if (!props.value) {
         return "-";
     }
-    if (Object.prototype.toString.call(props.value) === "[object Array]") {
-        if ((props.value as Array<any>).length === 0) {
+    if (Array.isArray(props.value)) {
+        if (props.value.length === 0) {
             return "-";
         }
-        return (props.value as Array<any>).map(item => (item ? dateFormat(item, props.formate) : "")).join(props.separator);
+        return props.value.map(item => (item ? dateFormat(item as string | number, props.formate) : "")).join(props.separator);
     }
-    return props.value ? dateFormat(props.value as number | string, props.formate) : "-";
+    return dateFormat(props.value as string | number, props.formate);
 });
 </script>

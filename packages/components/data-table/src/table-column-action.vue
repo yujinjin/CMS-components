@@ -74,11 +74,12 @@ const initActionButtons = function () {
     actionButtons.value = [];
     props.buttons.forEach(button => {
         if (!button.display || button.display(props.row)) {
-            button = Object.assign({ loading: false, isShow: true, link: true, type: "primary" }, button);
-            if (button.icon && typeof button.icon === "object") {
-                button.icon = markRaw(button.icon);
+            // 使用展开运算符创建新对象，避免修改外部传入的原始数据
+            const newButton: TableButton = { ...button, loading: false, isShow: true, link: true, type: "primary" };
+            if (newButton.icon && typeof newButton.icon === "object") {
+                newButton.icon = markRaw(newButton.icon);
             }
-            actionButtons.value.push(button);
+            actionButtons.value.push(newButton);
         }
     });
     if (props.maxNumShow && actionButtons.value.length > props.maxNumShow) {
@@ -106,7 +107,10 @@ const clickHandle = async function (button: TableButton) {
 
 // dropdown 按钮点击事件
 const dropdownCommandHandle = function (index: number) {
-    clickHandle(actionButtons.value[showStatusButtons.value.length + index]);
+    const button = hideStatusButtons.value[index];
+    if (button) {
+        clickHandle(button);
+    }
 };
 
 watch(

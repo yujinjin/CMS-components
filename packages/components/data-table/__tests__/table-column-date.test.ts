@@ -108,5 +108,16 @@ describe("TableColumnDate", () => {
             });
             expect(wrapper.text()).toBe("2024-01-01 ~ 2024-01-02");
         });
+
+        test("handles value as 0 (falsy but valid)", () => {
+            const wrapper = createWrapper({ value: 0 });
+            // 0 是 falsy 值，应显示为 "-"
+            expect(wrapper.text()).toBe("-");
+        });
+
+        test("handles value as undefined", () => {
+            const wrapper = createWrapper({ value: undefined });
+            expect(wrapper.text()).toBe("-");
+        });
     });
 });
