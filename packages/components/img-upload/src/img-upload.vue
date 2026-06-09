@@ -8,7 +8,7 @@
 -->
 <template>
     <div class="img-upload">
-        <el-upload v-bind="uploadInnerProps" ref="updloadRef" v-model:file-list="fileList" :disabled="isDisabled">
+        <el-upload v-bind="uploadInnerProps" ref="uploadRef" v-model:file-list="fileList" :disabled="isDisabled">
             <template #default>
                 <slot><el-button type="primary">点击上传</el-button></slot>
             </template>
@@ -84,7 +84,7 @@ const fileList: Ref<UploadUserFile[]> = ref([]);
 // 是否显示裁剪弹窗
 const isShowCropperDialog: Ref<boolean> = ref(false);
 
-const updloadRef = ref<InstanceType<typeof ElUpload>>();
+const uploadRef = ref<InstanceType<typeof ElUpload>>();
 
 // 剪切图片ref
 const cropperImgRef: Ref<HTMLImageElement | null> = ref(null);
@@ -123,16 +123,19 @@ const generateFileList = function () {
 const showCroppDialogHandle = async function () {
     isShowCropperDialog.value = true;
     await nextTick();
+    if (!cropperImgRef.value) {
+        return;
+    }
     if (cropperInstance) {
         cropperInstance.replace(cropperImg.value);
     } else {
         cropperInstance = new Cropper(
-            cropperImgRef.value!,
+            cropperImgRef.value,
             Object.assign(
                 {
                     viewMode: 1, // 0:无限制;1:将裁剪框限制为不超过画布的大小;2:限制最小画布尺寸以适应容器。如果画布和容器的比例不同，则最小画布将在其中一个维度中被额外的空格包围。3:限制最小画布尺寸以填充容器。如果画布和容器的比例不同，则容器将无法将整个画布适合其中一个尺寸。
                     aspectRatio: 1 / 1, // 默认比例
-                    preview: previewImgRef.value, // 预览视图
+                    preview: previewImgRef.value ?? undefined, // 预览视图
                     guides: false, // 裁剪框的虚线(九宫格)
                     autoCropArea: 0.8, // 0-1之间的数值，定义自动剪裁区域的大小，默认0.8
                     movable: false, // 是否允许移动图片
@@ -152,12 +155,17 @@ const showCroppDialogHandle = async function () {
 
 // 开始剪切操作
 const startCroppHandle = async function (raw: UploadRawFile) {
+    if (!raw) {
+        return;
+    }
     const imgFileReader = new FileReader();
     imgFileReader.onload = e => {
-        cropperImg.value = e.target!.result as string;
-        showCroppDialogHandle();
+        if (e.target?.result) {
+            cropperImg.value = e.target.result as string;
+            showCroppDialogHandle();
+        }
     };
-    imgFileReader.readAsDataURL(raw!);
+    imgFileReader.readAsDataURL(raw);
 };
 
 // 关闭裁剪弹窗
@@ -174,9 +182,11 @@ const imageUploadApi = async function (file: File | UploadRawFile) {
     if (uploadInnerProps.value.limit === 1) {
         fileList.value = [{ name: img.substring(img.lastIndexOf("/") + 1), url: img }];
     } else if ((file as UploadRawFile).uid && fileList.value.some(item => item.uid === (file as UploadRawFile).uid)) {
-        const findFile: UploadUserFile = fileList.value.find(item => item.uid === (file as UploadRawFile).uid)!;
-        findFile.name = img.substring(img.lastIndexOf("/") + 1);
-        findFile.url = img;
+        const findFile = fileList.value.find(item => item.uid === (file as UploadRawFile).uid);
+        if (findFile) {
+            findFile.name = img.substring(img.lastIndexOf("/") + 1);
+            findFile.url = img;
+        }
     } else {
         fileList.value.splice(0, 0, { name: img.substring(img.lastIndexOf("/") + 1), url: img });
     }
@@ -212,11 +222,15 @@ const changeDirectionCropper = function () {
 // 保存剪切的图
 const saveCropper = function () {
     cropperInstance.getCroppedCanvas().toBlob(async blob => {
-        if (blob!.size / 1024 > props.maxSize) {
+        if (!blob) {
+            ElMessage.error("图片裁剪失败！");
+            return;
+        }
+        if (blob.size / 1024 > props.maxSize) {
             ElMessage.error("文件大小超出限制！");
             return;
         }
-        await imageUploadApi(new File([blob!], Date.now() + ".jpg", { type: "image/jpeg", lastModified: Date.now() }));
+        await imageUploadApi(new File([blob], Date.now() + ".jpg", { type: "image/jpeg", lastModified: Date.now() }));
         fileListChange();
         closeCroppDialog();
     }, "image/jpeg");
@@ -252,18 +266,20 @@ const defaultUploadProps = {
     },
     // 文件超出个数限制时的钩子
     onExceed(files: File[]) {
-        if (uploadInnerProps.value.limit! > 1) {
-            ElMessageBox.alert("您最多只能上传" + uploadInnerProps.value.limit + "个图片!", "上传图片", {
+        const limit = uploadInnerProps.value.limit;
+        if (limit && limit > 1) {
+            ElMessageBox.alert("您最多只能上传" + limit + "个图片!", "上传图片", {
                 confirmButtonText: "确定",
                 type: "warning"
             });
         } else {
-            updloadRef.value!.clearFiles();
+            // limit 为 1 或未设置时，替换已有文件
+            uploadRef.value?.clearFiles();
             const file = files[0] as UploadRawFile;
             file.uid = genFileId();
-            updloadRef.value!.handleStart(file);
+            uploadRef.value?.handleStart(file);
             if (uploadInnerProps.value.autoUpload !== false) {
-                updloadRef.value!.submit();
+                uploadRef.value?.submit();
             }
         }
     },

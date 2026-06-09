@@ -129,4 +129,57 @@ describe("ImgUpload", () => {
         const dialog = wrapper.findComponent({ name: "ElDialog" });
         expect(dialog.vm.modelValue).toBe(true);
     });
+
+    test("modelValue as array with separator", async () => {
+        const uploadRequest = vi.fn(async () => "/static/img/1.jpg");
+        const value = ref<string[]>(["/static/img/1.jpg", "/static/img/2.jpg"]);
+        const wrapper = mount(() => <ImgUpload v-model={value.value} uploadRequest={uploadRequest} />);
+        // 验证数组模式初始值正确渲染
+        expect(wrapper.findComponent({ name: "ElUpload" }).vm.fileList).toMatchObject([
+            { name: "1.jpg", url: "/static/img/1.jpg" },
+            { name: "2.jpg", url: "/static/img/2.jpg" }
+        ]);
+    });
+
+    test("modelValue as string with custom separator", async () => {
+        const uploadRequest = vi.fn(async () => "/static/img/1.jpg");
+        const value = ref<string>("/static/img/1.jpg;/static/img/2.jpg");
+        const wrapper = mount(() => <ImgUpload v-model={value.value} separator=";" uploadRequest={uploadRequest} />);
+        // 验证自定义分隔符正确解析
+        expect(wrapper.findComponent({ name: "ElUpload" }).vm.fileList).toMatchObject([
+            { name: "1.jpg", url: "/static/img/1.jpg" },
+            { name: "2.jpg", url: "/static/img/2.jpg" }
+        ]);
+    });
+
+    test("onRemove deletes file from list", async () => {
+        const uploadRequest = vi.fn(async () => "/static/img/1.jpg");
+        const value = ref<string>("/static/img/1.jpg|/static/img/2.jpg");
+        const wrapper = mount(() => <ImgUpload v-model={value.value} uploadRequest={uploadRequest} />);
+        expect(wrapper.findComponent({ name: "ElUpload" }).vm.fileList).toHaveLength(2);
+        // 模拟删除操作：触发 onRemove 回调
+        const uploadVm = wrapper.findComponent({ name: "ElUpload" }).vm;
+        const remainingFiles = [uploadVm.fileList[0]];
+        await uploadVm.$emit("remove", uploadVm.fileList[1], remainingFiles);
+        await nextTick();
+        // 验证删除后 modelValue 已更新
+        expect(value.value).toBe("/static/img/1.jpg");
+    });
+
+    test("cropperProps as object config", async () => {
+        const uploadRequest = vi.fn(async () => "/static/img/1.jpg");
+        const value = ref<string>();
+        const cropperOptions = { aspectRatio: 16 / 9, viewMode: 2 as const };
+        const wrapper = mount(() => <ImgUpload v-model={value.value} cropperProps={cropperOptions} uploadRequest={uploadRequest} />);
+        // 验证裁剪配置传入后组件正常渲染
+        expect(wrapper.findComponent({ name: "ElUpload" }).exists()).toBe(true);
+        expect(wrapper.findComponent({ name: "ElDialog" }).exists()).toBe(true);
+    });
+
+    test("empty modelValue renders empty file list", async () => {
+        const uploadRequest = vi.fn(async () => "/static/img/1.jpg");
+        const value = ref<string>("");
+        const wrapper = mount(() => <ImgUpload v-model={value.value} uploadRequest={uploadRequest} />);
+        expect(wrapper.findComponent({ name: "ElUpload" }).vm.fileList).toHaveLength(0);
+    });
 });
