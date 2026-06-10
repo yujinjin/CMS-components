@@ -72,7 +72,7 @@ export default tseslint.config(
         },
         rules: {
             // 允许调用 console 对象的方法
-            "no-console": ["error", { allow: ["error"] }],
+            "no-console": ["error", { allow: ["error", "warn"] }],
             // 是否使用 debugger
             "no-debugger": "error",
             // 禁止在循环中 出现 await
