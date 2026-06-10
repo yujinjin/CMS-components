@@ -26,9 +26,6 @@ export type DialogFormButton = NotReadonly<Partial<ButtonProps>> & {
     /** 自定义插槽名称（如有值其他选项无效） */
     slot?: string;
 
-    /** 按钮是否正在加载 */
-    // isLoading?: boolean;
-
     /** 是否显示（如果不想销毁当前组件数据可以使用此属性） */
     isShow?: boolean;
 

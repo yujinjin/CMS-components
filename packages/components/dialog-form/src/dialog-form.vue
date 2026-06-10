@@ -43,6 +43,7 @@ defineOptions({
     name: "DialogForm"
 });
 
+// 动态插槽：default 插槽用于弹窗顶部内容，其他插槽名称由 input-form 的 field.slot 动态决定
 defineSlots<{
     default: () => any;
     [key: string]: (props: DialogFormButtonSlotScope | InputFormSlotScope) => any;
@@ -151,7 +152,7 @@ watch(
 defineExpose<DialogFormRef>({
     // 获取表单的value
     getInputValue: function () {
-        return inputFormRef.value?.getInputValue() || {};
+        return inputFormRef.value?.getInputValue() ?? {};
     },
 
     /**
@@ -172,7 +173,7 @@ defineExpose<DialogFormRef>({
         if (callback && typeof callback === "function") {
             callback(actionButtons.value);
         } else {
-            console.error("callback 必须是一个函数");
+            console.warn("callback 必须是一个函数");
         }
     },
     // 获取form Ref（组件未挂载时返回 null）
