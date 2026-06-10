@@ -106,7 +106,7 @@ const clickHandle = async function (button: DialogFormButton) {
     let canClose: boolean | void = true;
     try {
         if (button.click) {
-            canClose = await button.click(inputFormRef.value!.getInputValue(), inputFormRef.value!.getFormRef(), button);
+            canClose = await button.click(inputFormRef.value?.getInputValue() ?? {}, inputFormRef.value?.getFormRef() ?? null, button);
         }
     } catch (error) {
         canClose = false;
@@ -175,13 +175,16 @@ defineExpose<DialogFormRef>({
             console.error("callback 必须是一个函数");
         }
     },
-    // 获取form Ref
+    // 获取form Ref（组件未挂载时返回 null）
     getFormRef: function () {
-        return inputFormRef.value!.getFormRef();
+        return inputFormRef.value?.getFormRef() ?? null;
     },
-    // 表单验证
+    // 表单验证（组件未挂载时会 reject）
     validate(callback?: FormValidateCallback) {
-        return inputFormRef.value!.validate(callback);
+        if (!inputFormRef.value) {
+            return Promise.reject(new Error("表单组件尚未挂载，无法执行验证"));
+        }
+        return inputFormRef.value.validate(callback);
     }
 });
 </script>

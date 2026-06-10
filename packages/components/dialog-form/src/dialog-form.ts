@@ -86,9 +86,9 @@ export interface DialogFormRef {
     /** 修改当前生成的button按钮值 */
     changeButtons: (callback: (actionButtons: DialogFormButton[]) => void) => void;
 
-    /** 获取form Ref */
-    getFormRef: () => FormInstance;
+    /** 获取form Ref（组件未挂载时返回 null） */
+    getFormRef: () => FormInstance | null;
 
-    /** 表单验证 */
+    /** 表单验证（组件未挂载时会 reject） */
     validate: (callback?: FormValidateCallback) => FormValidationResult;
 }
