@@ -133,6 +133,9 @@ export const searchFormEmits = {
     // 搜索操作
     search: (searchFormValue: Record<string, any>) => searchFormValue !== null && typeof searchFormValue === "object",
 
+    // 重置操作
+    reset: (searchFormValue: Record<string, any>) => searchFormValue !== null && typeof searchFormValue === "object",
+
     // 表单字段值变化事件
     change: (formField: SearchFormField, formFields: SearchFormField[]) => formField !== null && typeof formField === "object" && Array.isArray(formFields),
 

@@ -45,6 +45,7 @@ defineOptions({
     name: "SearchForm"
 });
 
+// 动态插槽：插槽名称由 field.slot 动态决定，无法静态枚举，因此使用 [key: string] 索引签名
 defineSlots<{
     [key: string]: (props: SearchFormSlotScope) => any;
 }>();
@@ -78,7 +79,7 @@ const generateFormFields = function () {
     }
     props.fields.forEach(field => {
         if (!field.name) {
-            console.error("字段没有属性name值", field);
+            console.warn("字段没有属性name值", field);
             return;
         }
         const newField = extend(true, { isShow: true, type: "primary", value: null }, field) as SearchFormField;
@@ -89,17 +90,20 @@ const generateFormFields = function () {
             if (!newField.props) {
                 newField.props = {};
             }
+            // 此时 newField.props 已确保非空，但 TS 无法跨赋值收窄类型，使用局部变量断言
+            let fieldProps = newField.props!;
             if (newField.type === "datePicker") {
-                newField.props = Object.assign({}, SEARCH_FORM_FIELD_DEFAULT_ATTRIBUTES[newField.type][newField.props.type || "date"], newField.props);
-                if (newField.defaultValue && newField.props!.valueFormat) {
-                    newField.value = dateFormat(newField.defaultValue, newField.props!.valueFormat);
+                fieldProps = Object.assign({}, SEARCH_FORM_FIELD_DEFAULT_ATTRIBUTES[newField.type][fieldProps.type || "date"], fieldProps);
+                if (newField.defaultValue && fieldProps.valueFormat) {
+                    newField.value = dateFormat(newField.defaultValue, fieldProps.valueFormat);
                 }
             } else {
-                if (!newField.props.placeholder) {
-                    newField.props.placeholder = (SEARCH_FORM_FIELD_DEFAULT_ATTRIBUTES[newField.type].placeholder || "") + (newField.label || "");
+                if (!fieldProps.placeholder) {
+                    fieldProps.placeholder = (SEARCH_FORM_FIELD_DEFAULT_ATTRIBUTES[newField.type].placeholder || "") + (newField.label || "");
                 }
-                newField.props = Object.assign({}, SEARCH_FORM_FIELD_DEFAULT_ATTRIBUTES[newField.type], newField.props);
+                fieldProps = Object.assign({}, SEARCH_FORM_FIELD_DEFAULT_ATTRIBUTES[newField.type], fieldProps);
             }
+            newField.props = fieldProps;
         }
         formFields.value.push(newField);
     });
@@ -110,7 +114,7 @@ const generateFormFields = function () {
 const generateExtendButtons = function () {
     extendButtons.value = [];
     if (!props.buttons || props.buttons.length === 0) {
-        return [];
+        return;
     }
     props.buttons.forEach(button => {
         button = Object.assign({ loading: false }, button);
@@ -123,14 +127,16 @@ const generateExtendButtons = function () {
 
 // 触发window resize 事件，通常是为了让datatable最大高度重新计算
 const triggerResizeEvent = async function () {
-    // let resizeEvent = new Event('resize');
-    // resizeEvent.initEvent('resize', true, true)
     await nextTick();
     window.dispatchEvent(new Event("resize"));
 };
 
 const init = function () {
-    buttonBoxWidth.value = buttonBoxRef.value!.offsetWidth;
+    if (!buttonBoxRef.value) {
+        console.warn("init: 按钮容器元素尚未挂载，无法获取宽度");
+        return;
+    }
+    buttonBoxWidth.value = buttonBoxRef.value.offsetWidth;
 };
 
 // 获取当前搜索表单的数据对象
@@ -149,15 +155,17 @@ const searchHandle = function () {
 
 // 重置操作
 const resetHandle = function () {
-    props.fields.forEach((field, index) => {
+    formFields.value.forEach(field => {
         if (Object.prototype.hasOwnProperty.call(field, "defaultValue")) {
-            formFields.value[index].value = formFields.value[index].props?.valueFormat ? dateFormat(field.defaultValue, formFields.value[index].props?.valueFormat) : field.defaultValue;
+            field.value = field.props?.valueFormat ? dateFormat(field.defaultValue, field.props.valueFormat) : field.defaultValue;
         } else if (Object.prototype.hasOwnProperty.call(field, "value")) {
-            formFields.value[index].value = field.value;
+            field.value = null;
         } else {
-            formFields.value[index].value = null;
+            field.value = null;
         }
     });
+    const formValue = getSearchFormValue();
+    emits("reset", formValue);
     searchHandle();
 };
 
@@ -219,7 +227,7 @@ defineExpose<SearchFormRef>({
         if (callback && typeof callback === "function") {
             callback(formFields.value);
         } else {
-            console.error("callback 必须是一个函数");
+            console.warn("callback 必须是一个函数");
         }
     },
     // 获取当前搜索表单的数据对象

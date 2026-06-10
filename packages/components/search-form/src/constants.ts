@@ -42,6 +42,7 @@ export const SEARCH_FORM_FIELD_DEFAULT_ATTRIBUTES: Record<string, any> = {
             type: "date",
             placeholder: "请选择",
             valueFormat: "YYYY-MM-DD",
+            // 默认禁用未来日期（当前时间之后的日期不可选），适用于大多数业务场景中不允许选择未来日期的情况
             disabledDate: function (time: Date) {
                 return time.getTime() > Date.now();
             }
