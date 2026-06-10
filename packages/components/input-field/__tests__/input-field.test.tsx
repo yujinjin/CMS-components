@@ -1,8 +1,35 @@
 import { nextTick } from "vue";
 import { describe, test, expect, vi, beforeEach, afterEach } from "vitest";
 import { mount } from "@vue/test-utils";
-import { ElInput, ElInputNumber } from "element-plus";
+import { ElInput, ElInputNumber, ElForm, ElFormItem, formContextKey, formItemContextKey } from "element-plus";
 import InputField from "../src/input-field.vue";
+
+// 提供 Element Plus Form 上下文的默认值，避免 ElUpload 等组件的注入警告
+const formProvide = {
+    [formContextKey as symbol]: {
+        model: {},
+        rules: {},
+        fields: [],
+        addField: vi.fn(),
+        removeField: vi.fn(),
+        resetFields: vi.fn(),
+        clearValidate: vi.fn(),
+        validateField: vi.fn(),
+        validate: vi.fn(),
+        scrollToField: vi.fn()
+    },
+    [formItemContextKey as symbol]: {
+        prop: "",
+        size: "",
+        disabled: false,
+        validateState: "",
+        addValidateEvent: vi.fn(),
+        removeValidateEvent: vi.fn(),
+        validate: vi.fn(),
+        resetField: vi.fn(),
+        clearValidate: vi.fn()
+    }
+};
 
 describe("InputField", () => {
     beforeEach(() => {
@@ -33,17 +60,33 @@ describe("InputField", () => {
         return mount(InputField, {
             props,
             global: {
-                components
+                components: {
+                    ElForm,
+                    ElFormItem,
+                    ...components
+                },
+                provide: formProvide
             }
         });
     };
 
     test("renders slot when slot is true", () => {
-        const wrapper = mount(() => (
-            <InputField slot>
-                <span>hello word!</span>
-            </InputField>
-        ));
+        const wrapper = mount(
+            () => (
+                <InputField slot>
+                    <span>hello word!</span>
+                </InputField>
+            ),
+            {
+                global: {
+                    components: {
+                        ElForm,
+                        ElFormItem
+                    },
+                    provide: formProvide
+                }
+            }
+        );
         expect(wrapper.text()).toBe("hello word!");
     });
 
