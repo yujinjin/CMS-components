@@ -106,7 +106,7 @@ export type InputFormEmits = typeof inputFormEmits;
 /** 数据输入表单实例 */
 export interface InputFormRef {
     /** 获取表单的value */
-    getInputValue: () => Record<string, any> | null;
+    getInputValue: () => Record<string, any>;
 
     /** 设置表单的属性值 */
     setInputPropertyValue: (propertyName: string, value: any) => void;
@@ -114,9 +114,9 @@ export interface InputFormRef {
     /** 修改表单字段属性 */
     changeFormFields: (callback: (formFields: InputFormField[]) => void) => void;
 
-    // 获取form Ref
-    getFormRef: () => FormInstance;
+    // 获取form Ref（组件未挂载时返回 null）
+    getFormRef: () => FormInstance | null;
 
-    // 表单验证
+    // 表单验证（组件未挂载时会 reject）
     validate: (callback?: FormValidateCallback) => FormValidationResult;
 }

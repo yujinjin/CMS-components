@@ -8,7 +8,7 @@
 -->
 <template>
     <div v-loading="isLoading" class="cms-input-form">
-        <el-form v-bind="formProps" ref="inputFormRef" :model="inputFormValue" v-on="events">
+        <el-form v-bind="formProps" ref="inputFormRef" :model="inputFormValue" v-on="events || {}">
             <el-row>
                 <template v-for="(field, index) in formFields" :key="(field.name || '') + '_' + index">
                     <el-col v-if="field.isShow !== false" :key="index" :span="field.span">
@@ -43,6 +43,7 @@ defineOptions({
     name: "InputForm"
 });
 
+// 动态插槽：插槽名称由 field.slot 动态决定，无法静态枚举，因此使用 [key: string] 索引签名
 defineSlots<{
     [key: string]: (props: InputFormSlotScope) => any;
 }>();
@@ -63,31 +64,29 @@ const inputFormValue: Ref<Record<string, any>> = ref({});
 // 表单字段列表
 const formFields: Ref<InputFormField[]> = ref([]);
 
-// 输入字段列表（由于formField和inputField属性并不完全一致，使用"v-bind=formField" vue 会提示警告“Extraneous non-props attributes”）
-// const getInputFieldProps = function (field: InputFormField) {
-//     const props = {};
-//     Object.keys(inputFieldProps).forEach(key => {
-//         if (Object.prototype.hasOwnProperty.call(field, key)) {
-//             props[key] = field[key];
-//         }
-//     });
-//     return props;
-// };
-
 // 初始化表单数据
 const initInputFormValue = function () {
     inputFormValue.value = extend(true, {}, props.value);
     formFields.value.forEach(field => {
         if (!field.name) {
-            console.error("字段没有属性name值", field);
+            console.warn("字段没有属性name值", field);
             return;
         }
         // 设置field 的value值
         let fieldValue = getObjectProperty(inputFormValue.value, field.name);
         if (fieldValue === undefined) {
-            fieldValue = Object.prototype.hasOwnProperty.call(field, "value") ? field.value : null;
+            if (Object.prototype.hasOwnProperty.call(field, "value")) {
+                fieldValue = field.value;
+            } else {
+                // 根据字段类型提供合理的默认值，避免 switch 期望 boolean、inputNumber 期望 number 等类型不匹配问题
+                const typeDefaultValues: Record<string, any> = {
+                    switch: false,
+                    slider: 0,
+                    checkbox: []
+                };
+                fieldValue = typeDefaultValues[field.type || "input"] ?? null;
+            }
             setObjectProperty(inputFormValue.value, field.name, fieldValue);
-            // emits("fieldValueChange", field, fieldValue, formFields.value, inputFormValue.value);
         }
     });
 };
@@ -104,7 +103,7 @@ const generateFormFields = function () {
     }
     props.fields.forEach(field => {
         if (!field.name) {
-            console.error("字段没有属性name值", field);
+            console.warn("字段没有属性name值", field);
             return;
         }
         const newField: InputFormField = extend(true, { isShow: true, type: "input" }, field) as InputFormField;
@@ -117,21 +116,24 @@ const generateFormFields = function () {
         if (!newField.props) {
             newField.props = {};
         }
+        // 此时 newField.props 已确保非空，但 TS 无法跨赋值收窄类型，使用局部变量断言
+        let fieldProps = newField.props!;
         if (newField.type && INPUT_FORM_FIELD_DEFAULT_ATTRIBUTES[newField.type]) {
             if (newField.type === "datePicker") {
-                newField.props = Object.assign({}, INPUT_FORM_FIELD_DEFAULT_ATTRIBUTES[newField.type][newField.props.type || "date"], newField.props);
+                fieldProps = Object.assign({}, INPUT_FORM_FIELD_DEFAULT_ATTRIBUTES[newField.type][fieldProps.type || "date"], fieldProps);
             } else {
-                if (!newField.props.placeholder) {
-                    newField.props.placeholder = (INPUT_FORM_FIELD_DEFAULT_ATTRIBUTES[newField.type].placeholder || "") + (newField.label || "");
+                if (!fieldProps.placeholder) {
+                    fieldProps.placeholder = (INPUT_FORM_FIELD_DEFAULT_ATTRIBUTES[newField.type].placeholder || "") + (newField.label || "");
                 }
-                newField.props = Object.assign({}, INPUT_FORM_FIELD_DEFAULT_ATTRIBUTES[newField.type], newField.props);
+                fieldProps = Object.assign({}, INPUT_FORM_FIELD_DEFAULT_ATTRIBUTES[newField.type], fieldProps);
             }
+            newField.props = fieldProps;
         }
         if (newField.inputWidth) {
-            newField.props!.style = newField.props!.style || {};
-            newField.props!.style.width = newField.inputWidth + "px";
+            fieldProps.style = typeof fieldProps.style === "object" && fieldProps.style !== null ? fieldProps.style : {};
+            fieldProps.style.width = newField.inputWidth + "px";
         } else {
-            newField.props!.style = Object.assign({}, style, newField.props!.style);
+            fieldProps.style = Object.assign({}, style, typeof fieldProps.style === "object" && fieldProps.style !== null ? fieldProps.style : {});
         }
         if (newField.label) {
             newField.formItemProps.label = newField.label;
@@ -152,8 +154,7 @@ const generateFormFields = function () {
 
 // 设置字段的值
 const setFieldValue = function (fieldValue: any, field: InputFormField) {
-    if (field.type === "input" && field.trim === true && fieldValue) {
-        // 注意：当trim为true用户手动输入的内容无法空格，除非通过粘贴方式或回过头来在内容中间空格
+    if (field.type === "input" && field.trim === true && typeof fieldValue === "string") {
         fieldValue = fieldValue.trim();
     }
     setObjectProperty(inputFormValue.value, field.name, fieldValue);
@@ -171,6 +172,8 @@ watch(
     }
 );
 
+// 注意：此处不使用 immediate: true，因为 fields 的 watch 已经通过 generateFormFields -> initInputFormValue 初始化了表单值。
+// 仅当外部 value 在组件已挂载后发生变化时，才需要重新初始化表单值。
 watch(
     () => props.value,
     () => {
@@ -201,7 +204,12 @@ watch(
 defineExpose<InputFormRef>({
     // 获取表单的value
     getInputValue: function () {
-        return JSON.parse(JSON.stringify(inputFormValue.value));
+        try {
+            return JSON.parse(JSON.stringify(inputFormValue.value));
+        } catch (error) {
+            // JSON.stringify 无法处理循环引用等特殊情况，回退到 extend 深拷贝
+            return extend(true, {}, inputFormValue.value);
+        }
     },
     /**
      * 设置表单的属性值
@@ -221,16 +229,24 @@ defineExpose<InputFormRef>({
         if (callback && typeof callback === "function") {
             callback(formFields.value);
         } else {
-            console.error("callback 必须是一个函数");
+            console.warn("callback 必须是一个函数");
         }
     },
-    // 获取form Ref
+    // 获取form Ref（组件未挂载时返回 null）
     getFormRef: function () {
-        return inputFormRef.value!;
+        if (!inputFormRef.value) {
+            console.warn("getFormRef: 表单组件尚未挂载，无法获取 ref");
+            return null;
+        }
+        return inputFormRef.value;
     },
-    // 表单验证
+    // 表单验证（组件未挂载时会 reject）
     validate(callback?: FormValidateCallback) {
-        return inputFormRef.value!.validate(callback);
+        if (!inputFormRef.value) {
+            console.warn("validate: 表单组件尚未挂载，无法执行验证");
+            return Promise.reject(new Error("表单组件尚未挂载，无法执行验证"));
+        }
+        return inputFormRef.value.validate(callback);
     }
 });
 </script>
