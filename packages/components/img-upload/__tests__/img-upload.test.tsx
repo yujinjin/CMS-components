@@ -9,6 +9,7 @@
 import { ref, nextTick } from "vue";
 import { mount } from "@vue/test-utils";
 import { afterEach, describe, expect, test, vi } from "vitest";
+import { formContextKey, formItemContextKey, ElForm, ElFormItem } from "element-plus";
 import ImgUpload from "../src/img-upload.vue";
 
 describe("ImgUpload", () => {
@@ -18,9 +19,45 @@ describe("ImgUpload", () => {
         vi.restoreAllMocks();
     });
 
+    const createWrapper = (component: any) => {
+        return mount(component, {
+            global: {
+                components: {
+                    ElForm,
+                    ElFormItem
+                },
+                provide: {
+                    [formContextKey as symbol]: {
+                        model: {},
+                        rules: {},
+                        fields: [],
+                        addField: vi.fn(),
+                        removeField: vi.fn(),
+                        resetFields: vi.fn(),
+                        clearValidate: vi.fn(),
+                        validateField: vi.fn(),
+                        validate: vi.fn(),
+                        scrollToField: vi.fn()
+                    },
+                    [formItemContextKey as symbol]: {
+                        prop: "",
+                        size: "",
+                        disabled: false,
+                        validateState: "",
+                        addValidateEvent: vi.fn(),
+                        removeValidateEvent: vi.fn(),
+                        validate: vi.fn(),
+                        resetField: vi.fn(),
+                        clearValidate: vi.fn()
+                    }
+                }
+            }
+        });
+    };
+
     test("render test & class", async () => {
         const uploadRequest = vi.fn(async () => "/static/img/1.jpg");
-        const wrapper = mount(() => <ImgUpload uploadRequest={uploadRequest} />);
+        const wrapper = createWrapper(() => <ImgUpload uploadRequest={uploadRequest} />);
         expect(wrapper.classes()).toContain("img-upload");
         expect(wrapper.findComponent({ name: "ElUpload" }).exists()).toBe(true);
         expect(wrapper.findComponent({ name: "ElDialog" }).exists()).toBe(true);
@@ -29,7 +66,7 @@ describe("ImgUpload", () => {
     test("default value", async () => {
         const uploadRequest = vi.fn(async () => "/static/img/1.jpg");
         const value = ref<string | string[]>("/static/img/1.jpg");
-        const wrapper = mount(() => <ImgUpload v-model={value.value} uploadRequest={uploadRequest} />);
+        const wrapper = createWrapper(() => <ImgUpload v-model={value.value} uploadRequest={uploadRequest} />);
         expect(wrapper.findComponent({ name: "ElUpload" }).vm.fileList).toMatchObject([{ name: "1.jpg", url: "/static/img/1.jpg" }]);
         value.value = "/static/img/1.jpg|/static/img/2.jpg";
         await nextTick();
@@ -48,7 +85,7 @@ describe("ImgUpload", () => {
     test("prop separator", async () => {
         const uploadRequest = vi.fn(async () => "/static/img/3.jpg");
         const value = ref<string>("/static/img/1.jpg,/static/img/2.jpg");
-        const wrapper = mount(() => <ImgUpload v-model={value.value} separator="," uploadRequest={uploadRequest} />);
+        const wrapper = createWrapper(() => <ImgUpload v-model={value.value} separator="," uploadRequest={uploadRequest} />);
         expect(wrapper.findComponent({ name: "ElUpload" }).vm.fileList).toMatchObject([
             { name: "1.jpg", url: "/static/img/1.jpg" },
             { name: "2.jpg", url: "/static/img/2.jpg" }
@@ -58,7 +95,7 @@ describe("ImgUpload", () => {
     test("upload file", async () => {
         const uploadRequest = vi.fn(async () => "/static/img/1.jpg");
         const value = ref<string>();
-        const wrapper = mount(() => <ImgUpload v-model={value.value} uploadRequest={uploadRequest} />);
+        const wrapper = createWrapper(() => <ImgUpload v-model={value.value} uploadRequest={uploadRequest} />);
         const file = new File([""], "file.png", { type: "image/png" });
         Object.defineProperty(file, "size", { value: 1024 * 1024 * 1 });
         // 实现上传文件模拟
@@ -71,7 +108,7 @@ describe("ImgUpload", () => {
     test("prop maxSize", async () => {
         const uploadRequest = vi.fn(async () => "/static/img/1.jpg");
         const value = ref<string>();
-        const wrapper = mount(() => <ImgUpload v-model={value.value} uploadRequest={uploadRequest} />);
+        const wrapper = createWrapper(() => <ImgUpload v-model={value.value} uploadRequest={uploadRequest} />);
         const file = new File([""], "file.png", { type: "image/png" });
         Object.defineProperty(file, "size", { value: 1024 * 1024 * 3 });
         // 实现上传文件模拟
@@ -84,7 +121,7 @@ describe("ImgUpload", () => {
         const uploadRequest = vi.fn(async () => "/static/img/1.jpg");
         const onExceed = vi.fn();
         const value = ref<string[]>(["/static/img/1.jpg", "/static/img/2.jpg"]);
-        const wrapper = mount(() => <ImgUpload v-model={value.value} uploadProps={{ limit: 2, onExceed }} uploadRequest={uploadRequest} />);
+        const wrapper = createWrapper(() => <ImgUpload v-model={value.value} uploadProps={{ limit: 2, onExceed }} uploadRequest={uploadRequest} />);
 
         const file = new File([""], "file3.png", { type: "image/png" });
         Object.defineProperty(file, "size", { value: 1024 * 1024 * 1 });
@@ -101,7 +138,7 @@ describe("ImgUpload", () => {
     test("prop cropper", async () => {
         const uploadRequest = vi.fn(async () => "/static/img/1.jpg");
         const value = ref<string>();
-        const wrapper = mount(() => <ImgUpload v-model={value.value} cropperProps uploadRequest={uploadRequest} />);
+        const wrapper = createWrapper(() => <ImgUpload v-model={value.value} cropperProps uploadRequest={uploadRequest} />);
 
         const file = new File(["Hello, world!"], "file.png", { type: "image/png" });
         Object.defineProperty(file, "size", { value: 1024 * 1024 * 1 });
@@ -133,7 +170,7 @@ describe("ImgUpload", () => {
     test("modelValue as array with separator", async () => {
         const uploadRequest = vi.fn(async () => "/static/img/1.jpg");
         const value = ref<string[]>(["/static/img/1.jpg", "/static/img/2.jpg"]);
-        const wrapper = mount(() => <ImgUpload v-model={value.value} uploadRequest={uploadRequest} />);
+        const wrapper = createWrapper(() => <ImgUpload v-model={value.value} uploadRequest={uploadRequest} />);
         // 验证数组模式初始值正确渲染
         expect(wrapper.findComponent({ name: "ElUpload" }).vm.fileList).toMatchObject([
             { name: "1.jpg", url: "/static/img/1.jpg" },
@@ -144,7 +181,7 @@ describe("ImgUpload", () => {
     test("modelValue as string with custom separator", async () => {
         const uploadRequest = vi.fn(async () => "/static/img/1.jpg");
         const value = ref<string>("/static/img/1.jpg;/static/img/2.jpg");
-        const wrapper = mount(() => <ImgUpload v-model={value.value} separator=";" uploadRequest={uploadRequest} />);
+        const wrapper = createWrapper(() => <ImgUpload v-model={value.value} separator=";" uploadRequest={uploadRequest} />);
         // 验证自定义分隔符正确解析
         expect(wrapper.findComponent({ name: "ElUpload" }).vm.fileList).toMatchObject([
             { name: "1.jpg", url: "/static/img/1.jpg" },
@@ -155,7 +192,7 @@ describe("ImgUpload", () => {
     test("onRemove deletes file from list", async () => {
         const uploadRequest = vi.fn(async () => "/static/img/1.jpg");
         const value = ref<string>("/static/img/1.jpg|/static/img/2.jpg");
-        const wrapper = mount(() => <ImgUpload v-model={value.value} uploadRequest={uploadRequest} />);
+        const wrapper = createWrapper(() => <ImgUpload v-model={value.value} uploadRequest={uploadRequest} />);
         expect(wrapper.findComponent({ name: "ElUpload" }).vm.fileList).toHaveLength(2);
         // 模拟删除操作：触发 onRemove 回调
         const uploadVm = wrapper.findComponent({ name: "ElUpload" }).vm;
@@ -170,7 +207,7 @@ describe("ImgUpload", () => {
         const uploadRequest = vi.fn(async () => "/static/img/1.jpg");
         const value = ref<string>();
         const cropperOptions = { aspectRatio: 16 / 9, viewMode: 2 as const };
-        const wrapper = mount(() => <ImgUpload v-model={value.value} cropperProps={cropperOptions} uploadRequest={uploadRequest} />);
+        const wrapper = createWrapper(() => <ImgUpload v-model={value.value} cropperProps={cropperOptions} uploadRequest={uploadRequest} />);
         // 验证裁剪配置传入后组件正常渲染
         expect(wrapper.findComponent({ name: "ElUpload" }).exists()).toBe(true);
         expect(wrapper.findComponent({ name: "ElDialog" }).exists()).toBe(true);
@@ -179,7 +216,7 @@ describe("ImgUpload", () => {
     test("empty modelValue renders empty file list", async () => {
         const uploadRequest = vi.fn(async () => "/static/img/1.jpg");
         const value = ref<string>("");
-        const wrapper = mount(() => <ImgUpload v-model={value.value} uploadRequest={uploadRequest} />);
+        const wrapper = createWrapper(() => <ImgUpload v-model={value.value} uploadRequest={uploadRequest} />);
         expect(wrapper.findComponent({ name: "ElUpload" }).vm.fileList).toHaveLength(0);
     });
 });
