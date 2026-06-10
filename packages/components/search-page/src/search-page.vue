@@ -57,6 +57,8 @@ defineOptions({
     name: "SearchPage"
 });
 
+// 插槽分发机制：以 searchForm_ 开头的插槽分发到 SearchForm 组件，actionBar_ 开头分发到 ActionBar 组件，dataTable_ 开头分发到 DataTable 组件
+// actionBar_default 为 ActionBar 的 default 插槽
 const slots = defineSlots<
     {
         default(): any;
@@ -98,7 +100,7 @@ const distributeSlots = computed(() => {
         searchForm: [] as string[],
         actionBar: [] as string[],
         dataTable: [] as string[],
-        actionBarDefault: ""
+        actionBarDefault: "" // actionBar_default 插槽名称，空字符串表示无此插槽
     };
     Object.keys(slots).forEach(key => {
         if (key.startsWith("searchForm_")) {
@@ -129,7 +131,7 @@ const queryDataList = async function (isInit = true, formValue?: Record<string, 
     if (formValue) {
         searchFormValue.value = formValue;
     } else {
-        searchFormValue.value = searchFormRef.value?.getValue() || {};
+        searchFormValue.value = searchFormRef.value?.getValue() ?? {};
     }
     if (props.dataTableProps?.filters) {
         dataTableFilters.value = extend(true, {}, searchFormValue.value, props.dataTableProps.filters);
@@ -141,8 +143,12 @@ const queryDataList = async function (isInit = true, formValue?: Record<string, 
 };
 
 // 搜索操作
-const searchHandle = function (formValue: Record<string, any>) {
-    queryDataList(true, formValue);
+const searchHandle = async function (formValue: Record<string, any>) {
+    try {
+        await queryDataList(true, formValue);
+    } catch (error) {
+        console.error("searchHandle: 查询数据失败", error);
+    }
 };
 
 watch(
@@ -176,6 +182,7 @@ onMounted(() => {
     } else {
         dataTableFilters.value = searchFormValue.value;
     }
+    // 初始选择行可能由外部 v-model 传入，需要触发变更事件
     if (selectRows.value && selectRows.value.length > 0) {
         emits("selectRowsChange", selectRows.value);
     }
@@ -187,15 +194,25 @@ defineExpose<SearchPageRef>({
 
     // 获取当前搜索表单实时值
     getSearchingValue: function () {
-        if (searchFormRef.value) {
-            return extend(true, {}, props.dataTableProps && props.dataTableProps.filters, searchFormRef.value.getValue());
+        try {
+            if (searchFormRef.value) {
+                return extend(true, {}, props.dataTableProps && props.dataTableProps.filters, searchFormRef.value.getValue());
+            }
+            return extend(true, {}, props.dataTableProps && props.dataTableProps.filters);
+        } catch (error) {
+            console.warn("getSearchingValue: 获取搜索表单值失败", error);
+            return {};
         }
-        return extend(true, {}, props.dataTableProps && props.dataTableProps.filters);
     },
 
     // 获取当前已经搜索出来的结果值，与getSearchFormValue区别是当前已经用它查询出来结果的搜索表单值
     getSearchedValue: function () {
-        return extend(true, {}, dataTableFilters.value);
+        try {
+            return extend(true, {}, dataTableFilters.value);
+        } catch (error) {
+            console.warn("getSearchedValue: 获取已搜索值失败", error);
+            return {};
+        }
     },
 
     // 修改当前form字段的属性

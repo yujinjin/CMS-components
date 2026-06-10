@@ -62,13 +62,7 @@ describe("SearchPage", () => {
             {
                 type: "action",
                 width: 120,
-                buttons: [
-                    {
-                        contents: "Edit",
-                        handleCode: "edit",
-                        click: vi.fn()
-                    }
-                ]
+                buttons: [{ contents: "Edit", handleCode: "edit", click: vi.fn() }]
             }
         ],
         query: vi.fn().mockResolvedValue({ rows: mockData, total: 100 })
@@ -108,6 +102,13 @@ describe("SearchPage", () => {
             expect(emptyWrapper.findComponent({ name: "ActionBar" }).exists()).toBe(false);
             expect(emptyWrapper.findComponent({ name: "DataTable" }).exists()).toBe(false);
         });
+
+        test("renders only searchForm when only searchFormProps is provided", () => {
+            const wrapper = createWrapper({ actionBarProps: null, dataTableProps: null });
+            expect(wrapper.findComponent({ name: "SearchForm" }).exists()).toBe(true);
+            expect(wrapper.findComponent({ name: "ActionBar" }).exists()).toBe(false);
+            expect(wrapper.findComponent({ name: "DataTable" }).exists()).toBe(false);
+        });
     });
 
     describe("SearchForm Integration", async () => {
@@ -121,7 +122,6 @@ describe("SearchPage", () => {
 
         test("handles search form fields changes", async () => {
             const wrapper = createWrapper();
-            // await wrapper.findComponent({ name: "SearchForm" }).vm.$emit("fieldsChange");
             expect(wrapper.emitted("searchFieldsChange")).toBeTruthy();
             expect(wrapper.emitted("searchFieldsChange")?.[0]).toMatchObject([mockSearchFormProps.fields]);
         });
@@ -161,12 +161,23 @@ describe("SearchPage", () => {
             expect(mockDataTableProps.query).toHaveBeenCalled();
         });
 
+        test("query method returns undefined when dataTableRef is null", async () => {
+            const wrapper = createWrapper({ dataTableProps: null });
+            const result = await wrapper.vm.query();
+            expect(result).toBeUndefined();
+        });
+
         test("getSearchingValue returns current search values", () => {
             const wrapper = createWrapper();
             wrapper.findComponent({ name: "SearchForm" }).vm.formFields[2].value = "2024-01-01";
             const searchValue = wrapper.vm.getSearchingValue();
 
             expect(searchValue).toMatchObject({ name: "admin", status: 1, date: "2024-01-01" });
+        });
+
+        test("getSearchingValue returns empty object when searchFormRef is null", () => {
+            const wrapper = createWrapper({ searchFormProps: null });
+            expect(wrapper.vm.getSearchingValue()).toEqual({});
         });
 
         test("getSearchedValue returns current filters", async () => {
@@ -278,6 +289,20 @@ describe("SearchPage", () => {
             await wrapper.setProps({ isLoadingForInit: false });
             await nextTick();
             expect(mockDataTableProps.query).toHaveBeenCalled();
+        });
+    });
+
+    describe("Filters Integration", () => {
+        test("merges dataTableProps.filters with searchFormValue", async () => {
+            const wrapper = createWrapper({
+                dataTableProps: {
+                    ...mockDataTableProps,
+                    filters: { extraFilter: "value" }
+                }
+            });
+            await nextTick();
+            const searchedValue = wrapper.vm.getSearchedValue();
+            expect(searchedValue).toHaveProperty("extraFilter", "value");
         });
     });
 });
