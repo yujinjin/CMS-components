@@ -9,6 +9,7 @@
 <template>
     <div class="example-page">
         <h3>自定义列类型</h3>
+        <p class="demo-desc">通过 columns 的 type 字段可以配置选择列、索引列和操作列，slot 字段支持自定义列内容渲染</p>
         <data-table :columns="columns" :query="queryList">
             <template #dataTable_status="{ row }">
                 <el-tag :type="row.status === 1 ? 'success' : 'danger'">{{ row.status === 1 ? "启用" : "禁用" }}</el-tag>
@@ -41,8 +42,3 @@ const queryList = async () => {
     };
 };
 </script>
-<style lang="scss" scoped>
-.example-page {
-    padding: 12px;
-}
-</style>

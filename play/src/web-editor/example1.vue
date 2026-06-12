@@ -9,7 +9,10 @@
 <template>
     <div class="example-page">
         <h3>基础用法</h3>
-        <web-editor v-model="content" />
+        <p class="demo-desc">基础的富文本编辑器，通过 v-model 绑定 HTML 内容</p>
+        <div class="demo-block">
+            <web-editor v-model="content" />
+        </div>
     </div>
 </template>
 <script setup lang="ts">
@@ -18,8 +21,3 @@ import { WebEditor } from "@yujinjin/cms-components-main/index";
 
 const content = ref("<p>这是一个基础的富文本编辑器示例</p>");
 </script>
-<style lang="scss" scoped>
-.example-page {
-    padding: 12px;
-}
-</style>

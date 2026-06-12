@@ -9,6 +9,7 @@
 <template>
     <div class="example-page">
         <h3>基础用法</h3>
+        <p class="demo-desc">search-page 组件将搜索表单和表格组合，适用于标准的搜索列表页面</p>
         <search-page :search-form-props="searchFormProps" :data-table-props="dataTableProps" />
     </div>
 </template>
@@ -51,8 +52,3 @@ const dataTableProps: DataTableProps = {
     }
 };
 </script>
-<style lang="scss" scoped>
-.example-page {
-    padding: 12px;
-}
-</style>

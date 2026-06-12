@@ -9,6 +9,7 @@
 <template>
     <div class="example-page">
         <h3>展开收起</h3>
+        <p class="demo-desc">当表单字段超过一行显示数量时，自动出现展开/收起按钮，控制表单的折叠与展开状态</p>
         <search-form :fields="fields" />
     </div>
 </template>
@@ -41,8 +42,3 @@ const fields: SearchFormField[] = [
     { name: "price", label: "价格", type: "inputNumber" }
 ];
 </script>
-<style lang="scss" scoped>
-.example-page {
-    padding: 12px;
-}
-</style>

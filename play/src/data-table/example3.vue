@@ -9,6 +9,7 @@
 <template>
     <div class="example-page">
         <h3>表格操作</h3>
+        <p class="demo-desc">通过 events 属性监听行点击、排序变更等事件，操作列按钮支持自定义 click 处理函数</p>
         <data-table ref="tableRef" :columns="columns" :query="queryList" :events="{ rowClick: handleRowClick, sortChange: handleSortChange }" @selection-change="handleSelectionChange"></data-table>
     </div>
 </template>
@@ -67,8 +68,3 @@ function handleSortChange({ prop, order }: { prop: string; order: string }) {
     ElMessage.info(`排序：${prop} ${order}`);
 }
 </script>
-<style lang="scss" scoped>
-.example-page {
-    padding: 12px;
-}
-</style>

@@ -1,6 +1,15 @@
+<!--
+ * @创建者: yujinjin9@126.com
+ * @创建时间: 2025-01-13 11:00:00
+ * @最后修改作者: yujinjin9@126.com
+ * @最后修改时间: 2025-01-17 10:55:08
+ * @项目的路径: \CMS-components\play\src\input-form\example6.vue
+ * @描述: input-form组件的自定义布局示例
+-->
 <template>
     <div class="example-page">
         <h3>自定义布局</h3>
+        <p class="demo-desc">通过 fields 的 span 属性配置表单项的栅格布局，实现多列排列的自定义表单</p>
         <input-form ref="inputFormRef" :value="formData" :fields="fields" label-width="100px"></input-form>
         <div class="button-panel">
             <el-button @click="handleReset">重置</el-button>
@@ -68,12 +77,3 @@ const handlePreview = () => {
     previewVisible.value = true;
 };
 </script>
-<style lang="scss" scoped>
-.example-page {
-    padding: 12px;
-}
-.button-panel {
-    margin-top: 24px;
-    text-align: center;
-}
-</style>

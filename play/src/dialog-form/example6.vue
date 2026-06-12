@@ -1,7 +1,19 @@
+<!--
+ * @创建者: yujinjin9@126.com
+ * @创建时间: 2026-06-11 10:00:00
+ * @最后修改作者: yujinjin9@126.com
+ * @最后修改时间: 2026-06-11 10:00:00
+ * @项目的路径: \CMS-components\play\src\dialog-form\example6.vue
+ * @描述: dialog-form组件的动态表单项示例
+-->
 <template>
     <div class="example-page">
         <h3>动态表单项</h3>
-        <el-button type="primary" @click="handleOpen">打开表单</el-button>
+        <p class="demo-desc">通过 slot 自定义动态表单项（如规格列表、属性列表），支持动态增删行，适用于商品规格等可变字段场景。</p>
+
+        <div class="button-panel">
+            <el-button type="primary" @click="handleOpen">打开表单</el-button>
+        </div>
 
         <dialog-form v-if="visible" ref="dialogFormRef" :input-form-props="{ fields, value: formData }" :dialog-props="{ title: '动态表单' }" :buttons="buttons" @close="visible = false">
             <template #specs="scope">
@@ -107,9 +119,7 @@ const buttons = ref<DialogFormButton[]>([
 ]);
 </script>
 <style lang="scss" scoped>
-.example-page {
-    padding: 12px;
-}
+/* 动态表单项插槽样式 - 不属于全局样式系统 */
 .specs-list {
     .spec-item {
         display: flex;

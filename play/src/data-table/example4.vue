@@ -9,6 +9,7 @@
 <template>
     <div class="example-page">
         <h3>分页和加载</h3>
+        <p class="demo-desc">data-table 内置分页功能，通过 pagination 属性配置分页参数，加载时自动显示 loading 状态</p>
         <data-table
             :columns="columns"
             :query="queryList"
@@ -56,8 +57,3 @@ const queryList = async (params: any) => {
     return { rows, total };
 };
 </script>
-<style lang="scss" scoped>
-.example-page {
-    padding: 12px;
-}
-</style>

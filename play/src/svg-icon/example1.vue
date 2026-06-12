@@ -7,10 +7,11 @@
  * @描述: svg-icon 组件示例
 -->
 <template>
-    <div class="svg-icon-demo">
+    <div class="example-page">
         <!-- 基础用法 -->
         <section class="demo-section">
             <h3>基础用法</h3>
+            <p class="demo-desc">通过 value 属性传入 SVG Component，即可渲染对应的 SVG 图标</p>
             <div class="demo-block">
                 <svg-icon :value="ExitFullScreen" />
                 <svg-icon :value="WarningSign" />
@@ -23,6 +24,7 @@
         <!-- 不同颜色 -->
         <section class="demo-section">
             <h3>不同颜色</h3>
+            <p class="demo-desc">通过 color 属性自定义图标颜色</p>
             <div class="demo-block">
                 <svg-icon :value="Fold" color="#67c23a" />
                 <svg-icon :value="Fold" color="#e6a23c" />
@@ -34,6 +36,7 @@
         <!-- 不同尺寸 -->
         <section class="demo-section">
             <h3>不同尺寸</h3>
+            <p class="demo-desc">通过 size 属性控制图标大小，支持数字（自动加 px）和字符串类型</p>
             <div class="demo-block">
                 <svg-icon :value="WarningSign" size="16px" />
                 <svg-icon :value="WarningSign" size="24px" />
@@ -45,6 +48,7 @@
         <!-- 点击事件 -->
         <section class="demo-section">
             <h3>点击事件</h3>
+            <p class="demo-desc">svg-icon 支持原生 click 事件，可用于交互场景</p>
             <div class="demo-block">
                 <svg-icon :value="ExitFullScreen" class="clickable" @click="handleClick" />
             </div>
@@ -53,6 +57,7 @@
         <!-- 所有图标列表 -->
         <section class="demo-section">
             <h3>图标列表</h3>
+            <p class="demo-desc">点击图标可复制对应的 svg-icon 使用代码</p>
             <div class="icon-list">
                 <div v-for="icon in icons" :key="icon.name" class="icon-item" @click="copyTextHandle('<svg-icon><' + icon.name + '/></svg-icon>')">
                     <svg-icon>
@@ -76,7 +81,6 @@ import FullScreen from "./svgs/full-screen.svg";
 import VueLogo from "./svgs/vue-logo.svg";
 
 // 加载所有svg文件
-// const svgs = import.meta.glob("./svgs/*.svg");
 const icons = shallowRef([
     {
         name: "ExitFullScreen",
@@ -124,65 +128,47 @@ const handleClick = () => {
 </script>
 
 <style lang="scss" scoped>
-.svg-icon-demo {
-    padding: 20px;
+.demo-block {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
 
-    .demo-section {
-        margin-bottom: 30px;
+.clickable {
+    cursor: pointer;
+    transition: color 0.3s;
 
-        h3 {
-            margin-bottom: 16px;
-            font-size: 18px;
-            font-weight: 500;
-            color: #1f2f3d;
-        }
-
-        .demo-block {
-            padding: 20px;
-            border: 1px solid #dcdfe6;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-
-            .clickable {
-                cursor: pointer;
-                transition: color 0.3s;
-
-                &:hover {
-                    color: #409eff;
-                }
-            }
-        }
+    &:hover {
+        color: #818cf8;
     }
+}
 
-    .icon-list {
-        border-top: 1px solid #dcdfe6;
-        border-left: 1px solid #dcdfe6;
-        border-radius: 4px;
-        display: grid;
-        grid-template-columns: repeat(8, 1fr);
+.icon-list {
+    border-top: 1px solid #e2e8f0;
+    border-left: 1px solid #e2e8f0;
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
 
-        .icon-item {
-            height: 90px;
-            border-right: 1px solid #dcdfe6;
-            border-bottom: 1px solid #dcdfe6;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: background-color 0.3s;
+    .icon-item {
+        height: 90px;
+        border-right: 1px solid #e2e8f0;
+        border-bottom: 1px solid #e2e8f0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background-color 0.3s;
 
-            &:hover {
-                background-color: #f5f7fa;
-            }
+        &:hover {
+            background-color: rgba(99, 102, 241, 0.06);
+        }
 
-            .icon-name {
-                margin-top: 8px;
-                font-size: 12px;
-                color: #606266;
-            }
+        .icon-name {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #64748b;
         }
     }
 }

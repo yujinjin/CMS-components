@@ -9,6 +9,7 @@
 <template>
     <div class="example-page">
         <h3>基础用法</h3>
+        <p class="demo-desc">input-form 组件用于表单输入场景，通过 fields 配置表单项</p>
         <input-form :value="formData" :fields="fields" label-width="120px" />
     </div>
 </template>
@@ -28,8 +29,3 @@ const fields: InputFormField[] = [
     { name: "email", label: "邮箱", type: "input" }
 ];
 </script>
-<style lang="scss" scoped>
-.example-page {
-    padding: 12px;
-}
-</style>

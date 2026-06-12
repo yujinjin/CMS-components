@@ -9,8 +9,13 @@
 <template>
     <div class="example-page">
         <h3>只读模式</h3>
-        <web-editor v-model="content" :disabled="readonly" />
-        <el-button class="mt-12" type="primary" @click="toggleReadonly">切换只读状态</el-button>
+        <p class="demo-desc">设置 readOnly 属性使编辑器进入只读模式</p>
+        <div class="demo-block">
+            <web-editor v-model="content" :disabled="readonly" />
+            <div style="margin-top: 12px">
+                <el-button type="primary" @click="toggleReadonly">切换只读状态</el-button>
+            </div>
+        </div>
     </div>
 </template>
 <script setup lang="ts">
@@ -30,15 +35,8 @@ const content = ref(`
 
 const readonly = ref(true);
 
+// 切换只读/编辑状态
 const toggleReadonly = () => {
     readonly.value = !readonly.value;
 };
 </script>
-<style lang="scss" scoped>
-.example-page {
-    padding: 12px;
-}
-.mt-12 {
-    margin-top: 12px;
-}
-</style>

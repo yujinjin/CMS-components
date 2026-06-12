@@ -9,6 +9,7 @@
 <template>
     <div class="example-page">
         <h3>表格操作</h3>
+        <p class="demo-desc">通过表格操作列的 buttons 配置行级操作（编辑、删除），结合 dialog-form 实现弹窗编辑</p>
         <search-page :search-form-props="searchFormProps" :action-bar-props="actionBarProps" :data-table-props="dataTableProps">
             <template #dataTable_status="{ row }">
                 <el-tag :type="row.status === '1' ? 'success' : 'danger'">{{ row.status === "1" ? "启用" : "禁用" }}</el-tag>
@@ -158,8 +159,3 @@ const dialogFormButtons: DialogFormButton[] = [
     }
 ];
 </script>
-<style lang="scss" scoped>
-.example-page {
-    padding: 12px;
-}
-</style>

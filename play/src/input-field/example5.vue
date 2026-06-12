@@ -8,7 +8,8 @@
 -->
 <template>
     <div class="example-page">
-        <h3>其他一些类型等</h3>
+        <h3>其他类型</h3>
+        <p class="demo-desc">更多输入类型：switch、radio、checkbox 等</p>
         <div class="demo-block">
             <input-field v-model="value1" type="label" />
             <input-field v-model="value2" type="colorPicker" />
@@ -296,9 +297,6 @@ const options = ref([
 ]);
 </script>
 <style lang="scss" scoped>
-.example-page {
-    padding: 12px;
-}
 .demo-block {
     display: flex;
     flex-direction: column;

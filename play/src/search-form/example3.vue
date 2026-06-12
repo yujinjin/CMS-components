@@ -9,6 +9,7 @@
 <template>
     <div class="example-page">
         <h3>自定义按钮</h3>
+        <p class="demo-desc">通过 buttons 属性自定义搜索表单的操作按钮，可添加导出、批量删除等业务按钮</p>
         <search-form :fields="fields" :buttons="buttons" @search="handleSearch"></search-form>
     </div>
 </template>
@@ -47,8 +48,3 @@ const buttons: SearchFormButton[] = [
     { contents: "批量删除", type: "warning", click: handleBatchDelete }
 ];
 </script>
-<style lang="scss" scoped>
-.example-page {
-    padding: 12px;
-}
-</style>

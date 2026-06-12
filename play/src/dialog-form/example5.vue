@@ -9,7 +9,11 @@
 <template>
     <div class="example-page">
         <h3>分步表单</h3>
-        <el-button type="primary" @click="handleOpen">打开表单</el-button>
+        <p class="demo-desc">通过动态切换 fields 和 buttons 实现分步表单，每一步独立验证，配合 el-steps 展示进度。</p>
+
+        <div class="button-panel">
+            <el-button type="primary" @click="handleOpen">打开表单</el-button>
+        </div>
 
         <dialog-form
             v-if="visible"
@@ -132,12 +136,7 @@ const buttons = ref<DialogFormButton[]>([
 ]);
 </script>
 <style lang="scss" scoped>
-.example-page {
-    padding: 12px;
-}
-.dialog-footer {
-    text-align: right;
-}
+/* 分步表单内 steps 组件间距调整 - 不属于全局样式系统 */
 :deep(.el-steps) {
     margin-bottom: 20px;
 }

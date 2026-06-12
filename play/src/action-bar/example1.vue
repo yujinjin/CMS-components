@@ -9,9 +9,12 @@
 <template>
     <div class="example-page">
         <h3>基础用法</h3>
-        <action-bar :buttons="buttons">
-            <el-button :icon="Download">导出</el-button>
-        </action-bar>
+        <p class="demo-desc">action-bar 组件用于展示操作按钮组，通过 buttons 属性配置按钮列表</p>
+        <div class="demo-block">
+            <action-bar :buttons="buttons">
+                <el-button :icon="Download">导出</el-button>
+            </action-bar>
+        </div>
     </div>
 </template>
 <script setup lang="ts">
@@ -21,8 +24,3 @@ import { type ActionButton, ActionBar } from "@yujinjin/cms-components-main/inde
 
 const buttons = ref<ActionButton[]>([{ contents: "新增", type: "primary" }, { contents: "批量删除" }]);
 </script>
-<style lang="scss" scoped>
-.example-page {
-    padding: 12px;
-}
-</style>

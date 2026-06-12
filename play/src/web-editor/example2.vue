@@ -9,7 +9,10 @@
 <template>
     <div class="example-page">
         <h3>自定义高度</h3>
-        <web-editor v-model="content" style="min-height: 200px; max-height: 400px" placeholder="请输入内容..." />
+        <p class="demo-desc">通过 height 属性自定义编辑器高度</p>
+        <div class="demo-block">
+            <web-editor v-model="content" style="min-height: 200px; max-height: 400px" placeholder="请输入内容..." />
+        </div>
     </div>
 </template>
 <script setup lang="ts">
@@ -18,8 +21,3 @@ import { WebEditor } from "@yujinjin/cms-components-main/index";
 
 const content = ref("");
 </script>
-<style lang="scss" scoped>
-.example-page {
-    padding: 12px;
-}
-</style>

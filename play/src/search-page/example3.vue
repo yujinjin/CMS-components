@@ -9,6 +9,7 @@
 <template>
     <div class="example-page">
         <h3>自定义搜索项</h3>
+        <p class="demo-desc">支持多种搜索字段类型（input、select、checkSelect、datePicker、inputNumber）以及自定义插槽字段</p>
         <search-page ref="searchPageRef" :search-form-props="searchFormProps" :action-bar-props="actionBarProps" :data-table-props="dataTableProps">
             <template #searchForm_custom="{ field }">
                 <div class="custom-range">
@@ -110,8 +111,3 @@ const dataTableProps: DataTableProps = {
     }
 };
 </script>
-<style lang="scss" scoped>
-.example-page {
-    padding: 12px;
-}
-</style>

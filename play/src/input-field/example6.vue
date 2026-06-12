@@ -9,6 +9,7 @@
 <template>
     <div class="example-page">
         <h3>不同尺寸</h3>
+        <p class="demo-desc">通过 size 属性控制组件尺寸：large、default、small</p>
         <div class="demo-block">
             <input-field v-model="value" size="large" placeholder="大尺寸" />
             <input-field v-model="value" placeholder="默认尺寸" />
@@ -23,9 +24,6 @@ import { InputField } from "@yujinjin/cms-components-main/index";
 const value = ref("");
 </script>
 <style lang="scss" scoped>
-.example-page {
-    padding: 12px;
-}
 .demo-block {
     display: flex;
     flex-direction: column;

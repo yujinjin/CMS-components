@@ -9,6 +9,7 @@
 <template>
     <div class="example-page">
         <h3>联动表单</h3>
+        <p class="demo-desc">通过 fieldValueChange 事件监听字段值变化，动态控制关联字段的显示和数据加载</p>
         <input-form :value="formData" :fields="fields" label-width="100px" @field-value-change="fieldValueChangeHandle" />
     </div>
 </template>
@@ -103,8 +104,3 @@ const fieldValueChangeHandle = function (field: InputFormField, fieldValue: any,
     }
 };
 </script>
-<style lang="scss" scoped>
-.example-page {
-    padding: 12px;
-}
-</style>

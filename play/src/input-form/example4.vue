@@ -4,11 +4,12 @@
  * @最后修改作者: yujinjin9@126.com
  * @最后修改时间: 2025-01-17 10:55:08
  * @项目的路径: \CMS-components\play\src\input-form\example4.vue
- * @描述: input-form组件的动态表单示例 
+ * @描述: input-form组件的动态表单示例
 -->
 <template>
     <div class="example-page">
         <h3>动态表单</h3>
+        <p class="demo-desc">通过 slot 自定义表单项，动态增删字段实现可编辑的动态表单</p>
         <input-form ref="inputFormRef" :value="formData" :fields="fields" label-width="100px">
             <template #custom="{ field, formValue }">
                 <div class="custom-field">
@@ -76,17 +77,8 @@ const deleteField = (field: InputFormField) => {
 };
 </script>
 <style lang="scss" scoped>
-.example-page {
-    padding: 12px;
-}
-
 .custom-field {
     display: flex;
     gap: 12px;
-}
-
-.button-panel {
-    margin-top: 24px;
-    padding-left: 100px;
 }
 </style>

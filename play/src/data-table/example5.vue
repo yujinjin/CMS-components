@@ -9,8 +9,9 @@
 <template>
     <div class="example-page">
         <h3>设置隐藏列</h3>
+        <p class="demo-desc">通过 updateTableColumnsShowStatus 方法可以动态控制列的显示与隐藏</p>
         <div>
-            <el-button @click="handleResetColumns">设置‘名称’列隐藏</el-button>
+            <el-button @click="handleResetColumns">设置’名称’列隐藏</el-button>
         </div>
         <data-table ref="tableRef" :columns="columns" :query="queryList"></data-table>
     </div>
@@ -45,8 +46,3 @@ function handleResetColumns() {
     tableRef.value?.updateTableColumnsShowStatus(["id", "age", "email", "phone", "address", "remark"]);
 }
 </script>
-<style lang="scss" scoped>
-.example-page {
-    padding: 12px;
-}
-</style>

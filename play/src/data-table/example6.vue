@@ -9,6 +9,7 @@
 <template>
     <div class="example-page">
         <h3>展开行</h3>
+        <p class="demo-desc">通过 columns 中设置 type 为 expand 并配合 slot 插槽，可以实现行展开显示详情内容</p>
         <data-table :columns="columns" :query="queryList">
             <template #expand="{ row }">
                 <div class="expand-detail">
@@ -69,9 +70,6 @@ const queryList = async () => {
 };
 </script>
 <style lang="scss" scoped>
-.example-page {
-    padding: 12px;
-}
 .expand-detail {
     padding: 12px;
     p {

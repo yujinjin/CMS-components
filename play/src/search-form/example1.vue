@@ -9,6 +9,7 @@
 <template>
     <div class="example-page">
         <h3>基础用法</h3>
+        <p class="demo-desc">search-form 组件用于搜索场景，封装了搜索表单的常用功能</p>
         <search-form :fields="fields" :is-show-collapse="false" @search="handleSearch" />
     </div>
 </template>
@@ -34,8 +35,3 @@ const handleSearch = (data: any) => {
     console.log("搜索数据:", data);
 };
 </script>
-<style lang="scss" scoped>
-.example-page {
-    padding: 12px;
-}
-</style>

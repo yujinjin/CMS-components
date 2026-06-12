@@ -9,7 +9,11 @@
 <template>
     <div class="example-page">
         <h3>自定义表单验证</h3>
-        <el-button type="primary" @click="handleOpen">打开表单</el-button>
+        <p class="demo-desc">支持 required、pattern、email 等内置验证规则，也支持自定义 validator 函数实现跨字段联动校验。</p>
+
+        <div class="button-panel">
+            <el-button type="primary" @click="handleOpen">打开表单</el-button>
+        </div>
 
         <dialog-form v-if="visible" ref="dialogFormRef" :input-form-props="inputFormData" :dialog-props="{ title: '用户注册' }" :buttons="buttons" @close="visible = false" />
     </div>
@@ -91,8 +95,3 @@ const buttons = ref<DialogFormButton[]>([
     { type: "danger", contents: "取消", click: handleCancel }
 ]);
 </script>
-<style lang="scss" scoped>
-.example-page {
-    padding: 12px;
-}
-</style>

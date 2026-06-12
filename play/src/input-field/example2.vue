@@ -9,6 +9,7 @@
 <template>
     <div class="example-page">
         <h3>输入框类型</h3>
+        <p class="demo-desc">通过 type 属性切换不同的输入类型，如 input、inputNumber 等</p>
         <div class="demo-block">
             <input-field v-model="value1" :props="{ type: 'password' }" placeholder="密码输入" />
             <input-field v-model="value2" type="inputNumber" placeholder="数字输入" />
@@ -51,17 +52,18 @@ const createFilter = (queryString: string) => {
 
 const querySearch = (queryString: string, cb: any) => {
     const results = queryString ? restaurants.value.filter(createFilter(queryString)) : restaurants.value;
-    // call callback function to return suggestions
+    // 调用回调函数返回建议结果
     cb(results);
 };
 </script>
 <style lang="scss" scoped>
-.example-page {
-    padding: 12px;
-}
 .demo-block {
     display: flex;
     flex-direction: column;
     gap: 12px;
+
+    :deep(.el-input) {
+        width: 350px;
+    }
 }
 </style>

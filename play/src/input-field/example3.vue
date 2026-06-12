@@ -9,6 +9,7 @@
 <template>
     <div class="example-page">
         <h3>选择类型</h3>
+        <p class="demo-desc">type 为 select 时渲染下拉选择框</p>
         <div class="demo-block">
             <input-field v-model="value1" type="select" :data="options" placeholder="下拉选择" />
             <input-field v-model="value2" type="radio" :data="options" />
@@ -33,9 +34,6 @@ const options = [
 ];
 </script>
 <style lang="scss" scoped>
-.example-page {
-    padding: 12px;
-}
 .demo-block {
     display: flex;
     flex-direction: column;

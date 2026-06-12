@@ -9,7 +9,10 @@
 <template>
     <div class="example-page">
         <h3>基础用法</h3>
-        <img-upload v-model="values" :upload-request="uploadRequest" />
+        <p class="demo-desc">最简单的图片上传组件用法，通过 v-model 绑定图片 URL 数组</p>
+        <div class="demo-block">
+            <img-upload v-model="values" :upload-request="uploadRequest" />
+        </div>
     </div>
 </template>
 <script setup lang="ts">
@@ -23,8 +26,3 @@ const uploadRequest = async (file: File) => {
     return img;
 };
 </script>
-<style lang="scss" scoped>
-.example-page {
-    padding: 12px;
-}
-</style>

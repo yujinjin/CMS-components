@@ -9,6 +9,7 @@
 <template>
     <div class="example-page">
         <h3>基础用法</h3>
+        <p class="demo-desc">data-table 组件封装了分页表格的常用功能，通过 columns 配置列</p>
         <data-table :columns="columns" :query="queryList">
             <template #dataTable_name="{ row }">
                 <el-tag>{{ row.name }}</el-tag>
@@ -53,8 +54,3 @@ const queryList = async () => {
     );
 };
 </script>
-<style lang="scss" scoped>
-.example-page {
-    padding: 12px;
-}
-</style>

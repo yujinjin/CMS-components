@@ -9,6 +9,7 @@
 <template>
     <div class="example-page">
         <h3>日期时间类型</h3>
+        <p class="demo-desc">type 为 datePicker 时渲染日期选择器</p>
         <div class="demo-block">
             <input-field v-model="value1" type="datePicker" placeholder="选择日期" />
             <input-field v-model="value2" type="datePicker" :props="{ type: 'datetime' }" placeholder="选择日期时间" />
@@ -27,12 +28,13 @@ const value3 = ref("");
 const value4 = ref([]);
 </script>
 <style lang="scss" scoped>
-.example-page {
-    padding: 12px;
-}
 .demo-block {
     display: flex;
     flex-direction: column;
     gap: 12px;
+
+    :deep(.el-input) {
+        width: 350px;
+    }
 }
 </style>

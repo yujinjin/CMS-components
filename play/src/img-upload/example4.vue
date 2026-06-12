@@ -1,23 +1,26 @@
 <!--
  * @创建者: yujinjin9@126.com
- * @创建时间: 2025-01-13 10:31:43
+ * @创建时间: 2024-11-19 16:10:06
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2025-01-16 10:54:18
+ * @最后修改时间: 2025-01-13 10:30:26
  * @项目的路径: \CMS-components\play\src\img-upload\example4.vue
- * @描述: img-upload组件的自定义裁剪参数示例
+ * @描述: img-upload组件自定义裁剪参数示例
 -->
 <template>
     <div class="example-page">
         <h3>自定义裁剪参数</h3>
-        <img-upload
-            v-model="values"
-            :upload-request="uploadRequest"
-            :cropper-props="{
-                aspectRatio: 16 / 9,
-                minCropBoxWidth: 200,
-                minCropBoxHeight: 200
-            }"
-        />
+        <p class="demo-desc">cropperProps 可传入裁剪区域比例、尺寸等参数</p>
+        <div class="demo-block">
+            <img-upload
+                v-model="values"
+                :upload-request="uploadRequest"
+                :cropper-props="{
+                    aspectRatio: 16 / 9,
+                    minCropBoxWidth: 200,
+                    minCropBoxHeight: 200
+                }"
+            />
+        </div>
     </div>
 </template>
 <script setup lang="ts">
@@ -31,8 +34,3 @@ const uploadRequest = async (file: File) => {
     return img;
 };
 </script>
-<style lang="scss" scoped>
-.example-page {
-    padding: 12px;
-}
-</style>

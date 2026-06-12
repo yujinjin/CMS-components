@@ -9,6 +9,7 @@
 <template>
     <div class="example-page">
         <h3>自定义表单项</h3>
+        <p class="demo-desc">通过 slot 属性自定义表单项，使用插槽实现特殊交互（如范围输入），满足非标准字段的需求</p>
         <search-form :fields="fields" @search="handleSearch">
             <template #custom="{ field }">
                 <div class="custom-range">
@@ -42,9 +43,6 @@ const handleSearch = (data: any) => {
 };
 </script>
 <style lang="scss" scoped>
-.example-page {
-    padding: 12px;
-}
 .custom-range {
     display: flex;
     align-items: center;

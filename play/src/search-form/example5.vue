@@ -9,6 +9,7 @@
 <template>
     <div class="example-page">
         <h3>联动搜索</h3>
+        <p class="demo-desc">通过 change 事件监听字段变化，动态控制后续字段的显示与数据源，实现多级联动搜索</p>
         <search-form :fields="fields" @search="handleSearch" @change="fieldsChangeHandle" />
     </div>
 </template>
@@ -128,8 +129,3 @@ const handleSearch = (data: any) => {
     console.log("搜索数据:", data);
 };
 </script>
-<style lang="scss" scoped>
-.example-page {
-    padding: 12px;
-}
-</style>

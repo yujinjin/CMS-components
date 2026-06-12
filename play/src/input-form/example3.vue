@@ -4,11 +4,12 @@
  * @最后修改作者: yujinjin9@126.com
  * @最后修改时间: 2025-01-17 11:46:59
  * @项目的路径: \CMS-components\play\src\input-form\example3.vue
- * @描述: input-form组件的不同类型的表单项示例
+ * @描述: input-form组件的表单验证示例
 -->
 <template>
     <div class="example-page">
         <h3>表单验证</h3>
+        <p class="demo-desc">通过 props.rules 配置表单验证规则，支持必填、长度、正则、自定义验证器等多种验证方式</p>
         <input-form ref="inputFormRef" :value="formData" :fields="fields" :props="{ rules }" label-width="120px" />
         <div class="button-panel">
             <el-button @click="handleReset">重置</el-button>
@@ -85,12 +86,3 @@ const handleSubmit = async (data: any) => {
     ElMessage.success("提交数据:" + JSON.stringify(inputFormRef.value?.getInputValue()));
 };
 </script>
-<style lang="scss" scoped>
-.example-page {
-    padding: 12px;
-}
-.button-panel {
-    margin-top: 24px;
-    text-align: center;
-}
-</style>

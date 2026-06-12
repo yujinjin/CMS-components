@@ -9,27 +9,30 @@
 <template>
     <div class="example-page">
         <h3>自定义布局</h3>
-        <action-bar :buttons="buttons" align="right">
-            <el-radio-group v-model="tabValue">
-                <el-radio-button value="全部" label="全部" />
-                <el-radio-button value="待处理" label="待处理" />
-                <el-radio-button value="已处理" label="已处理" />
-            </el-radio-group>
-            <template #more>
-                <el-dropdown style="margin-left: 8px">
-                    <el-button>
-                        更多操作
-                        <el-icon class="el-icon--right"><arrow-down /></el-icon>
-                    </el-button>
-                    <template #dropdown>
-                        <el-dropdown-menu>
-                            <el-dropdown-item>导出</el-dropdown-item>
-                            <el-dropdown-item>批量删除</el-dropdown-item>
-                        </el-dropdown-menu>
-                    </template>
-                </el-dropdown>
-            </template>
-        </action-bar>
+        <p class="demo-desc">通过 align 属性控制按钮面板对齐方式，默认插槽可放置筛选控件，more 插槽支持下拉菜单等扩展操作</p>
+        <div class="demo-block">
+            <action-bar :buttons="buttons" align="right">
+                <el-radio-group v-model="tabValue">
+                    <el-radio-button value="全部" label="全部" />
+                    <el-radio-button value="待处理" label="待处理" />
+                    <el-radio-button value="已处理" label="已处理" />
+                </el-radio-group>
+                <template #more>
+                    <el-dropdown style="margin-left: 8px">
+                        <el-button>
+                            更多操作
+                            <el-icon class="el-icon--right"><arrow-down /></el-icon>
+                        </el-button>
+                        <template #dropdown>
+                            <el-dropdown-menu>
+                                <el-dropdown-item>导出</el-dropdown-item>
+                                <el-dropdown-item>批量删除</el-dropdown-item>
+                            </el-dropdown-menu>
+                        </template>
+                    </el-dropdown>
+                </template>
+            </action-bar>
+        </div>
     </div>
 </template>
 <script setup lang="ts">
@@ -41,8 +44,3 @@ const tabValue = ref("全部");
 
 const buttons = ref<ActionButton[]>([{ contents: "新增", type: "primary" }, { slot: "more" }]);
 </script>
-<style lang="scss" scoped>
-.example-page {
-    padding: 12px;
-}
-</style>

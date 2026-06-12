@@ -9,7 +9,10 @@
 <template>
     <div class="example-page">
         <h3>图片上传</h3>
-        <web-editor v-model="content" :on-img-upload="handleUploadImage" />
+        <p class="demo-desc">配置 uploadRequest 实现编辑器内的图片上传功能</p>
+        <div class="demo-block">
+            <web-editor v-model="content" :on-img-upload="handleUploadImage" />
+        </div>
     </div>
 </template>
 <script setup lang="ts">
@@ -19,8 +22,8 @@ import { WebEditor } from "@yujinjin/cms-components-main/index";
 
 const content = ref("<p>这是一个支持图片上传的富文本编辑器示例</p>");
 
+// 模拟图片上传逻辑
 const handleUploadImage = async (file: File) => {
-    // 这里是上传图片的逻辑，这里只是模拟上传
     return new Promise<string>((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = e => {
@@ -35,8 +38,3 @@ const handleUploadImage = async (file: File) => {
     });
 };
 </script>
-<style lang="scss" scoped>
-.example-page {
-    padding: 12px;
-}
-</style>

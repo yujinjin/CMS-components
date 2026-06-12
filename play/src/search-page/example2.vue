@@ -9,6 +9,7 @@
 <template>
     <div class="example-page">
         <h3>自定义工具栏</h3>
+        <p class="demo-desc">通过 actionBarProps 配置操作栏按钮，支持默认插槽和更多操作插槽自定义工具栏内容</p>
         <search-page ref="searchPageRef" :search-form-props="searchFormProps" :action-bar-props="actionBarProps" :data-table-props="dataTableProps" @select-rows-change="selectRowsChangeHandle">
             <template #actionBar_default>
                 <el-radio-group v-model="tabValue" @change="tabChangeHandle">
@@ -120,8 +121,3 @@ const tabChangeHandle = function () {
     searchPageRef.value?.query();
 };
 </script>
-<style lang="scss" scoped>
-.example-page {
-    padding: 12px;
-}
-</style>

@@ -9,27 +9,25 @@
 <template>
     <div class="example-page">
         <h3>自定义内容和按钮</h3>
-        <el-button type="primary" @click="handleOpen">打开表单</el-button>
+        <p class="demo-desc">通过默认插槽插入自定义内容（如提示、协议勾选），通过按钮 slot 自定义操作按钮（如下拉菜单）。</p>
+
+        <div class="button-panel">
+            <el-button type="primary" @click="handleOpen">打开表单</el-button>
+        </div>
 
         <dialog-form v-if="visible" ref="dialogFormRef" :input-form-props="inputFormData" :dialog-props="{ title: '商品信息' }" :buttons="buttons" @close="visible = false">
-            <!-- 默认插槽 -->
+            <!-- 默认插槽 - 自定义提示信息 -->
             <div class="form-tips">
                 <el-alert title="请填写完整的商品信息" type="info" :closable="true" />
             </div>
-
-            <!-- <template #images="scope">
-                <div class="custom-upload">
-                    <el-upload v-model:file-list="(scope as InputFormSlotScope).formValue.images" action="" list-type="picture-card">
-                        <el-icon><plus /></el-icon>
-                    </el-upload>
-                </div>
-            </template> -->
 
             <template #agreement="scope">
                 <div class="form-agreement">
                     <el-checkbox v-model="(scope as InputFormSlotScope).formValue.agreement">我已阅读并同意服务条款</el-checkbox>
                 </div>
             </template>
+
+            <!-- 自定义按钮插槽 -->
             <template #more>
                 <el-dropdown style="margin-right: 12px">
                     <el-button>
@@ -88,17 +86,12 @@ const handleCancel = () => {
 const buttons = ref<DialogFormButton[]>([{ slot: "more" }, { type: "primary", contents: "提交", click: handleSubmit }, { type: "danger", contents: "取消", click: handleCancel }]);
 </script>
 <style lang="scss" scoped>
-.example-page {
-    padding: 12px;
-}
+/* 自定义插槽内容样式 - 不属于全局样式系统 */
 .form-tips {
     margin-bottom: 20px;
 }
 .form-agreement {
     margin-top: 20px;
     text-align: center;
-}
-.dialog-footer {
-    text-align: right;
 }
 </style>

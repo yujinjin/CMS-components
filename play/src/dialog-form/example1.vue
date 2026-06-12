@@ -9,7 +9,11 @@
 <template>
     <div class="example-page">
         <h3>基础用法</h3>
-        <el-button type="primary" @click="handleAdd">新增</el-button>
+        <p class="demo-desc">dialog-form 组件将弹窗和表单组合使用，适用于新增、编辑等弹窗表单场景。</p>
+
+        <div class="button-panel">
+            <el-button type="primary" @click="handleAdd">新增</el-button>
+        </div>
 
         <dialog-form ref="dialogFormRef" :is-show="visible" :input-form-props="{ fields }" :dialog-props="{ title: '新增用户' }" :buttons="buttons" @close="visible = false" />
     </div>
@@ -47,8 +51,3 @@ const buttons = ref<DialogFormButton[]>([
     { type: "danger", contents: "取消", click: handleCancel }
 ]);
 </script>
-<style lang="scss" scoped>
-.example-page {
-    padding: 12px;
-}
-</style>

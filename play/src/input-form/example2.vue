@@ -9,6 +9,7 @@
 <template>
     <div class="example-page">
         <h3>不同类型的表单项</h3>
+        <p class="demo-desc">通过 fields 的 type 属性配置不同类型的表单项，支持 input、radio、datePicker、checkbox、imgUpload 等多种类型</p>
         <input-form :value="formData" :fields="fields" label-width="100px" />
     </div>
 </template>
@@ -56,8 +57,3 @@ const fields: InputFormField[] = [
     { name: "description", label: "描述", props: { type: "textarea" } }
 ];
 </script>
-<style lang="scss" scoped>
-.example-page {
-    padding: 12px;
-}
-</style>

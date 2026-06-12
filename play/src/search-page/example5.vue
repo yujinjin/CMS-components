@@ -1,6 +1,7 @@
 <template>
     <div class="example-page">
         <h3>自定义布局</h3>
+        <p class="demo-desc">通过插槽自定义操作栏（radio-group 状态筛选）和表格列（订单状态 Popover 提示），展示复杂业务场景</p>
         <search-page ref="searchPageRef" :search-form-props="searchFormProps" :action-bar-props="actionBarProps" :data-table-props="dataTableProps">
             <template #dataTable_orderNo="{ row }">
                 <table-column-copy :value="row.orderNo" />
@@ -99,9 +100,6 @@ const cancelOrderHandle = function (row: any) {
 const { searchFormProps, actionBarProps, dataTableProps } = useSearchPage({ showDialogHandle, excelExportHandle, cancelOrderHandle, orertReportData });
 </script>
 <style lang="scss" scoped>
-.example-page {
-    padding: 12px;
-}
 .order-status-header {
     display: flex;
     align-items: center;

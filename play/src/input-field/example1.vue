@@ -9,7 +9,10 @@
 <template>
     <div class="example-page">
         <h3>基础用法</h3>
-        <input-field v-model="value" placeholder="请输入" />
+        <p class="demo-desc">基础的文本输入组件，通过 v-model 双向绑定数据</p>
+        <div class="demo-block">
+            <input-field v-model="value" placeholder="请输入" />
+        </div>
     </div>
 </template>
 <script setup lang="ts">
@@ -20,8 +23,6 @@ const value = ref("");
 </script>
 <style lang="scss" scoped>
 .example-page {
-    padding: 12px;
-
     :deep(.el-input) {
         width: 350px;
     }

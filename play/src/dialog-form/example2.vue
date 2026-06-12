@@ -9,8 +9,12 @@
 <template>
     <div class="example-page">
         <h3>编辑模式</h3>
-        <el-button type="primary" @click="handleAdd">新增</el-button>
-        <el-button type="warning" @click="handleEdit">编辑</el-button>
+        <p class="demo-desc">通过 isEdit 标记区分新增与编辑模式，编辑时回填已有数据，弹窗标题和提交逻辑随模式切换。</p>
+
+        <div class="button-panel">
+            <el-button type="primary" @click="handleAdd">新增</el-button>
+            <el-button type="warning" @click="handleEdit">编辑</el-button>
+        </div>
 
         <dialog-form v-if="visible" ref="dialogFormRef" :input-form-props="inputFormData" :dialog-props="{ title: dialogTitle }" :buttons="buttons" @close="visible = false" />
     </div>
@@ -91,8 +95,3 @@ const buttons = ref<DialogFormButton[]>([
     { type: "danger", contents: "取消", click: handleCancel }
 ]);
 </script>
-<style lang="scss" scoped>
-.example-page {
-    padding: 12px;
-}
-</style>

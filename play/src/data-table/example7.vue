@@ -9,6 +9,7 @@
 <template>
     <div class="example-page">
         <h3>复杂用例</h3>
+        <p class="demo-desc">综合运用 enum 列、自定义列头插槽、操作列动态显示、图片列、复制组件等高级功能</p>
         <data-table :columns="columns" :query="queryList" :pagination="{ pageSize: 50 }">
             <template #dataTable_orderNo="{ row }">
                 <table-column-copy :value="row.orderNo" />
