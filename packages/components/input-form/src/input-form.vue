@@ -66,6 +66,7 @@ const formFields: Ref<InputFormField[]> = ref([]);
 
 // 初始化表单数据
 const initInputFormValue = function () {
+    // 外部 value 只作为初始/同步来源，内部编辑始终落到 inputFormValue，避免直接改写调用方对象。
     inputFormValue.value = extend(true, {}, props.value);
     formFields.value.forEach(field => {
         if (!field.name) {
@@ -76,6 +77,7 @@ const initInputFormValue = function () {
         let fieldValue = getObjectProperty(inputFormValue.value, field.name);
         if (fieldValue === undefined) {
             if (Object.prototype.hasOwnProperty.call(field, "value")) {
+                // 字段配置上的 value 优先于类型默认值，用于声明单个字段的初始值。
                 fieldValue = field.value;
             } else {
                 // 根据字段类型提供合理的默认值，避免 switch 期望 boolean、inputNumber 期望 number 等类型不匹配问题
@@ -99,6 +101,7 @@ const generateFormFields = function () {
     }
     const style = { width: "400px" };
     if (props.columns === 2) {
+        // 两列表单默认收窄输入框，减少一行内控件挤压。
         style.width = "220px";
     }
     props.fields.forEach(field => {
@@ -120,6 +123,7 @@ const generateFormFields = function () {
         let fieldProps = newField.props!;
         if (newField.type && INPUT_FORM_FIELD_DEFAULT_ATTRIBUTES[newField.type]) {
             if (newField.type === "datePicker") {
+                // 日期选择器按具体 picker 类型选择默认属性，例如 date、daterange、datetime。
                 fieldProps = Object.assign({}, INPUT_FORM_FIELD_DEFAULT_ATTRIBUTES[newField.type][fieldProps.type || "date"], fieldProps);
             } else {
                 if (!fieldProps.placeholder) {
@@ -130,6 +134,7 @@ const generateFormFields = function () {
             newField.props = fieldProps;
         }
         if (newField.inputWidth) {
+            // 单字段宽度优先级最高，保留调用方已有 style 的其他属性。
             fieldProps.style = typeof fieldProps.style === "object" && fieldProps.style !== null ? fieldProps.style : {};
             fieldProps.style.width = newField.inputWidth + "px";
         } else {
@@ -155,6 +160,7 @@ const generateFormFields = function () {
 // 设置字段的值
 const setFieldValue = function (fieldValue: any, field: InputFormField) {
     if (field.type === "input" && field.trim === true && typeof fieldValue === "string") {
+        // 只对 input 字符串开启 trim，避免 checkbox、switch 等值类型被误处理。
         fieldValue = fieldValue.trim();
     }
     setObjectProperty(inputFormValue.value, field.name, fieldValue);

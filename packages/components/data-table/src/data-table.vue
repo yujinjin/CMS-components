@@ -66,7 +66,7 @@ const tableProps: Ref<Partial<TableProps<any>>> = ref({});
 // 数据列表
 const dataList = ref([]);
 
-// 处理后的数据列表
+// 按列类型和默认配置加工后的渲染列列表，避免直接修改外部传入的 columns。
 const columnList: Ref<DataTableColumn<any>[]> = ref([]);
 
 // 查询是否正在加载
@@ -92,6 +92,7 @@ const initPaginationData = function () {
     if (!props.isShowPagination) {
         return;
     }
+    // props.pagination 变化时保留运行期页码和总数，避免外部配置刷新后把当前查询状态重置掉。
     const { total, currentPage } = paginationData.value;
     paginationData.value = Object.assign(
         {
@@ -106,7 +107,6 @@ const initPaginationData = function () {
     );
 };
 
-// TODO: 收起/展开事件触发
 // 初始化table 最大高度
 const initTableMaxHeight = async function () {
     if (props.props && (props.props.height || props.props.maxHeight)) {
@@ -119,6 +119,7 @@ const initTableMaxHeight = async function () {
     }
     const panelHeight = dataTablePanelRef.value.clientHeight;
     const paginationHeight = paginationRef.value ? paginationRef.value.offsetHeight : 0;
+    // 让表格高度跟随容器剩余空间，底部预留 15px 防止分页和表格边缘贴合。
     tableProps.value.maxHeight = panelHeight - paginationHeight - 15;
     if (tableProps.value.maxHeight < 100) {
         tableProps.value.maxHeight = 100;
@@ -147,14 +148,14 @@ const initTableProps = function () {
     );
 };
 
-// TODO: selectRows 事件
-
 // 初始化columns 数据
 const initColumns = function () {
     columnList.value = [];
     props.columns.forEach(columnItem => {
+        // 深拷贝列配置，后续会补充 fixed、label、formatter、isShow 等运行期属性。
         const newColumnItem = extend(true, { isShow: true }, columnItem);
         if (newColumnItem.type === "action" && newColumnItem.buttons && newColumnItem.buttons.length > 0) {
+            // 操作列默认固定在右侧，并提供统一标题，调用方仍可通过 columns 覆盖。
             if (newColumnItem.fixed === undefined) {
                 newColumnItem.fixed = "right";
             }
@@ -164,11 +165,13 @@ const initColumns = function () {
         } else if (newColumnItem.type === "index" && !newColumnItem.index) {
             newColumnItem.index = function (index: number) {
                 if (props.isShowPagination) {
+                    // 分页场景下展示跨页连续序号。
                     return (paginationData.value.currentPage! - 1) * paginationData.value.pageSize! + index + 1;
                 }
                 return index + 1;
             };
         } else if (!newColumnItem.type && !newColumnItem.formatter) {
+            // 普通列统一把 null/undefined 展示为占位符，0、false、空字符串仍按原值交给表格渲染。
             newColumnItem.formatter = function (row: any, column: TableColumnCtx<any>, cellValue: any, index: number) {
                 return cellValue === null || cellValue === undefined ? "-" : cellValue;
             };
@@ -186,8 +189,10 @@ const queryDataList = async function (isInit = true) {
     emits("search", true);
     try {
         if (isInit && props.isShowPagination) {
+            // 新查询从第一页开始；翻页触发的查询会传入 false 保留当前页码。
             paginationData.value.currentPage = 1;
         }
+        // 查询参数由外部 filters 和分页信息组成，并允许调用方在请求前做最后加工。
         let parameters = Object.assign({}, props.filters, props.isShowPagination ? { pageNo: paginationData.value.currentPage, pageSize: paginationData.value.pageSize } : {});
         if (props.queryParametersProcess) {
             parameters = props.queryParametersProcess(parameters);
@@ -197,6 +202,7 @@ const queryDataList = async function (isInit = true) {
             queryResult = props.queryResponseProcess(queryResult);
         }
         if (props.isShowPagination) {
+            // 分页接口默认约定返回 { rows, total }；为空时兜底为空列表，保证表格渲染稳定。
             dataList.value = queryResult.rows || [];
             paginationData.value.total = queryResult.total || 0;
         } else {
@@ -217,7 +223,7 @@ const getCellValue = function (row: any, columnItem: DataTableColumn<any>, index
     if (!columnItem.prop) {
         return null;
     }
-    // 支持多属性获取，使用 separator（默认逗号）分隔 prop 中的多个属性名
+    // 支持多属性取值，如 prop: "startTime,endTime"，日期/图片/枚举列会继续按数组值渲染。
     const separator = columnItem.separator || ",";
     if (columnItem.prop.includes(separator)) {
         return columnItem.prop.split(separator).map(key => row[key.trim()]);
@@ -266,7 +272,7 @@ let resizeHandle: (e: UIEvent) => any;
 
 if (!props.props || (!props.props.height && !props.props.maxHeight)) {
     resizeHandle = debounce(initTableMaxHeight, 100);
-    // 当前数据表格已经指定高度，就不再自动计算了
+    // 未指定固定高度时监听窗口变化，保证搜索区折叠、窗口缩放后表格最大高度能重新计算。
     window.addEventListener("resize", resizeHandle);
 }
 

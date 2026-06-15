@@ -46,13 +46,13 @@ export const searchPageEmits = {
 export type SearchPageEmits = typeof searchPageEmits;
 
 export interface SearchPageRef {
-    // 搜索查询函数
+    // 搜索查询函数；isInit=true 时会重置 DataTable 分页到第一页。
     query: (isInit?: boolean) => Promise<any> | undefined;
 
-    // 获取当前搜索表单实时值
+    // 获取当前搜索表单实时值，不要求这些值已经触发查询。
     getSearchingValue: () => Record<string, any>;
 
-    // 获取当前已经搜索出来的结果值，与getSearchFormValue区别是当前已经用它查询出来结果的搜索表单值
+    // 获取当前已经搜索出来的结果值，与 getSearchingValue 的区别是当前已经用它查询出来结果的搜索表单值。
     getSearchedValue: () => Record<string, any>;
 
     // 修改当前form字段的属性

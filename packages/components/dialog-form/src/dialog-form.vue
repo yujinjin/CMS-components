@@ -68,6 +68,7 @@ const dialogInnerProps: Ref<Partial<NotReadonly<DialogProps>>> = ref({});
 const actionButtons = ref<DialogFormButton[]>([]);
 
 const slots = computed<string[]>(() => {
+    // 只把 input-form 字段声明过的 slot 透传下去，避免默认插槽和按钮插槽被误分发。
     return props.inputFormProps?.fields?.filter(field => !!field.slot).map(field => field.slot!) || [];
 });
 
@@ -78,8 +79,10 @@ const initActionButtons = function () {
     }
     actionButtons.value = [];
     props.buttons.forEach(button => {
+        // 按钮 loading/isShow 属于弹窗内部运行期状态，不要求调用方提前声明。
         button = Object.assign({ loading: false, isShow: true }, button);
         if (button.customIcon && typeof button.customIcon === "object") {
+            // 图标组件无需响应式代理，markRaw 避免 Vue 对组件对象发出性能提示。
             button.customIcon = markRaw(button.customIcon);
         }
         if (button.icon && typeof button.icon === "object") {
@@ -107,6 +110,7 @@ const clickHandle = async function (button: DialogFormButton) {
     let canClose: boolean | void = true;
     try {
         if (button.click) {
+            // 约定 click 返回 false 时阻止自动关闭，便于表单验证失败或业务拦截。
             canClose = await button.click(inputFormRef.value?.getInputValue() ?? {}, inputFormRef.value?.getFormRef() ?? null, button);
         }
     } catch (error) {
@@ -124,6 +128,7 @@ watch(
     value => {
         if (value) {
             dialogVisible.value = true;
+            // 每次打开时重新合并弹窗属性，确保调用方动态修改 dialogProps 后立即生效。
             dialogInnerProps.value = Object.assign(
                 {
                     closeOnClickModal: false,

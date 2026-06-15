@@ -59,6 +59,7 @@ const textChangeHandle = debounce(() => {
     if (!quillInstance) {
         return;
     }
+    // Quill 的 text-change 触发频率很高，防抖后再同步 v-model 和表单校验。
     emits("update:modelValue", quillInstance.getSemanticHTML());
     elFormItem?.validate?.("change");
 }, 300);
@@ -76,6 +77,7 @@ const imgFileChangeHandle = async function (e: Event) {
     // 图片上传成功之后的回调
     let range = quillInstance.getSelection();
     if (!range) {
+        // 上传文件会让焦点离开编辑器，必要时恢复焦点后再获取插入位置。
         quillInstance.focus();
         range = quillInstance.getSelection();
     }
@@ -94,6 +96,7 @@ const initQuill = function () {
             toolbar: {
                 container: props.toolbar || defaultToolbar,
                 handlers: {
+                    // 只有传入 onImgUpload 时才拦截图片按钮，否则保留 Quill 默认行为。
                     image: props.onImgUpload ? () => inputFileRef.value?.click() : undefined
                 }
             }
@@ -103,6 +106,7 @@ const initQuill = function () {
         placeholder: "输入内容..."
     });
     if (props.modelValue) {
+        // 用 clipboard.convert 让外部 HTML 进入 Quill 的 Delta 模型，避免直接写 innerHTML 破坏编辑器状态。
         quillInstance.setContents(quillInstance.clipboard.convert({ html: props.modelValue }));
     }
     quillInstance.on("text-change", function () {
@@ -123,6 +127,7 @@ watch(
     () => props.modelValue,
     value => {
         if (!quillInstance || value === quillInstance.getSemanticHTML()) return;
+        // 外部 v-model 变化时同步到编辑器；相同 HTML 跳过，避免与 text-change 形成回写循环。
         quillInstance.setContents(quillInstance.clipboard.convert({ html: props.modelValue }));
     }
 );

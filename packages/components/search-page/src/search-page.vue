@@ -73,10 +73,10 @@ const props = defineProps(searchPageProps);
 
 const emits = defineEmits(searchPageEmits);
 
-// 当前数据表格的筛选参数值（searchFormValue和props.dataTableProps.filters的并集）
+// 当前数据表格实际使用的筛选参数快照，由搜索表单值和 dataTableProps.filters 合并而来。
 const dataTableFilters: Ref<Record<string, any>> = ref({});
 
-// 当前搜索条件的筛选参数值
+// 当前搜索表单的实时值；用户输入后未查询时，它可能与 dataTableFilters 不一致。
 const searchFormValue: Ref<Record<string, any>> = ref({});
 
 // datatable组件ref
@@ -104,6 +104,7 @@ const distributeSlots = computed(() => {
     };
     Object.keys(slots).forEach(key => {
         if (key.startsWith("searchForm_")) {
+            // 子组件收到的插槽名称保持原样，调用方用统一前缀避免不同区域插槽重名。
             typeSlotList.searchForm.push(key);
         } else if (key === "actionBar_default") {
             typeSlotList.actionBarDefault = "actionBar_default";
@@ -128,11 +129,13 @@ const searchFieldsChangeHandle = function (formFields: SearchFormField[]) {
 
 // 查询方法
 const queryDataList = async function (isInit = true, formValue?: Record<string, any>) {
+    // 主动传入 formValue 的场景来自 SearchForm 的 search 事件；实例方法调用则读取表单当前值。
     if (formValue) {
         searchFormValue.value = formValue;
     } else {
         searchFormValue.value = searchFormRef.value?.getValue() ?? {};
     }
+    // 固定筛选条件后合并，确保外部强制条件优先级高于搜索表单同名字段。
     if (props.dataTableProps?.filters) {
         dataTableFilters.value = extend(true, {}, searchFormValue.value, props.dataTableProps.filters);
     } else {
@@ -166,6 +169,7 @@ watch(
     () => props.isLoadingForInit,
     async value => {
         if (value) return;
+        // 初始化 loading 结束后只触发一次查询，避免 DataTable 在 v-bind 更新过程中重复自动查询。
         queryDataList();
     },
     {
@@ -177,6 +181,7 @@ onMounted(() => {
     if (searchFormRef.value) {
         searchFormValue.value = searchFormRef.value.getValue();
     }
+    // 先生成一次过滤条件，供 DataTable 首次挂载或外部立即读取 searched 值时使用。
     if (props.dataTableProps?.filters) {
         dataTableFilters.value = extend(true, {}, searchFormValue.value, props.dataTableProps.filters);
     } else {
@@ -195,6 +200,7 @@ defineExpose<SearchPageRef>({
     // 获取当前搜索表单实时值
     getSearchingValue: function () {
         try {
+            // 返回的是用户当前输入值，不要求这些值已经触发过查询。
             if (searchFormRef.value) {
                 return extend(true, {}, props.dataTableProps && props.dataTableProps.filters, searchFormRef.value.getValue());
             }
@@ -208,6 +214,7 @@ defineExpose<SearchPageRef>({
     // 获取当前已经搜索出来的结果值，与getSearchFormValue区别是当前已经用它查询出来结果的搜索表单值
     getSearchedValue: function () {
         try {
+            // 返回最近一次 queryDataList 固化的筛选快照，适合导出等依赖当前表格结果的操作。
             return extend(true, {}, dataTableFilters.value);
         } catch (error) {
             console.warn("getSearchedValue: 获取已搜索值失败", error);

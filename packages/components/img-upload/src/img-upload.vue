@@ -113,6 +113,7 @@ const generateFileList = function () {
     } else if (Array.isArray(modelValue.value)) {
         fileList.value = modelValue.value.map(item => ({ name: item.substring(item.lastIndexOf("/") + 1), url: item }));
     } else if (uploadInnerProps.value.limit === 1) {
+        // 单文件模式下字符串值代表唯一文件，Element Plus Upload 仍需要数组 fileList。
         fileList.value = [{ name: modelValue.value.substring(modelValue.value.lastIndexOf("/") + 1), url: modelValue.value }];
     } else {
         fileList.value = modelValue.value.split(props.separator).map(url => ({ name: url.substring(url.lastIndexOf("/") + 1), url }));
@@ -127,6 +128,7 @@ const showCroppDialogHandle = async function () {
         return;
     }
     if (cropperInstance) {
+        // 连续裁剪多张图片时复用实例，只替换图片源，避免重复初始化预览 DOM。
         cropperInstance.replace(cropperImg.value);
     } else {
         cropperInstance = new Cropper(
@@ -180,8 +182,10 @@ const closeCroppDialog = function () {
 const imageUploadApi = async function (file: File | UploadRawFile) {
     const img = (await props.uploadRequest(file)) as string;
     if (uploadInnerProps.value.limit === 1) {
+        // limit=1 时新上传文件直接替换旧文件。
         fileList.value = [{ name: img.substring(img.lastIndexOf("/") + 1), url: img }];
     } else if ((file as UploadRawFile).uid && fileList.value.some(item => item.uid === (file as UploadRawFile).uid)) {
+        // 普通上传会先产生本地预览项，上传完成后按 uid 回填服务端 URL。
         const findFile = fileList.value.find(item => item.uid === (file as UploadRawFile).uid);
         if (findFile) {
             findFile.name = img.substring(img.lastIndexOf("/") + 1);
@@ -195,6 +199,7 @@ const imageUploadApi = async function (file: File | UploadRawFile) {
 // 文件列表变化
 const fileListChange = function () {
     if (Array.isArray(modelValue.value)) {
+        // 保持外部绑定类型不变：数组输入输出数组，字符串输入输出分隔后的字符串。
         newModelValue = JSON.stringify(fileList.value.map(item => item.url));
         modelValue.value = JSON.parse(newModelValue);
     } else {
@@ -251,7 +256,7 @@ const defaultUploadProps = {
     onChange: function (file: UploadFile, files: UploadFiles) {
         if (props.cropperProps) {
             // 由于element plus upload组件上传之后会自动添加一个预览文件。
-            // 这里是自定义实现的文件上传请求，所以必须是上传完文件之后才展示处理， 这里删除掉
+            // 裁剪模式必须等裁剪完成且服务端上传成功后再展示，所以先移除本地临时项。
             files.pop();
             startCroppHandle(file.raw!);
         }
@@ -306,6 +311,7 @@ watch(
 watch(
     () => modelValue.value,
     value => {
+        // fileListChange 会同步写回 modelValue；用 newModelValue 跳过这类内部回写，避免循环刷新 fileList。
         if ((!value && !newModelValue) || value === newModelValue || JSON.stringify(value) === newModelValue) {
             return;
         }

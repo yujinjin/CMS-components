@@ -84,6 +84,7 @@ const generateFormFields = function () {
         }
         const newField = extend(true, { isShow: true, type: "primary", value: null }, field) as SearchFormField;
         if (Object.prototype.hasOwnProperty.call(newField, "defaultValue")) {
+            // defaultValue 是重置时的基准值，也作为字段首次生成时的初始值。
             newField.value = newField.defaultValue;
         }
         if (newField.type && SEARCH_FORM_FIELD_DEFAULT_ATTRIBUTES[newField.type]) {
@@ -93,6 +94,7 @@ const generateFormFields = function () {
             // 此时 newField.props 已确保非空，但 TS 无法跨赋值收窄类型，使用局部变量断言
             let fieldProps = newField.props!;
             if (newField.type === "datePicker") {
+                // 日期组件的默认属性按 picker 类型区分，先取内置配置，再让调用方 props 覆盖。
                 fieldProps = Object.assign({}, SEARCH_FORM_FIELD_DEFAULT_ATTRIBUTES[newField.type][fieldProps.type || "date"], fieldProps);
                 if (newField.defaultValue && fieldProps.valueFormat) {
                     newField.value = dateFormat(newField.defaultValue, fieldProps.valueFormat);
@@ -119,6 +121,7 @@ const generateExtendButtons = function () {
     props.buttons.forEach(button => {
         button = Object.assign({ loading: false }, button);
         if (button.icon && typeof button.icon === "object") {
+            // Vue 组件图标不需要被深度代理，markRaw 可以避免渲染时的响应式开销和警告。
             button.icon = markRaw(button.icon);
         }
         extendButtons.value.push(button);
@@ -143,6 +146,7 @@ const init = function () {
 const getSearchFormValue = function () {
     const formValue = {};
     formFields.value.forEach(field => {
+        // 支持 "user.name" 这类嵌套字段名，输出结构化查询对象。
         setObjectProperty(formValue, field.name, field.value);
     });
     return formValue;
@@ -157,6 +161,7 @@ const searchHandle = function () {
 const resetHandle = function () {
     formFields.value.forEach(field => {
         if (Object.prototype.hasOwnProperty.call(field, "defaultValue")) {
+            // datePicker 设置 valueFormat 时，重置值也要保持与组件绑定格式一致。
             field.value = field.props?.valueFormat ? dateFormat(field.defaultValue, field.props.valueFormat) : field.defaultValue;
         } else if (Object.prototype.hasOwnProperty.call(field, "value")) {
             field.value = null;
