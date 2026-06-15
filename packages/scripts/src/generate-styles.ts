@@ -14,7 +14,7 @@ import gulpSass from "gulp-sass";
 import { COMPONENTS_STYLE_ROOT, BUILD_STYLE_ROOT, BUILD_DIST_ROOT } from "./utils/constants";
 
 // 自定义Sass导入器
-const customImporter = (url, prev, done) => {
+const customImporter = (url: string, prev: string, done: () => void) => {
     // 示例：如果导入的文件是node_modules里的包的加入相对路径
     if (url.startsWith("quill/dist/") || url.startsWith("cropperjs/src/")) {
         // 这里可以根据自定义逻辑修改文件路径
@@ -30,12 +30,15 @@ const customImporter = (url, prev, done) => {
  */
 function buildStyle() {
     console.info("构建样式文件:" + COMPONENTS_STYLE_ROOT);
-    const sass = gulpSass(dartSass);
+    // sass 模块命名空间对象在运行时满足 Compiler 接口的结构要求，
+    // 但 TypeScript 无法自动识别匹配，需使用类型断言
+    const sass = gulpSass(dartSass as unknown as Parameters<typeof gulpSass>[0]);
 
     return src(COMPONENTS_STYLE_ROOT + "/**/*.scss")
         .pipe(
             sass
                 .sync({
+                    // @ts-expect-error gulp-sass 类型基于现代 Sass API（importers），此处使用旧版 importer 回调模式
                     importer: customImporter // 使用自定义导入器
                 })
                 .on("error", sass.logError)
@@ -61,4 +64,6 @@ function copyFullStyle() {
 
 const main = series(buildStyle, copySource, copyFullStyle);
 
-main();
+main(err => {
+    if (err) throw err;
+});

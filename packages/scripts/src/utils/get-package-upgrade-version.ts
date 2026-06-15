@@ -9,7 +9,7 @@
 import { exec } from "./process";
 import console from "./console";
 
-export default function (packageName) {
+export default function (packageName: string) {
     console.info("开始---------------获取最新包-" + packageName + "的版本号");
     // 当前项目线上最新版本号
     let latestVersion = "0.0.0";

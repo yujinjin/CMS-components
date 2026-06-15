@@ -9,21 +9,24 @@
         "build:style": "tsx src/generate-styles.ts",
         "pub": "cross-env vt=$npm_config_vt tsx src/publish.ts"
     },
-    "dependencies": {},
     "devDependencies": {
+        "@rollup/plugin-commonjs": "^26.0.1",
+        "@rollup/plugin-node-resolve": "^15.2.3",
+        "@rollup/plugin-typescript": "^11.1.6",
+        "@types/fs-extra": "^11.0.01",
+        "@types/gulp": "^4.0.18",
+        "@types/gulp-autoprefixer": "^0.0.37",
+        "@types/gulp-clean-css": "^4.3.4",
+        "@types/gulp-sass": "^6.0.0",
+        "conventional-changelog-cli": "^5.0.0",
+        "fast-glob": "^3.3.2",
+        "fs-extra": "^11.2.0",
         "gulp": "^5.0.0",
         "gulp-autoprefixer": "9.0.0",
         "gulp-clean-css": "^4.3.0",
         "gulp-sass": "^5.1.0",
-        "fast-glob": "^3.3.2",
-        "fs-extra": "^11.2.0",
         "rollup": "^4.18.0",
         "rollup-plugin-esbuild": "^6.1.1",
-        "conventional-changelog-cli": "^5.0.0",
-        "@rollup/plugin-typescript": "^11.1.6",
-        "@rollup/plugin-node-resolve": "^15.2.3",
-        "@rollup/plugin-commonjs": "^26.0.1",
-        "@types/fs-extra": "^11.0.01",
         "tslib": "^2.6.3"
     }
 }

@@ -78,4 +78,6 @@ const publish = async function () {
 // const main = series(build, generateChangelog, addGitTag);
 const main = series(build, generateChangelog, addGitTag, publish);
 
-main();
+main(err => {
+    if (err) throw err;
+});

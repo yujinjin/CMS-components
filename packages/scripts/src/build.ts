@@ -31,4 +31,6 @@ const main = series(
     )
 );
 
-main();
+main(err => {
+    if (err) throw err;
+});
