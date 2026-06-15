@@ -6,3 +6,6 @@ docs/.vitepress/cache
 .eslintcache
 /pnpm-lock.yaml
 /packages/main/version.ts
+.claude/
+.trae/
+openspec/
