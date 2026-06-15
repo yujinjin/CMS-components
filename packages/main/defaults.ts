@@ -2,7 +2,14 @@ import { type App } from "vue";
 import components from "./components";
 import { version } from "./version";
 
-const INSTALLED_KEY = Symbol("CMS_INSTALLED_KEY");
+const INSTALLED_KEY: unique symbol = Symbol("CMS_INSTALLED_KEY");
+
+// 通过模块增强扩展 App 类型，声明自定义 symbol 属性
+declare module "vue" {
+    interface App {
+        [INSTALLED_KEY]: boolean;
+    }
+}
 
 export interface InstallOptions {
     size?: string;
