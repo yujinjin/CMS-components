@@ -122,7 +122,7 @@ describe("DataTable", () => {
 
     describe("Pagination Functionality", () => {
         test("emits page-change event", async () => {
-            const wrapper = createWrapper({ showPagination: true });
+            const wrapper = createWrapper({ isShowPagination: true });
             await wrapper.findComponent({ name: "ElPagination" }).vm.$emit("current-change", 2);
             expect(wrapper.props("query")).toHaveBeenCalledWith({ pageNo: 2, pageSize: 20 });
             // expect(wrapper.emitted("page-change")).toBeTruthy();
@@ -130,7 +130,7 @@ describe("DataTable", () => {
         });
 
         test("emits size-change event", async () => {
-            const wrapper = createWrapper({ showPagination: true });
+            const wrapper = createWrapper({ isShowPagination: true });
             await wrapper.findComponent({ name: "ElPagination" }).vm.$emit("size-change", 50);
             expect(wrapper.props("query")).toHaveBeenCalledWith({ pageNo: 1, pageSize: 50 });
             // expect(wrapper.emitted("size-change")).toBeTruthy();
