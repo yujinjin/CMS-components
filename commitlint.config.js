@@ -24,10 +24,13 @@ export default {
         "body-leading-blank": [1, "always"],
         // footer 是否以空行开始
         "footer-leading-blank": [1, "always"],
-        // header内容的最大长度为72
+        // header内容的最大长度为100
         "header-max-length": [2, "always", 100],
-        //
+        // body每行最大长度为500
+        "body-max-line-length": [2, "always", 500],
+        // scope必须使用小写
         "scope-case": [2, "always", "lower-case"],
+        // subject内容必须使用sentence-case
         "subject-case": [1, "never", ["sentence-case", "start-case", "pascal-case", "upper-case"]],
         // subject内容不能为空
         "subject-empty": [2, "never"],
