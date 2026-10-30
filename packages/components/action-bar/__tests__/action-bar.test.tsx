@@ -1,10 +1,17 @@
-import { type MockedFunction, describe, it, expect, vi } from "vitest";
-import { mount } from "@vue/test-utils";
+import { type MockedFunction, describe, it, expect, vi, afterEach } from "vitest";
+import { mount, enableAutoUnmount } from "@vue/test-utils";
 import { ElButton } from "element-plus";
 import { type ActionButton } from "../src/action-bar";
 import ActionBar from "../src/action-bar.vue";
 
-describe("ActionBar", () => {
+enableAutoUnmount(afterEach);
+afterEach(() => {
+    vi.clearAllTimers();
+    vi.useRealTimers();
+    vi.restoreAllMocks();
+});
+
+describe("列表操作栏组件", () => {
     const mockButtons: ActionButton[] = [
         {
             contents: "Button 1",
@@ -21,7 +28,7 @@ describe("ActionBar", () => {
         {
             contents: "Button 3",
             handleCode: "btn3",
-            icon: "Edit", // component icon
+            icon: "Edit", // 组件图标
             click: vi.fn()
         }
     ];
@@ -37,14 +44,39 @@ describe("ActionBar", () => {
         });
     };
 
-    it("renders properly with default props", () => {
+    it("异步操作只锁定当前按钮并传入选择行副本配置", async () => {
+        let finish!: () => void;
+        const click = vi.fn((_rows: Record<string, any>[], _button: ActionButton) => new Promise<void>(resolve => (finish = resolve)));
+        const otherClick = vi.fn();
+        const buttons = [
+            { contents: "保存", click },
+            { contents: "查看", click: otherClick }
+        ];
+        const rows = [{ id: 7 }];
+        const wrapper = createWrapper({ buttons, selectRows: rows });
+        const controls = wrapper.findAllComponents(ElButton);
+        await controls[0].trigger("click");
+        await controls[0].trigger("click");
+        await controls[1].trigger("click");
+        expect(click).toHaveBeenCalledTimes(1);
+        expect(click.mock.calls[0]?.[0]).toEqual([{ id: 7 }]);
+        expect(click.mock.calls[0]?.[1]).not.toBe(buttons[0]);
+        expect(otherClick).toHaveBeenCalledTimes(1);
+        expect(buttons[0]).not.toHaveProperty("loading");
+        finish();
+        await Promise.resolve();
+        await controls[0].vm.$nextTick();
+        expect(controls[0].props("loading")).toBe(false);
+    });
+
+    it("使用默认属性正确渲染", () => {
         const wrapper = createWrapper();
         expect(wrapper.find(".cms-action-bar-panel").exists()).toBe(true);
         expect(wrapper.find(".buttons-panel").exists()).toBe(true);
         expect(wrapper.findAllComponents(ElButton)).toHaveLength(mockButtons.length);
     });
 
-    it("aligns buttons correctly", async () => {
+    it("按照配置对齐按钮", async () => {
         const wrapper = createWrapper({ align: "right" });
         expect(wrapper.find(".buttons-panel").attributes("style")).toContain("text-align: right");
 
@@ -52,19 +84,19 @@ describe("ActionBar", () => {
         expect(wrapper.find(".buttons-panel").attributes("style")).toContain("text-align: center");
     });
 
-    it("renders string icons correctly", () => {
+    it("正确渲染字符串图标", () => {
         const wrapper = createWrapper();
         const buttonWithStringIcon = wrapper.findAll(".el-button")[1];
         expect(buttonWithStringIcon.find("i.el-icon-edit").exists()).toBe(true);
     });
 
-    it("renders component icons correctly", () => {
+    it("正确渲染组件图标", () => {
         const wrapper = createWrapper();
         const buttonWithComponentIcon = wrapper.findAll(".el-button")[2];
         expect(buttonWithComponentIcon.find(".el-icon").exists()).toBe(true);
     });
 
-    it("handles button clicks correctly", async () => {
+    it("点击按钮时执行对应操作", async () => {
         const wrapper = createWrapper();
         const buttons = wrapper.findAll(".el-button");
 
@@ -72,25 +104,25 @@ describe("ActionBar", () => {
         expect(mockButtons[0].click).toBeCalled();
     });
 
-    it("prevents multiple clicks while loading", async () => {
+    it("加载期间阻止重复点击", async () => {
         const wrapper = createWrapper();
         const button = wrapper.findAll(".el-button")[0];
 
-        // Simulate a long-running click handler
+        // 模拟长时间执行的按钮回调
         (mockButtons[0].click as MockedFunction<any>).mockImplementation(async () => {
             await new Promise(resolve => setTimeout(resolve, 100));
         });
 
-        // Click multiple times rapidly
+        // 连续快速点击按钮
         await button.trigger("click");
         await button.trigger("click");
         await button.trigger("click");
 
-        // Should only be called once
+        // 回调应仅执行一次
         expect(mockButtons[0].click).toHaveBeenCalledTimes(1);
     });
 
-    it("handles click errors gracefully", async () => {
+    it("捕获按钮回调异常并恢复状态", async () => {
         const consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
         const error = new Error("Test error");
         (mockButtons[0].click as MockedFunction<any>).mockRejectedValue(error);
@@ -106,7 +138,7 @@ describe("ActionBar", () => {
         consoleError.mockRestore();
     });
 
-    it("renders slot content when provided", () => {
+    it("提供插槽时渲染插槽内容", () => {
         const wrapper = mount(() => (
             <ActionBar align={"left"} buttons={mockButtons}>
                 <div class="custom-slot">Custom Content</div>
@@ -116,7 +148,7 @@ describe("ActionBar", () => {
         expect(wrapper.find(".custom-slot").element.previousElementSibling?.className).contains("buttons-panel");
     });
 
-    it("updates buttons when props change", async () => {
+    it("属性变化时更新按钮", async () => {
         const wrapper = createWrapper();
         const newButtons = [{ contents: "New Button", handleCode: "new", click: vi.fn() }];
 
@@ -125,7 +157,7 @@ describe("ActionBar", () => {
         expect(wrapper.find(".el-button").text()).toContain("New Button");
     });
 
-    it("exposes changeButtons method", async () => {
+    it("暴露修改按钮的方法", async () => {
         const wrapper = createWrapper();
         const callback = vi.fn(buttons => {
             buttons[0].disabled = true;
@@ -137,7 +169,7 @@ describe("ActionBar", () => {
         expect((wrapper.vm as any).actionButtons[0].disabled).toBe(true);
     });
 
-    it("renders button with custom slot", () => {
+    it("使用自定义插槽渲染按钮", () => {
         const buttonsWithSlot: ActionButton[] = [{ handleCode: "custom", slot: "customSlot", contents: "Custom" }];
         const wrapper = mount(() => (
             <ActionBar buttons={buttonsWithSlot}>
@@ -150,7 +182,7 @@ describe("ActionBar", () => {
         expect(wrapper.find(".custom-slot-btn").text()).toBe("custom");
     });
 
-    it("does not pollute original button data", () => {
+    it("内部按钮状态不修改原始配置", () => {
         const originalButton: ActionButton = { contents: "Test", handleCode: "test", click: vi.fn() };
         mount(ActionBar, {
             props: {
@@ -163,7 +195,7 @@ describe("ActionBar", () => {
         expect(Object.prototype.hasOwnProperty.call(originalButton, "loading")).toBe(false);
     });
 
-    it("renders empty buttons panel when buttons array is empty", () => {
+    it("按钮数组为空时不渲染按钮区域", () => {
         const wrapper = createWrapper({ buttons: [] });
         expect(wrapper.find(".buttons-panel").exists()).toBe(false);
     });

@@ -28,7 +28,16 @@
     </el-select>
 
     <!-- check-select -->
-    <check-select v-else-if="type === 'checkSelect'" v-bind="allProps" :model-value="modelValue" :data="data" @update:model-value="changeValue" v-on="events" />
+    <check-select
+        v-else-if="type === 'checkSelect'"
+        v-bind="allProps"
+        :model-value="modelValue"
+        :data="data"
+        :option-value-key="optionValueKey"
+        :option-label-key="optionLabelKey"
+        @update:model-value="changeValue"
+        v-on="events"
+    />
 
     <!-- checkbox -->
     <el-checkbox-group v-else-if="type === 'checkbox'" v-bind="allProps" :model-value="modelValue" @update:model-value="changeValue" v-on="events">
@@ -79,7 +88,7 @@ const allProps = computed(() => {
     };
 });
 
-// 获取 element 组件名称，将驼峰转为 kebab-case 并添加 el- 前缀
+// 按命名约定分发给已注册的控件，如 datePicker → el-date-picker；新增控件无需维护映射表。
 const getElComponentName = function (type: string): string {
     if (!type) {
         return "";

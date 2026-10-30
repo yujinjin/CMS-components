@@ -6,15 +6,22 @@
  * @项目的路径: \CMS-components\packages\components\dialog-form\__tests__\dialog-form.test.tsx
  * @描述: dialog-form组件测试用例
  */
-import { describe, test, expect, vi } from "vitest";
-import { mount, flushPromises } from "@vue/test-utils";
+import { describe, test, expect, vi, afterEach } from "vitest";
+import { mount, flushPromises, enableAutoUnmount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { ElLoading } from "element-plus";
 import DialogForm from "../src/dialog-form.vue";
 import { type DialogFormButton } from "../src/dialog-form";
 import { type InputFormField } from "@yujinjin/cms-components-modules/input-form";
 
-describe("DialogForm", () => {
+enableAutoUnmount(afterEach);
+afterEach(() => {
+    vi.clearAllTimers();
+    vi.useRealTimers();
+    vi.restoreAllMocks();
+});
+
+describe("弹窗表单组件", () => {
     const mockFields: InputFormField[] = [
         { name: "name", label: "Name", type: "input", value: "" },
         {
@@ -62,8 +69,16 @@ describe("DialogForm", () => {
         });
     };
 
-    describe("Basic Rendering", () => {
-        test("renders dialog with correct", async () => {
+    test("清空按钮配置后移除原有操作", async () => {
+        const wrapper = createWrapper({ buttons: [{ contents: "保存" }] });
+        await nextTick();
+        expect(wrapper.findAllComponents({ name: "ElButton" })).toHaveLength(1);
+        await wrapper.setProps({ buttons: [] });
+        expect(wrapper.findAllComponents({ name: "ElButton" })).toHaveLength(0);
+    });
+
+    describe("基础渲染", () => {
+        test("正确渲染弹窗与表单内容", async () => {
             const wrapper = createWrapper();
             await nextTick();
             expect(wrapper.findComponent({ name: "ElDialog" }).exists()).toBe(true);
@@ -71,21 +86,21 @@ describe("DialogForm", () => {
             expect(wrapper.findAllComponents({ name: "ElButton" })).toHaveLength(mockButtons.length);
         });
 
-        test("dialog is hidden when isShow is false", async () => {
+        test("显示开关关闭时不渲染弹窗", async () => {
             const wrapper = createWrapper({ isShow: false, buttons: [] });
             await nextTick();
             expect(wrapper.findComponent({ name: "ElDialog" }).exists()).toBe(false);
             expect(wrapper.findComponent({ name: "ElButton" }).exists()).toBe(false);
         });
 
-        test("renders with empty buttons", async () => {
+        test("按钮列表为空时正常渲染弹窗", async () => {
             const wrapper = createWrapper({ buttons: [] });
             await nextTick();
             expect(wrapper.findComponent({ name: "ElDialog" }).exists()).toBe(true);
             expect(wrapper.findAllComponents({ name: "ElButton" })).toHaveLength(0);
         });
 
-        test("hides button when isShow is false", async () => {
+        test("隐藏标记为不显示的按钮", async () => {
             const buttonsWithHidden: DialogFormButton[] = [
                 { handleCode: "visible", contents: "可见", isShow: true },
                 { handleCode: "hidden", contents: "隐藏", isShow: false }
@@ -96,8 +111,8 @@ describe("DialogForm", () => {
         });
     });
 
-    describe("Functionality", () => {
-        test("emits submit event with form data", async () => {
+    describe("交互行为", () => {
+        test("点击提交按钮时执行回调并恢复加载状态", async () => {
             vi.useFakeTimers();
             const wrapper = createWrapper();
             await nextTick();
@@ -113,7 +128,7 @@ describe("DialogForm", () => {
             expect((wrapper.vm as any).dialogVisible).toBe(true);
         });
 
-        test("emits cancel event and closes dialog", async () => {
+        test("点击取消按钮后关闭弹窗", async () => {
             vi.useFakeTimers();
             const wrapper = createWrapper();
             await nextTick();
@@ -129,7 +144,7 @@ describe("DialogForm", () => {
             expect((wrapper.vm as any).dialogVisible).toBe(false);
         });
 
-        test("does not close dialog when click handler returns false", async () => {
+        test("按钮回调返回 false 时保留弹窗", async () => {
             vi.useFakeTimers();
             const wrapper = createWrapper();
             await nextTick();
@@ -141,7 +156,7 @@ describe("DialogForm", () => {
             expect((wrapper.vm as any).dialogVisible).toBe(true);
         });
 
-        test("does not click when button is loading", async () => {
+        test("按钮加载期间不重复执行回调", async () => {
             const wrapper = createWrapper();
             await nextTick();
             const button = wrapper.findAllComponents({ name: "ElButton" })[0];
@@ -154,7 +169,7 @@ describe("DialogForm", () => {
             // 注意：mockButtons[0].click 已被之前的测试调用，需要重新检查
         });
 
-        test("catches error in click handler and keeps dialog open", async () => {
+        test("捕获按钮回调异常并保留弹窗", async () => {
             const errorButton: DialogFormButton[] = [
                 {
                     handleCode: "error",
@@ -178,8 +193,8 @@ describe("DialogForm", () => {
         });
     });
 
-    describe("Slots", () => {
-        test("renders custom slot content", async () => {
+    describe("插槽", () => {
+        test("正确渲染自定义插槽内容", async () => {
             const wrapper = mount(DialogForm, {
                 props: {
                     inputFormProps: {
@@ -200,8 +215,8 @@ describe("DialogForm", () => {
         });
     });
 
-    describe("Exposed Methods", () => {
-        test("getInputValue method returns current form values", async () => {
+    describe("公开实例方法", () => {
+        test("获取当前表单数据", async () => {
             const wrapper = createWrapper();
             await nextTick();
             const formValues = wrapper.vm.getInputValue();
@@ -212,13 +227,13 @@ describe("DialogForm", () => {
             });
         });
 
-        test("getInputValue returns empty object when inputFormRef is null", () => {
+        test("表单实例不存在时返回空对象", () => {
             const wrapper = createWrapper({ isShow: false, buttons: [] });
             // 弹窗未显示时 inputFormRef 为 null
             expect(wrapper.vm.getInputValue()).toEqual({});
         });
 
-        test("setInputPropertyValue method updates form field value", async () => {
+        test("通过实例方法更新表单字段值", async () => {
             const wrapper = createWrapper();
             await nextTick();
             wrapper.vm.setInputPropertyValue("name", "New Name");
@@ -230,7 +245,7 @@ describe("DialogForm", () => {
             });
         });
 
-        test("changeFormFields method updates form fields", async () => {
+        test("通过回调修改表单字段配置", async () => {
             const wrapper = createWrapper();
             await nextTick();
             const changeFormFieldsCallback = vi.fn();
@@ -240,7 +255,7 @@ describe("DialogForm", () => {
             expect(changeFormFieldsCallback).toHaveBeenCalledWith(wrapper.findComponent({ name: "InputForm" }).vm.formFields);
         });
 
-        test("changeButtons method updates form buttons", () => {
+        test("通过回调修改按钮配置", () => {
             const wrapper = createWrapper();
             const changeButtonsCallback = vi.fn();
             wrapper.vm.changeButtons(changeButtonsCallback);
@@ -249,7 +264,7 @@ describe("DialogForm", () => {
             expect(changeButtonsCallback).toHaveBeenCalledWith((wrapper.vm as any).actionButtons);
         });
 
-        test("changeButtons warns with non-function argument", () => {
+        test("修改按钮时传入非函数参数则发出警告", () => {
             const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
             const wrapper = createWrapper();
             wrapper.vm.changeButtons("not a function" as any);
@@ -257,23 +272,23 @@ describe("DialogForm", () => {
             warnSpy.mockRestore();
         });
 
-        test("getFormRef method returns null when not mounted", async () => {
+        test("表单未挂载时返回空引用", async () => {
             const wrapper = createWrapper({ isShow: false, buttons: [] });
             expect(wrapper.vm.getFormRef()).toBeNull();
         });
 
-        test("getFormRef method returns form instance when mounted", async () => {
+        test("表单挂载后返回表单实例", async () => {
             const wrapper = createWrapper();
             await nextTick();
             expect(wrapper.vm.getFormRef()).not.toBeNull();
         });
 
-        test("validate rejects when inputFormRef is null", async () => {
+        test("表单实例不存在时校验失败", async () => {
             const wrapper = createWrapper({ isShow: false, buttons: [] });
             await expect(wrapper.vm.validate()).rejects.toThrow("表单组件尚未挂载，无法执行验证");
         });
 
-        test("validate works when inputFormRef is mounted", async () => {
+        test("表单挂载后能够执行校验", async () => {
             const wrapper = createWrapper({ value: { name: "", status: 1 } });
             await nextTick();
             const result = wrapper.vm.validate();
@@ -281,8 +296,8 @@ describe("DialogForm", () => {
         });
     });
 
-    describe("Events", () => {
-        test("emits fieldValueChange event", async () => {
+    describe("事件通知", () => {
+        test("字段值变化时触发对应事件", async () => {
             const wrapper = createWrapper();
             await nextTick();
             // InputForm 会触发 fieldValueChange 事件
@@ -292,7 +307,7 @@ describe("DialogForm", () => {
             expect(wrapper.emitted("fieldValueChange")).toBeTruthy();
         });
 
-        test("emits close event when dialog closes", async () => {
+        test("弹窗关闭后发出关闭事件", async () => {
             const wrapper = createWrapper();
             await nextTick();
             // 通过 ElDialog 的 closed 事件触发 close
@@ -303,8 +318,8 @@ describe("DialogForm", () => {
         });
     });
 
-    describe("Reactivity", () => {
-        test("buttons dynamic change triggers regeneration", async () => {
+    describe("响应式更新", () => {
+        test("按钮配置变化时重新生成按钮", async () => {
             const wrapper = createWrapper();
             await nextTick();
             expect(wrapper.findAllComponents({ name: "ElButton" })).toHaveLength(2);
@@ -315,7 +330,7 @@ describe("DialogForm", () => {
             expect(wrapper.findAllComponents({ name: "ElButton" })).toHaveLength(1);
         });
 
-        test("isShow change toggles dialog visibility", async () => {
+        test("显示开关变化时切换弹窗可见状态", async () => {
             const wrapper = createWrapper({ isShow: false, buttons: [] });
             await nextTick();
             expect(wrapper.findComponent({ name: "ElDialog" }).exists()).toBe(false);

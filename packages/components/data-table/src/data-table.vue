@@ -17,7 +17,12 @@
                     <template #default="scope">
                         <slot v-if="columnItem.slot" :name="columnItem.slot" v-bind="scope"></slot>
                         <!-- 日期 -->
-                        <table-column-date v-else-if="columnItem.type === 'date'" :value="getCellValue(scope.row, columnItem, scope.$index)" :formate="columnItem.formate" />
+                        <table-column-date
+                            v-else-if="columnItem.type === 'date'"
+                            :value="getCellValue(scope.row, columnItem, scope.$index)"
+                            :formate="columnItem.formate"
+                            :separator="columnItem.separator"
+                        />
                         <!-- 数字 -->
                         <table-column-number v-else-if="columnItem.type === 'number'" :value="getCellValue(scope.row, columnItem, scope.$index)" :digit="columnItem.digit || 0" />
                         <!-- 图片 -->
@@ -233,12 +238,14 @@ const getCellValue = function (row: any, columnItem: DataTableColumn<any>, index
 
 // 分页中每页条目数据变换
 const pageSizeChangeHandle = function (pageSize: number) {
+    if (isLoadingForSearch.value) return;
     paginationData.value.pageSize = pageSize;
     queryDataList();
 };
 
 // 分页中的当前页码变换
 const currentPageChangeHandle = function (currentPage: number) {
+    if (isLoadingForSearch.value) return;
     paginationData.value.currentPage = currentPage;
     queryDataList(false);
 };

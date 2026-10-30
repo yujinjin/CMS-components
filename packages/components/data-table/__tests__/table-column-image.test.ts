@@ -10,30 +10,30 @@ import { describe, test, expect } from "vitest";
 import { mount } from "@vue/test-utils";
 import TableColumnImage from "../src/table-column-image.vue";
 
-describe("TableColumnImage", () => {
+describe("表格图片列组件", () => {
     const createWrapper = (props = {}) => {
         return mount(TableColumnImage, {
             props
         });
     };
 
-    describe("Basic Rendering", () => {
-        test("renders dash when value is null", () => {
+    describe("基础渲染", () => {
+        test("图片值为 null 时展示无图片提示", () => {
             const wrapper = createWrapper({ value: null });
             expect(wrapper.text()).toBe("没有图片");
         });
 
-        test("renders dash when value is empty string", () => {
+        test("图片值为空字符串时展示无图片提示", () => {
             const wrapper = createWrapper({ value: "" });
             expect(wrapper.text()).toBe("没有图片");
         });
 
-        test("renders dash when value is empty array", () => {
+        test("图片数组为空时展示无图片提示", () => {
             const wrapper = createWrapper({ value: [] });
             expect(wrapper.text()).toBe("没有图片");
         });
 
-        test("renders single image correctly", () => {
+        test("正确渲染单张图片", () => {
             const wrapper = createWrapper({
                 value: "https://example.com/image.jpg"
             });
@@ -43,8 +43,8 @@ describe("TableColumnImage", () => {
         });
     });
 
-    describe("Multiple Images Rendering", () => {
-        test("renders multiple images correctly", () => {
+    describe("多图片展示", () => {
+        test("正确渲染多张图片", () => {
             const images = ["https://example.com/image1.jpg", "https://example.com/image2.jpg"];
             const wrapper = createWrapper({ value: images });
             const imageComponents = wrapper.findAllComponents({ name: "ElImage" });
@@ -54,7 +54,7 @@ describe("TableColumnImage", () => {
             expect(imageComponents[1].props("src")).toBe(images[1]);
         });
 
-        test("handles empty values in array", () => {
+        test("正确处理图片数组中的空项", () => {
             const images = ["https://example.com/image1.jpg", "", "https://example.com/image2.jpg"];
             const wrapper = createWrapper({ value: images });
             const imageComponents = wrapper.findAllComponents({ name: "ElImage" });
@@ -64,7 +64,7 @@ describe("TableColumnImage", () => {
             expect(imageComponents[2].props("src")).toBe(images[2]);
         });
 
-        test("renders multiple images by separator correctly", () => {
+        test("按照指定分隔符拆分并展示图片", () => {
             const images = "https://example.com/image1.jpg,https://example.com/image2.jpg";
             const wrapper = createWrapper({ value: images, separator: "," });
             const imageComponents = wrapper.findAllComponents({ name: "ElImage" });
@@ -75,29 +75,29 @@ describe("TableColumnImage", () => {
         });
     });
 
-    describe("Preview Configuration", () => {
-        test("sets preview-src-list for image preview", () => {
+    describe("图片预览配置", () => {
+        test("为单张图片配置预览列表", () => {
             const wrapper = createWrapper({ value: "https://example.com/image.jpg" });
             const image = wrapper.findComponent({ name: "ElImage" });
             expect(image.props("previewSrcList")).toEqual(["https://example.com/image.jpg"]);
         });
 
-        test("sets preview-src-list for multiple images", () => {
+        test("为多张图片配置完整预览列表", () => {
             const images = ["https://example.com/img1.jpg", "https://example.com/img2.jpg"];
             const wrapper = createWrapper({ value: images });
             const image = wrapper.findComponent({ name: "ElImage" });
             expect(image.props("previewSrcList")).toEqual(images);
         });
 
-        test("renders no-image text when value is null", () => {
+        test("图片值为空时展示无图片提示", () => {
             const wrapper = createWrapper({ value: null });
             expect(wrapper.find(".no-image").exists()).toBe(true);
             expect(wrapper.find(".no-image").text()).toBe("没有图片");
         });
     });
 
-    describe("Component Name", () => {
-        test("has correct component name", () => {
+    describe("组件标识", () => {
+        test("能够通过组件名称定位实例", () => {
             const wrapper = createWrapper({ value: "https://example.com/image.jpg" });
             expect(wrapper.findComponent({ name: "TableColumnImage" }).exists()).toBe(true);
         });

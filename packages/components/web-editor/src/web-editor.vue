@@ -75,6 +75,8 @@ const imgFileChangeHandle = async function (e: Event) {
         return;
     }
     const img = (await props.onImgUpload(files[0])) as string;
+    // 上传等待期间可能已经卸载，不能继续使用已清理的编辑器实例。
+    if (!quillInstance) return;
     // 图片上传成功之后的回调
     let range = quillInstance.getSelection();
     if (!range) {

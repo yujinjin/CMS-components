@@ -127,23 +127,33 @@ const searchFieldsChangeHandle = function (formFields: SearchFormField[]) {
     emits("searchFieldsChange", formFields);
 };
 
+// 同步占用提交窗口，防止 nextTick 等待期间的连续事件覆盖首组筛选条件。
+let isQueryPending = false;
+
 // 查询方法
 const queryDataList = async function (isInit = true, formValue?: Record<string, any>) {
-    // 主动传入 formValue 的场景来自 SearchForm 的 search 事件；实例方法调用则读取表单当前值。
-    if (formValue) {
-        searchFormValue.value = formValue;
-    } else {
-        searchFormValue.value = searchFormRef.value?.getValue() ?? {};
+    // 与 DataTable 的加载锁保持一致：被忽略的查询不能覆盖当前已提交的条件。
+    if (isQueryPending || isSearchLoading.value) return;
+    isQueryPending = true;
+    try {
+        // 主动传入 formValue 的场景来自 SearchForm 的 search 事件；实例方法调用则读取表单当前值。
+        if (formValue) {
+            searchFormValue.value = formValue;
+        } else {
+            searchFormValue.value = searchFormRef.value?.getValue() ?? {};
+        }
+        // 固定筛选条件后合并，确保外部强制条件优先级高于搜索表单同名字段。
+        if (props.dataTableProps?.filters) {
+            dataTableFilters.value = extend(true, {}, searchFormValue.value, props.dataTableProps.filters);
+        } else {
+            dataTableFilters.value = searchFormValue.value;
+        }
+        // 等待新的 filters 透传到 DataTable，再执行查询，避免请求仍使用上一轮筛选参数。
+        await nextTick();
+        await dataTableRef.value?.queryDataList(isInit);
+    } finally {
+        isQueryPending = false;
     }
-    // 固定筛选条件后合并，确保外部强制条件优先级高于搜索表单同名字段。
-    if (props.dataTableProps?.filters) {
-        dataTableFilters.value = extend(true, {}, searchFormValue.value, props.dataTableProps.filters);
-    } else {
-        dataTableFilters.value = searchFormValue.value;
-    }
-    // 等待新的 filters 透传到 DataTable，再执行查询，避免请求仍使用上一轮筛选参数。
-    await nextTick();
-    return dataTableRef.value?.queryDataList(isInit);
 };
 
 // 搜索操作
@@ -203,7 +213,7 @@ defineExpose<SearchPageRef>({
         try {
             // 返回的是用户当前输入值，不要求这些值已经触发过查询。
             if (searchFormRef.value) {
-                return extend(true, {}, props.dataTableProps && props.dataTableProps.filters, searchFormRef.value.getValue());
+                return extend(true, {}, searchFormRef.value.getValue(), props.dataTableProps && props.dataTableProps.filters);
             }
             return extend(true, {}, props.dataTableProps && props.dataTableProps.filters);
         } catch (error) {

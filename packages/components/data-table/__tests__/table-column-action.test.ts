@@ -3,7 +3,7 @@ import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import TableColumnAction from "../src/table-column-action.vue";
 
-describe("TableColumnAction", () => {
+describe("表格操作列组件", () => {
     const mockButtons = [
         {
             contents: "Edit",
@@ -38,20 +38,20 @@ describe("TableColumnAction", () => {
         });
     };
 
-    test("renders visible buttons correctly", () => {
+    test("正确渲染直接展示的按钮", () => {
         const wrapper = createWrapper();
         const visibleButtons = wrapper.findAllComponents({ name: "ElButton" });
-        expect(visibleButtons).toHaveLength(3); // maxNumShow is 3
+        expect(visibleButtons).toHaveLength(3); // 直接展示的按钮数量上限为 3
     });
 
-    test("renders dropdown for overflow buttons", () => {
+    test("超出展示数量的按钮收起至下拉菜单", () => {
         const wrapper = createWrapper();
         expect(wrapper.findComponent({ name: "ElDropdown" }).exists()).toBe(true);
         const dropdownItems = wrapper.findAllComponents({ name: "ElDropdownItem" });
-        expect(dropdownItems).toHaveLength(1); // 4th button should be in dropdown
+        expect(dropdownItems).toHaveLength(1); // 第四个按钮应收起到下拉菜单中
     });
 
-    test("applies default button props", () => {
+    test("应用默认按钮属性", () => {
         const wrapper = createWrapper();
         const button = wrapper.findComponent({ name: "ElButton" });
         expect(button.props()).toMatchObject({
@@ -61,7 +61,7 @@ describe("TableColumnAction", () => {
         });
     });
 
-    test("handles button click correctly", async () => {
+    test("点击按钮时执行对应行操作", async () => {
         const wrapper = createWrapper();
         const button = wrapper.findAllComponents({ name: "ElButton" })[0];
 
@@ -69,11 +69,11 @@ describe("TableColumnAction", () => {
         expect(mockButtons[0].click).toHaveBeenCalledWith({}, expect.any(Object));
     });
 
-    test("prevents multiple clicks while loading", async () => {
+    test("加载期间阻止重复点击", async () => {
         const wrapper = createWrapper();
         const button = wrapper.findAllComponents({ name: "ElButton" })[0];
 
-        // Simulate a long-running click handler
+        // 模拟长时间执行的按钮回调
         mockButtons[0].click.mockImplementation(async () => {
             await new Promise(resolve => setTimeout(resolve, 100));
         });
@@ -85,13 +85,13 @@ describe("TableColumnAction", () => {
         expect(mockButtons[0].click).toHaveBeenCalledTimes(1);
     });
 
-    test("handles dropdown command correctly", async () => {
+    test("选择下拉菜单项时执行对应操作", async () => {
         const wrapper = createWrapper();
         await wrapper.findComponent({ name: "ElDropdown" }).vm.$emit("command", 0);
-        expect(mockButtons[3].click).toHaveBeenCalled(); // 4th button (index 3)
+        expect(mockButtons[3].click).toHaveBeenCalled(); // 第四个按钮对应索引 3
     });
 
-    test("respects display function for buttons", () => {
+    test("根据显示回调决定是否生成按钮", () => {
         const buttonsWithDisplay = [
             {
                 contents: "Conditional",
@@ -100,14 +100,14 @@ describe("TableColumnAction", () => {
             }
         ];
 
-        // Button should not show
+        // 不应展示该按钮
         const wrapper1 = createWrapper({
             buttons: buttonsWithDisplay,
             row: { showButton: false }
         });
         expect(wrapper1.findComponent({ name: "ElButton" }).exists()).toBe(false);
 
-        // Button should show
+        // 应展示该按钮
         const wrapper2 = createWrapper({
             buttons: buttonsWithDisplay,
             row: { showButton: true }
@@ -115,7 +115,7 @@ describe("TableColumnAction", () => {
         expect(wrapper2.findComponent({ name: "ElButton" }).exists()).toBe(true);
     });
 
-    test("handles error in button click", async () => {
+    test("捕获行操作按钮的回调异常", async () => {
         const consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
         const error = new Error("Test error");
         mockButtons[0].click.mockRejectedValue(error);
@@ -129,7 +129,7 @@ describe("TableColumnAction", () => {
         consoleError.mockRestore();
     });
 
-    test("updates buttons when props change", async () => {
+    test("属性变化时更新按钮", async () => {
         const wrapper = createWrapper();
         const newButtons = [{ contents: "New Button", handleCode: "new", click: vi.fn() }];
 
@@ -138,17 +138,17 @@ describe("TableColumnAction", () => {
         expect(wrapper.findComponent({ name: "ElButton" }).text()).toBe("New Button");
     });
 
-    test("respects maxNumShow prop", async () => {
+    test("按照配置限制直接展示的按钮数量", async () => {
         const wrapper = createWrapper({ maxNumShow: 2 });
         expect(wrapper.findAllComponents({ name: "ElButton" })).toHaveLength(2);
         expect(wrapper.findAllComponents({ name: "ElDropdownItem" })).toHaveLength(2);
     });
 
-    test("handles loading state correctly", async () => {
+    test("正确处理按钮加载状态", async () => {
         const wrapper = createWrapper();
         const button = wrapper.findAllComponents({ name: "ElButton" })[0];
         vi.useFakeTimers();
-        // Simulate loading state
+        // 模拟按钮加载状态
         mockButtons[0].click.mockImplementation(() => new Promise(resolve => setTimeout(() => resolve(1), 50)));
         await button.trigger("click");
         expect((wrapper.vm as any).actionButtons[0].loading).toBe(true);
@@ -157,7 +157,7 @@ describe("TableColumnAction", () => {
         expect((wrapper.vm as any).actionButtons[0].loading).toBe(false);
     });
 
-    test("does not pollute original button data", () => {
+    test("内部按钮状态不修改原始配置", () => {
         const originalButton = { contents: "Test", handleCode: "test", click: vi.fn() };
         mount(TableColumnAction, {
             props: {
@@ -171,14 +171,14 @@ describe("TableColumnAction", () => {
         expect(Object.prototype.hasOwnProperty.call(originalButton, "isShow")).toBe(false);
     });
 
-    test("renders no buttons when all buttons have display returning false", () => {
+    test("全部显示回调返回否时不渲染按钮", () => {
         const hiddenButtons = [{ contents: "Hidden", handleCode: "hidden", display: () => false }];
         const wrapper = createWrapper({ buttons: hiddenButtons });
         expect(wrapper.findComponent({ name: "ElButton" }).exists()).toBe(false);
         expect(wrapper.findComponent({ name: "ElDropdown" }).exists()).toBe(false);
     });
 
-    test("renders no dropdown when buttons count <= maxNumShow", () => {
+    test("按钮数量未超出上限时隐藏下拉菜单", () => {
         const fewButtons = [
             { contents: "Btn1", handleCode: "btn1", click: vi.fn() },
             { contents: "Btn2", handleCode: "btn2", click: vi.fn() }

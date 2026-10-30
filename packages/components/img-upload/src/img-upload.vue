@@ -39,7 +39,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { type Ref, type PropType, ref, watch, nextTick, inject, computed } from "vue";
+import { type Ref, type PropType, ref, watch, nextTick, inject, computed, onUnmounted } from "vue";
 import {
     type UploadProps,
     type UploadRequestOptions,
@@ -96,7 +96,10 @@ const previewImgRef: Ref<HTMLDivElement | null> = ref(null);
 const cropperImg: Ref<string> = ref("");
 
 // 图片裁剪实例化对象
-let cropperInstance: Cropper;
+let cropperInstance: Cropper | null = null;
+
+// 文件读取是异步操作，卸载后忽略其结果，避免重新打开裁剪弹窗。
+let isUnmounted = false;
 
 // ModelValue的string格式，解决双向绑定时与fileList的值并不是同样的数据而产生的多次修改ModelValue值
 let newModelValue = "";
@@ -163,6 +166,7 @@ const startCroppHandle = async function (raw: UploadRawFile) {
     }
     const imgFileReader = new FileReader();
     imgFileReader.onload = e => {
+        if (isUnmounted) return;
         if (e.target?.result) {
             cropperImg.value = e.target.result as string;
             showCroppDialogHandle();
@@ -175,6 +179,7 @@ const startCroppHandle = async function (raw: UploadRawFile) {
 const closeCroppDialog = function () {
     if (cropperInstance) {
         cropperInstance.destroy();
+        cropperInstance = null;
     }
     isShowCropperDialog.value = false;
 };
@@ -227,6 +232,7 @@ const changeDirectionCropper = function () {
 
 // 裁剪画布转为 JPEG Blob 并再次校验体积；上传成功后才同步绑定值并关闭裁剪弹窗。
 const saveCropper = function () {
+    if (!cropperInstance) return;
     cropperInstance.getCroppedCanvas().toBlob(async blob => {
         if (!blob) {
             ElMessage.error("图片裁剪失败！");
@@ -323,4 +329,8 @@ watch(
         deep: true
     }
 );
+onUnmounted(() => {
+    isUnmounted = true;
+    closeCroppDialog();
+});
 </script>

@@ -7,14 +7,21 @@
  * @描述: input-form组件测试用例
  */
 
-import { describe, test, expect, vi } from "vitest";
-import { mount } from "@vue/test-utils";
+import { describe, test, expect, vi, afterEach } from "vitest";
+import { mount, enableAutoUnmount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { ElLoading, ElInput } from "element-plus";
 import InputForm from "../src/input-form.vue";
 import { type InputFormField, type InputFormSlotScope } from "../src/input-form";
 
-describe("InputForm", () => {
+enableAutoUnmount(afterEach);
+afterEach(() => {
+    vi.clearAllTimers();
+    vi.useRealTimers();
+    vi.restoreAllMocks();
+});
+
+describe("输入表单组件", () => {
     const fields: InputFormField[] = [
         {
             name: "userName",
@@ -87,8 +94,29 @@ describe("InputForm", () => {
         });
     };
 
-    describe("Basic Rendering", () => {
-        test("renders input correctly", () => {
+    test.each([null, false, 0, ""])("外部值 %s 优先于字段默认值", value => {
+        const wrapper = createWrapper({ fields: [{ name: "value", type: "label", value: "默认值" }], value: { value } });
+        expect(wrapper.vm.getInputValue()).toEqual({ value });
+    });
+
+    test("嵌套路径写入同步事件且返回值与内部状态隔离", async () => {
+        const wrapper = createWrapper({ fields: [{ name: "user.name", type: "input" }], value: { user: { name: "原值" } } });
+        await wrapper.get("input").setValue("新值");
+        const value = wrapper.vm.getInputValue();
+        expect(value).toEqual({ user: { name: "新值" } });
+        value.user.name = "外部修改";
+        expect(wrapper.vm.getInputValue()).toEqual({ user: { name: "新值" } });
+        expect(wrapper.emitted("fieldValueChange")?.[0]?.[3]).toEqual({ user: { name: "新值" } });
+    });
+
+    test("隐藏字段保留初始数据但不生成可编辑控件", () => {
+        const wrapper = createWrapper({ fields: [{ name: "token", type: "input", isShow: false, value: "fixed" }] });
+        expect(wrapper.find("input").exists()).toBe(false);
+        expect(wrapper.vm.getInputValue()).toEqual({ token: "fixed" });
+    });
+
+    describe("基础渲染", () => {
+        test("按照字段配置渲染表单", () => {
             const wrapper = createWrapper();
             expect(wrapper.findComponent({ name: "ElForm" }).exists()).toBe(true);
             expect(wrapper.findComponent({ name: "ElForm" }).props("rules")).toMatchObject({
@@ -107,14 +135,14 @@ describe("InputForm", () => {
             ]);
         });
 
-        test("renders with initial value", () => {
+        test("正确回显表单初始值", () => {
             const wrapper = createWrapper({
                 value
             });
             expect(wrapper.findComponent({ name: "ElForm" }).props("model")).toEqual(value);
         });
 
-        test("renders slot", async () => {
+        test("正确渲染字段插槽", async () => {
             const wrapper = mount(
                 () => (
                     <InputForm
@@ -145,8 +173,8 @@ describe("InputForm", () => {
         });
     });
 
-    describe("Empty and Error States", () => {
-        test("renders empty form with empty fields array", () => {
+    describe("空数据与异常场景", () => {
+        test("字段数组为空时渲染空表单", () => {
             const wrapper = mount(InputForm, {
                 props: {
                     fields: []
@@ -159,7 +187,7 @@ describe("InputForm", () => {
             expect(wrapper.findAllComponents({ name: "InputField" })).toHaveLength(0);
         });
 
-        test("warns when field is missing name", () => {
+        test("字段缺少名称时发出警告", () => {
             const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
             mount(InputForm, {
                 props: {
@@ -174,8 +202,8 @@ describe("InputForm", () => {
         });
     });
 
-    describe("Layout and Display", () => {
-        test("renders with columns = 2 layout", () => {
+    describe("布局与显隐", () => {
+        test("按照双列布局分配字段栅格", () => {
             const wrapper = createWrapper({ columns: 2 });
             const cols = wrapper.findAllComponents({ name: "ElCol" });
             // columns=2 时，每个字段 span 默认为 24/2 = 12
@@ -184,14 +212,14 @@ describe("InputForm", () => {
             });
         });
 
-        test("shows loading state when isLoading is true", () => {
+        test("启用加载状态时正确渲染表单", () => {
             const wrapper = createWrapper({ isLoading: true });
             // v-loading 指令会在 DOM 上添加 loading 相关的类或属性
             const loadingEl = wrapper.find(".cms-input-form");
             expect(loadingEl.exists()).toBe(true);
         });
 
-        test("hides field when isShow is false", () => {
+        test("显示标记为 false 时隐藏字段", () => {
             const fieldsWithHidden: InputFormField[] = [
                 { name: "visible", label: "可见", type: "input" },
                 { name: "hidden", label: "隐藏", type: "input", isShow: false }
@@ -204,7 +232,7 @@ describe("InputForm", () => {
             expect(wrapper.findAllComponents({ name: "InputField" })).toHaveLength(1);
         });
 
-        test("applies custom field span", () => {
+        test("应用自定义字段栅格跨度", () => {
             const fieldsWithSpan: InputFormField[] = [{ name: "field1", label: "字段1", type: "input", span: 8 }];
             const wrapper = mount(InputForm, {
                 props: { fields: fieldsWithSpan },
@@ -214,7 +242,7 @@ describe("InputForm", () => {
             expect(col.props("span")).toBe(8);
         });
 
-        test("applies custom field inputWidth", () => {
+        test("应用自定义字段控件宽度", () => {
             const fieldsWithWidth: InputFormField[] = [{ name: "field1", label: "字段1", type: "input", inputWidth: 200 }];
             const wrapper = mount(InputForm, {
                 props: { fields: fieldsWithWidth },
@@ -225,8 +253,8 @@ describe("InputForm", () => {
         });
     });
 
-    describe("Input Functionality", () => {
-        test("emits update:modelValue on input", async () => {
+    describe("输入交互", () => {
+        test("输入时触发字段值变化事件", async () => {
             // console会打印出undefined,原因是el-form触发验证打印的日志
             const wrapper = createWrapper();
             const inputFields = wrapper.findAllComponents({ name: "InputField" });
@@ -240,11 +268,11 @@ describe("InputForm", () => {
             expect((emittedEvents.fieldValueChange as any[])[0]?.[1]).toEqual("13800138000");
         });
 
-        test("trim value when trim is true", async () => {
+        test("启用去空格配置时移除首尾空白", async () => {
             // console会打印出undefined,原因是el-form触发验证打印的日志
             const wrapper = createWrapper();
             const inputFields = wrapper.findAllComponents({ name: "InputField" });
-            const emailInput = inputFields[2]; // email field has trim: true
+            const emailInput = inputFields[2]; // 邮箱字段已启用去空格配置
             const testEmail = "  test@example.com  ";
 
             await emailInput.vm.$emit("update:modelValue", testEmail);
@@ -255,11 +283,11 @@ describe("InputForm", () => {
             expect((emittedEvents.fieldValueChange as any[])[0]?.[1]).toEqual(testEmail.trim());
         });
 
-        test("trim handles falsy string value correctly", async () => {
+        test("去空格时保留字符串零值", async () => {
             // 验证 "  0  " 这样的值也能被正确 trim
             const wrapper = createWrapper();
             const inputFields = wrapper.findAllComponents({ name: "InputField" });
-            const emailInput = inputFields[2]; // email field has trim: true
+            const emailInput = inputFields[2]; // 邮箱字段已启用去空格配置
 
             await emailInput.vm.$emit("update:modelValue", "  0  ");
             await nextTick();
@@ -269,7 +297,7 @@ describe("InputForm", () => {
             expect((emittedEvents.fieldValueChange as any[])[0]?.[1]).toEqual("0");
         });
 
-        test("does not trim non-string values", async () => {
+        test("非字符串值不进行去空格处理", async () => {
             // 验证非字符串值不会被 trim 处理
             const fieldsWithTrim: InputFormField[] = [{ name: "numberField", label: "数字", type: "input", trim: true }];
             const wrapper = mount(InputForm, {
@@ -287,8 +315,8 @@ describe("InputForm", () => {
         });
     });
 
-    describe("Exposed Methods", () => {
-        test("validate method returns promise", async () => {
+    describe("公开实例方法", () => {
+        test("校验方法返回异步结果", async () => {
             const wrapper = createWrapper({
                 value
             });
@@ -297,29 +325,29 @@ describe("InputForm", () => {
             expect(validateResult).toBeInstanceOf(Promise);
         });
 
-        test("validate method with invalid input", async () => {
+        test("输入不合法时表单校验失败", async () => {
             const wrapper = createWrapper({
                 value: {
                     ...value,
-                    phoneNumber: "1223" // Invalid phone number
+                    phoneNumber: "1223" // 无效手机号
                 }
             });
 
             try {
                 await wrapper.vm.validate();
-                // Should not reach here
+                // 校验失败时不应执行到此处
                 expect(false).toBe(true);
             } catch (error) {
                 expect(error).toBeTruthy();
             }
         });
 
-        test("getInputValue method", async () => {
+        test("获取当前表单值", async () => {
             const wrapper = createWrapper({ value });
             expect(wrapper.vm.getInputValue()).toMatchObject(value);
         });
 
-        test("getInputValue returns deep clone", () => {
+        test("返回的表单数据与内部状态深度隔离", () => {
             const wrapper = createWrapper({ value });
             const result1 = wrapper.vm.getInputValue();
             // 修改返回值不应影响组件内部数据
@@ -328,7 +356,7 @@ describe("InputForm", () => {
             expect(result2.phoneNumber).toEqual("13564323232");
         });
 
-        test("setInputPropertyValue method", async () => {
+        test("通过实例方法设置字段值", async () => {
             const wrapper = createWrapper({ value });
 
             wrapper.vm.setInputPropertyValue("gender", "2");
@@ -338,14 +366,14 @@ describe("InputForm", () => {
             expect(wrapper.vm.getInputValue()).toMatchObject({ ...value, gender: "2" });
         });
 
-        test("setInputPropertyValue for non-existent field sets value directly", async () => {
+        test("设置未声明字段时直接补充数据", async () => {
             const wrapper = createWrapper({ value });
             wrapper.vm.setInputPropertyValue("newField", "newValue");
             await nextTick();
             expect(wrapper.vm.getInputValue()).toMatchObject({ ...value, newField: "newValue" });
         });
 
-        test("changeFormFields method", async () => {
+        test("通过实例方法修改字段配置", async () => {
             const wrapper = createWrapper({ value });
             const changeFormFieldsCallback = vi.fn();
             wrapper.vm.changeFormFields(changeFormFieldsCallback);
@@ -353,7 +381,7 @@ describe("InputForm", () => {
             expect(changeFormFieldsCallback).toHaveBeenCalledWith((wrapper.vm as any).formFields);
         });
 
-        test("changeFormFields warns with non-function argument", () => {
+        test("修改字段时传入非函数参数则发出警告", () => {
             const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
             const wrapper = createWrapper({ value });
             wrapper.vm.changeFormFields("not a function" as any);
@@ -361,13 +389,13 @@ describe("InputForm", () => {
             warnSpy.mockRestore();
         });
 
-        test("getFormRef method", async () => {
+        test("获取底层表单实例", async () => {
             const wrapper = createWrapper();
             await nextTick();
             expect(wrapper.vm.getFormRef()).not.toBeNull();
         });
 
-        test("getFormRef returns null after unmount", async () => {
+        test("卸载后获取表单实例返回空引用", async () => {
             const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
             const wrapper = createWrapper();
             await nextTick();
@@ -380,7 +408,7 @@ describe("InputForm", () => {
             warnSpy.mockRestore();
         });
 
-        test("validate rejects after unmount", async () => {
+        test("卸载后执行表单校验返回失败", async () => {
             const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
             const wrapper = createWrapper();
             await nextTick();
@@ -391,8 +419,8 @@ describe("InputForm", () => {
         });
     });
 
-    describe("Event Validation", () => {
-        test("fieldValueChange event includes all parameters", async () => {
+    describe("事件参数校验", () => {
+        test("字段值变化事件包含完整参数", async () => {
             const wrapper = createWrapper();
             const inputFields = wrapper.findAllComponents({ name: "InputField" });
             const phoneInput = inputFields[3];
@@ -412,8 +440,8 @@ describe("InputForm", () => {
         });
     });
 
-    describe("Reactivity", () => {
-        test("fields dynamic change triggers regeneration", async () => {
+    describe("响应式更新", () => {
+        test("字段配置变化时重新生成字段", async () => {
             const wrapper = createWrapper();
             expect(wrapper.findAllComponents({ name: "InputField" })).toHaveLength(4);
 
@@ -425,7 +453,7 @@ describe("InputForm", () => {
             expect(wrapper.findAllComponents({ name: "InputField" })).toHaveLength(2);
         });
 
-        test("value change reinitializes form data", async () => {
+        test("外部值变化时重新初始化表单数据", async () => {
             const wrapper = createWrapper({ value });
             expect(wrapper.vm.getInputValue()).toMatchObject(value);
 
@@ -434,7 +462,7 @@ describe("InputForm", () => {
             expect(wrapper.vm.getInputValue()).toMatchObject(newValue);
         });
 
-        test("field.value default value is set for switch type", () => {
+        test("开关字段未指定初值时默认为 false", () => {
             const switchFields: InputFormField[] = [{ name: "enabled", label: "启用", type: "switch" }];
             const wrapper = mount(InputForm, {
                 props: { fields: switchFields },
@@ -444,7 +472,7 @@ describe("InputForm", () => {
             expect(wrapper.vm.getInputValue().enabled).toBe(false);
         });
 
-        test("field.value default value is set for checkbox type", () => {
+        test("复选框字段未指定初值时默认为空数组", () => {
             const checkboxFields: InputFormField[] = [{ name: "options", label: "选项", type: "checkbox" }];
             const wrapper = mount(InputForm, {
                 props: { fields: checkboxFields },
@@ -454,7 +482,7 @@ describe("InputForm", () => {
             expect(wrapper.vm.getInputValue().options).toEqual([]);
         });
 
-        test("field.value default value is set for slider type", () => {
+        test("滑块字段未指定初值时默认为零", () => {
             const sliderFields: InputFormField[] = [{ name: "volume", label: "音量", type: "slider" }];
             const wrapper = mount(InputForm, {
                 props: { fields: sliderFields },
@@ -464,7 +492,7 @@ describe("InputForm", () => {
             expect(wrapper.vm.getInputValue().volume).toBe(0);
         });
 
-        test("field.value default value is null for input type", () => {
+        test("输入字段未指定初值时默认为 null", () => {
             const inputFields: InputFormField[] = [{ name: "name", label: "名称", type: "input" }];
             const wrapper = mount(InputForm, {
                 props: { fields: inputFields },
@@ -475,8 +503,8 @@ describe("InputForm", () => {
         });
     });
 
-    describe("Field Types", () => {
-        test("renders datePicker field correctly", () => {
+    describe("字段类型", () => {
+        test("正确渲染日期选择字段", () => {
             const dateFields: InputFormField[] = [{ name: "birthDate", label: "出生日期", type: "datePicker" }];
             const wrapper = mount(InputForm, {
                 props: { fields: dateFields },
@@ -486,7 +514,7 @@ describe("InputForm", () => {
             expect(inputField.props("type")).toEqual("datePicker");
         });
 
-        test("renders select field correctly", () => {
+        test("正确渲染下拉选择字段", () => {
             const selectFields: InputFormField[] = [{ name: "city", label: "城市", type: "select", data: [{ value: "bj", label: "北京" }] }];
             const wrapper = mount(InputForm, {
                 props: { fields: selectFields },
@@ -497,7 +525,7 @@ describe("InputForm", () => {
             expect(inputField.props("data")).toEqual([{ value: "bj", label: "北京" }]);
         });
 
-        test("renders switch field correctly", () => {
+        test("正确渲染开关字段", () => {
             const switchFields: InputFormField[] = [{ name: "enabled", label: "启用", type: "switch" }];
             const wrapper = mount(InputForm, {
                 props: { fields: switchFields },
@@ -507,7 +535,7 @@ describe("InputForm", () => {
             expect(inputField.props("type")).toEqual("switch");
         });
 
-        test("passes field.rules to formItemProps", () => {
+        test("将字段校验规则传递给表单项", () => {
             const fieldsWithRules: InputFormField[] = [{ name: "required", label: "必填", type: "input", rules: [{ required: true, message: "此项必填" }] }];
             const wrapper = mount(InputForm, {
                 props: { fields: fieldsWithRules },
@@ -517,7 +545,7 @@ describe("InputForm", () => {
             expect(formItem.props("rules")).toMatchObject([{ required: true, message: "此项必填" }]);
         });
 
-        test("passes field.formItemProps attributes", () => {
+        test("将自定义表单项属性传递给底层组件", () => {
             const fieldsWithFormItemProps: InputFormField[] = [{ name: "field1", label: "字段1", type: "input", formItemProps: { required: true } }];
             const wrapper = mount(InputForm, {
                 props: { fields: fieldsWithFormItemProps },
@@ -528,8 +556,8 @@ describe("InputForm", () => {
         });
     });
 
-    describe("Events Prop", () => {
-        test("renders without warning when events is undefined", () => {
+    describe("表单事件配置", () => {
+        test("未传入事件配置时不产生事件绑定警告", () => {
             const vueWarnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
             mount(InputForm, {
                 props: {

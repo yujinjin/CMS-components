@@ -4,12 +4,33 @@
  * @描述: check-select组件测试用例
  */
 import { nextTick, ref } from "vue";
-import { mount } from "@vue/test-utils";
-import { describe, expect, test } from "vitest";
+import { mount, enableAutoUnmount } from "@vue/test-utils";
+import { describe, expect, test, afterEach, vi } from "vitest";
 import SelectCheck from "../src/check-select.vue";
 
-describe("CheckSelect", () => {
-    test("render test & class", async () => {
+enableAutoUnmount(afterEach);
+afterEach(() => {
+    vi.clearAllTimers();
+    vi.useRealTimers();
+    vi.restoreAllMocks();
+});
+
+describe("复选下拉框组件", () => {
+    test("关闭搜索后下次全选恢复完整范围", async () => {
+        const value = ref<string[]>([]);
+        const wrapper = mount(() => <SelectCheck v-model={value.value} data={["北京", "上海"]} />);
+        const select = wrapper.findComponent({ name: "ElSelect" });
+        select.props("filterMethod")!("北京");
+        await nextTick();
+        await wrapper.findComponent({ name: "ElOption" }).get(".cms-check-select_option-inner").trigger("click");
+        expect(value.value).toEqual(["北京"]);
+        select.vm.$emit("visible-change", false);
+        await nextTick();
+        await wrapper.findComponent({ name: "ElOption" }).get(".cms-check-select_option-inner").trigger("click");
+        expect(value.value).toEqual(["北京", "上海"]);
+    });
+
+    test("正确渲染组件及样式类", async () => {
         const values = ref(["1", "2", "3", "4"]);
         const data = ["1", "2", "3", "4"];
         const wrapper = mount(() => <SelectCheck v-model={values.value} data={data} />);
@@ -22,7 +43,7 @@ describe("CheckSelect", () => {
         expect(wrapper.findComponent({ name: "ElCheckbox" }).classes("is-checked")).toBe(true);
     });
 
-    test("prop optionValueKey、optionLabelKey", async () => {
+    test("支持自定义选项取值与文案字段", async () => {
         const values = ref(["1", "2"]);
         const data: Array<{ id: string; name: string }> = Array.from({ length: 10 }, (value, index) => ({ id: index.toString(), name: `option ${index}` }));
         const wrapper = mount(() => <SelectCheck v-model={values.value} data={data} optionValueKey="id" optionLabelKey="name" />);
@@ -38,7 +59,7 @@ describe("CheckSelect", () => {
             });
     });
 
-    test("default value", async () => {
+    test("正确回显默认选中值", async () => {
         const values = ref();
         const data: Array<{ id: string; name: string }> = Array.from({ length: 10 }, (value, index) => ({ id: index.toString(), name: `option ${index}` }));
         const wrapper = mount(() => <SelectCheck v-model={values.value} data={data} optionValueKey="id" optionLabelKey="name" />);
@@ -63,7 +84,7 @@ describe("CheckSelect", () => {
             });
     });
 
-    test("prop data disabled", async () => {
+    test("根据选项配置禁用对应选项", async () => {
         const values = ref(["1", "2"]);
         const data: Array<{ id: string; name: string }> = Array.from({ length: 10 }, (value, index) => ({ id: index.toString(), name: `option ${index}`, disabled: index % 2 === 0 }));
         const wrapper = mount(() => <SelectCheck v-model={values.value} data={data} optionValueKey="id" optionLabelKey="name" />);
@@ -83,7 +104,7 @@ describe("CheckSelect", () => {
             });
     });
 
-    test("all checked option", async () => {
+    test("正确显示全选与半选状态", async () => {
         const values = ref();
         const data: Array<{ id: string; name: string }> = Array.from({ length: 10 }, (value, index) => ({ id: index.toString(), name: `option ${index}` }));
         const wrapper = mount(() => <SelectCheck v-model={values.value} data={data} optionValueKey="id" optionLabelKey="name" />);
@@ -104,7 +125,7 @@ describe("CheckSelect", () => {
         expect(checkboxWrapper.find(".is-indeterminate").exists()).toBe(false);
     });
 
-    test("event change", async () => {
+    test("选项变化时触发变更事件", async () => {
         const values = ref();
         const data: Array<{ id: string; name: string }> = Array.from({ length: 10 }, (value, index) => ({ id: index.toString(), name: `option ${index}` }));
         const changeValue = ref();
@@ -132,7 +153,7 @@ describe("CheckSelect", () => {
         expect(checkboxVm.indeterminate).toBe(false);
     });
 
-    test("checkChangeHandle adds value when checked", async () => {
+    test("勾选选项时添加对应值", async () => {
         const values = ref<string[]>([]);
         const data = ["1", "2", "3"];
         const wrapper = mount(() => <SelectCheck v-model={values.value} data={data} />);
@@ -145,7 +166,7 @@ describe("CheckSelect", () => {
         expect(values.value).toContain("1");
     });
 
-    test("checkChangeHandle removes value when unchecked", async () => {
+    test("取消勾选时移除对应值", async () => {
         const values = ref<string[]>(["1", "2"]);
         const data = ["1", "2", "3"];
         const wrapper = mount(() => <SelectCheck v-model={values.value} data={data} />);
@@ -159,7 +180,7 @@ describe("CheckSelect", () => {
         expect(values.value).toContain("2");
     });
 
-    test("isShowCheckAll is false when all options are disabled", async () => {
+    test("全部选项禁用时隐藏全选入口", async () => {
         const values = ref<string[]>([]);
         const data: Array<{ value: string; label: string; disabled: boolean }> = [
             { value: "1", label: "Option 1", disabled: true },
@@ -174,7 +195,7 @@ describe("CheckSelect", () => {
         expect(checkboxWrappers.length).toBe(data.length);
     });
 
-    test("checkbox click.stop prevents event propagation to el-option", async () => {
+    test("复选框点击不冒泡至选项以避免重复切换", async () => {
         const values = ref<string[]>([]);
         const data = ["1", "2", "3"];
         const wrapper = mount(() => <SelectCheck v-model={values.value} data={data} />);
@@ -189,7 +210,7 @@ describe("CheckSelect", () => {
         expect(values.value.length).toBe(1);
     });
 
-    test("multipleLimit disables checkAll when limit reached", async () => {
+    test("达到多选数量上限时禁用全选", async () => {
         const values = ref<string[]>(["0", "1", "2"]);
         const data: Array<{ id: string; name: string }> = Array.from({ length: 10 }, (_, index) => ({ id: index.toString(), name: `option ${index}` }));
         const wrapper = mount(() => <SelectCheck v-model={values.value} data={data} optionValueKey="id" optionLabelKey="name" props={{ multipleLimit: 3 }} />);
@@ -200,20 +221,20 @@ describe("CheckSelect", () => {
         expect(checkAllCheckbox.vm.disabled).toBe(true);
     });
 
-    test("multipleLimit checkAll selects up to limit", async () => {
+    test("全选时选中数量不超过上限", async () => {
         const values = ref<string[]>([]);
         const data: Array<{ id: string; name: string }> = Array.from({ length: 10 }, (_, index) => ({ id: index.toString(), name: `option ${index}` }));
         const wrapper = mount(() => <SelectCheck v-model={values.value} data={data} optionValueKey="id" optionLabelKey="name" props={{ multipleLimit: 3 }} />);
         wrapper.find(".el-select__wrapper").trigger("click");
         await nextTick();
         // 点击全选
-        await wrapper.findComponent({ name: "ElCheckbox" }).vm.$emit("change", true);
+        await wrapper.findComponent({ name: "ElOption" }).get(".cms-check-select_option-inner").trigger("click");
         await nextTick();
         // 应只选中到限制数量
         expect(values.value.length).toBe(3);
     });
 
-    test("multipleLimit checkbox disabled for unselected options when limit reached", async () => {
+    test("达到多选上限时禁用未选中项", async () => {
         const values = ref<string[]>(["0", "1", "2"]);
         const data: Array<{ id: string; name: string }> = Array.from({ length: 10 }, (_, index) => ({ id: index.toString(), name: `option ${index}` }));
         const wrapper = mount(() => <SelectCheck v-model={values.value} data={data} optionValueKey="id" optionLabelKey="name" props={{ multipleLimit: 3 }} />);
@@ -226,7 +247,7 @@ describe("CheckSelect", () => {
         expect(checkboxWrappers[4].vm.disabled).toBe(true);
     });
 
-    test("checkAllChangeHandle skips disabled options", async () => {
+    test("全选时跳过禁用选项", async () => {
         const values = ref<string[]>([]);
         const data: Array<{ id: string; name: string; disabled: boolean }> = [
             { id: "0", name: "选项 0", disabled: true },
@@ -238,7 +259,7 @@ describe("CheckSelect", () => {
         wrapper.find(".el-select__wrapper").trigger("click");
         await nextTick();
         // 点击全选
-        await wrapper.findComponent({ name: "ElCheckbox" }).vm.$emit("change", true);
+        await wrapper.findComponent({ name: "ElOption" }).get(".cms-check-select_option-inner").trigger("click");
         await nextTick();
         // 禁用选项不应被选中
         expect(values.value).not.toContain("0");
@@ -248,7 +269,7 @@ describe("CheckSelect", () => {
         expect(values.value).toContain("2");
     });
 
-    test("uncheck all preserves disabled option values", async () => {
+    test("取消全选时保留禁用选项的已选值", async () => {
         // 初始值中包含禁用选项的值
         const values = ref<string[]>(["0", "1", "2"]);
         const data: Array<{ id: string; name: string; disabled: boolean }> = [
@@ -260,7 +281,7 @@ describe("CheckSelect", () => {
         wrapper.find(".el-select__wrapper").trigger("click");
         await nextTick();
         // 当前所有可选选项已选中，点击全选取消
-        await wrapper.findComponent({ name: "ElCheckbox" }).vm.$emit("change", false);
+        await wrapper.findComponent({ name: "ElOption" }).get(".cms-check-select_option-inner").trigger("click");
         await nextTick();
         // 禁用选项的选中值应保留
         expect(values.value).toContain("0");
@@ -269,7 +290,7 @@ describe("CheckSelect", () => {
         expect(values.value).not.toContain("2");
     });
 
-    test("checkChangeHandle respects multipleLimit", async () => {
+    test("单项勾选遵守多选数量上限", async () => {
         const values = ref<string[]>(["0", "1", "2"]);
         const data: Array<{ id: string; name: string }> = Array.from({ length: 10 }, (_, index) => ({ id: index.toString(), name: `option ${index}` }));
         const wrapper = mount(() => <SelectCheck v-model={values.value} data={data} optionValueKey="id" optionLabelKey="name" props={{ multipleLimit: 3 }} />);
@@ -283,7 +304,7 @@ describe("CheckSelect", () => {
         expect(values.value.length).toBe(3);
     });
 
-    test("filterMethod tracking enables select-all for visible options only", async () => {
+    test("搜索后全选仅选中匹配的选项", async () => {
         const values = ref<string[]>([]);
         const filterMethod = (_query: string) => {
             // 自定义过滤方法（空实现，实际过滤由 selectableOptionValues 的 filterQuery 追踪处理）
@@ -302,15 +323,10 @@ describe("CheckSelect", () => {
         }
         await nextTick();
         // 点击全选，应只选可见选项（匹配"选项 1"的）
-        await wrapper.findComponent({ name: "ElCheckbox" }).vm.$emit("change", true);
+        await wrapper.findComponent({ name: "ElOption" }).get(".cms-check-select_option-inner").trigger("click");
         await nextTick();
         // 由于 filterQuery 追踪，全选应只选包含"选项 1"的项
         // 注意：这里测试的是 filterQuery 追踪机制，实际可见项取决于 selectableOptionValues 的 filter 逻辑
-        expect(values.value.length).toBeLessThan(data.length);
-        // 所有选中值对应的 name 应包含"1"
-        values.value.forEach(v => {
-            const item = data.find(d => d.id === v);
-            expect(item?.name).toContain("1");
-        });
+        expect(values.value).toEqual(["1"]);
     });
 });

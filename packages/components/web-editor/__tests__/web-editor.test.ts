@@ -7,11 +7,11 @@
  * @描述: web-editor组件单元测试用例
  */
 import { describe, it, expect, vi, afterEach } from "vitest";
-import { mount, type VueWrapper } from "@vue/test-utils";
+import { mount, type VueWrapper, enableAutoUnmount } from "@vue/test-utils";
 import Quill from "quill";
 import WebEditor from "../src/web-editor.vue";
 
-// Mock Quill 模块
+// 模拟富文本编辑器引擎 模块
 vi.mock("quill", () => {
     return {
         default: vi.fn(() => ({
@@ -30,10 +30,12 @@ vi.mock("quill", () => {
     };
 });
 
-// 获取 Quill mock 实例的方法
-const getQuillInstance = () => (Quill as any).mock.results[0].value;
+// 获取 Quill 模拟实例的方法
+const getQuillInstance = () => (Quill as any).mock.results.at(-1).value;
 
-describe("WebEditor", () => {
+enableAutoUnmount(afterEach);
+
+describe("富文本编辑器组件", () => {
     let wrapper: VueWrapper;
 
     const createWrapper = (props = {}) => {
@@ -47,25 +49,27 @@ describe("WebEditor", () => {
     };
 
     afterEach(() => {
+        vi.clearAllTimers();
+        vi.useRealTimers();
         vi.restoreAllMocks();
         if (wrapper) {
             wrapper.unmount();
         }
     });
 
-    it("renders properly", () => {
+    it("正确渲染编辑器与图片选择入口", () => {
         wrapper = createWrapper();
         expect(wrapper.find(".cms-web-editor-container").exists()).toBe(true);
         expect(wrapper.find(".web-editor").exists()).toBe(true);
         expect(wrapper.find('input[type="file"]').exists()).toBe(true);
     });
 
-    it("initializes Quill editor on mount", () => {
+    it("挂载时初始化富文本编辑器", () => {
         wrapper = createWrapper();
         expect(Quill).toHaveBeenCalled();
     });
 
-    it("updates content when modelValue prop changes", async () => {
+    it("外部绑定值变化时更新编辑内容", async () => {
         wrapper = createWrapper();
         await wrapper.setProps({
             modelValue: "<p>new content</p>"
@@ -74,24 +78,25 @@ describe("WebEditor", () => {
         expect(getQuillInstance().setContents).toHaveBeenCalled();
     });
 
-    it("emits update:modelValue when content changes", async () => {
+    it("编辑内容变化后回传双向绑定值", async () => {
+        vi.useFakeTimers();
         wrapper = createWrapper();
         // 触发 Quill 的 text-change 事件回调
         const quillInstance = getQuillInstance();
         const textChangeCallback = quillInstance.on.mock.calls.find((call: any[]) => call[0] === "text-change")?.[1];
         textChangeCallback();
 
-        // Wait for debounce
-        await new Promise(resolve => setTimeout(resolve, 300));
+        // 推进虚拟时间，等待防抖回调执行
+        await vi.advanceTimersByTimeAsync(300);
 
         expect(wrapper.emitted("update:modelValue")).toBeTruthy();
         expect((wrapper.emitted("update:modelValue") as any[])[0]).toEqual(["<p>test content</p>"]);
     });
 
-    it("handles image upload", async () => {
+    it("上传图片后插入编辑器", async () => {
         const file = new File([""], "test.png", { type: "image/png" });
 
-        // Mock onImgUpload to return a URL
+        // 模拟图片上传回调返回图片地址
         const onImgUpload = vi.fn().mockResolvedValue("http://example.com/test.png");
         wrapper = createWrapper({ onImgUpload });
         await wrapper.setProps({ onImgUpload });
@@ -104,7 +109,7 @@ describe("WebEditor", () => {
         expect(getQuillInstance().insertEmbed).toHaveBeenCalled();
     });
 
-    it("respects disabled state", async () => {
+    it("禁用状态变化时切换编辑器可编辑状态", async () => {
         wrapper = createWrapper();
         await wrapper.setProps({
             disabled: true
@@ -113,7 +118,7 @@ describe("WebEditor", () => {
         expect(getQuillInstance().enable).toHaveBeenCalledWith(false);
     });
 
-    it("does not call onImgUpload when not provided", async () => {
+    it("未提供图片上传回调时不插入图片", async () => {
         wrapper = createWrapper();
         const file = new File([""], "test.png", { type: "image/png" });
         const inputEl = wrapper.find('input[type="file"]');
@@ -123,7 +128,7 @@ describe("WebEditor", () => {
         expect(getQuillInstance().insertEmbed).not.toHaveBeenCalled();
     });
 
-    it("destroys Quill instance on unmount", () => {
+    it("卸载时清理编辑器事件监听", () => {
         wrapper = createWrapper();
         const quillInstance = getQuillInstance();
         wrapper.unmount();
@@ -131,7 +136,7 @@ describe("WebEditor", () => {
         expect(quillInstance.off).toHaveBeenCalledWith("text-change");
     });
 
-    it("does not crash when imgFileChangeHandle is called with no files", async () => {
+    it("未选择文件时不执行图片上传", async () => {
         const onImgUpload = vi.fn().mockResolvedValue("http://example.com/test.png");
         wrapper = createWrapper({ onImgUpload });
         const inputEl = wrapper.find('input[type="file"]');
@@ -140,18 +145,18 @@ describe("WebEditor", () => {
         expect(onImgUpload).not.toHaveBeenCalled();
     });
 
-    it("passes custom toolbar config to Quill", async () => {
+    it("初始化时应用自定义工具栏配置", async () => {
         const customToolbar = ["bold", "italic"];
         wrapper = createWrapper({ toolbar: customToolbar });
         // 验证 Quill 初始化时传入了自定义 toolbar
-        const quillCallArgs = (Quill as any).mock.calls[0];
+        const quillCallArgs = (Quill as any).mock.calls.at(-1);
         const modulesConfig = quillCallArgs[1]?.modules;
         expect(modulesConfig?.toolbar?.container).toEqual(customToolbar);
     });
 
-    it("uses default toolbar when toolbar prop is not provided", () => {
+    it("未配置工具栏时使用默认工具栏", () => {
         wrapper = createWrapper();
-        const quillCallArgs = (Quill as any).mock.calls[0];
+        const quillCallArgs = (Quill as any).mock.calls.at(-1);
         const modulesConfig = quillCallArgs[1]?.modules;
         // 验证使用了默认 toolbar（包含 bold, italic 等）
         expect(modulesConfig?.toolbar?.container).toBeDefined();

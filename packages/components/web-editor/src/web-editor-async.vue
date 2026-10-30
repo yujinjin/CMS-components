@@ -78,6 +78,8 @@ const imgFileChangeHandle = async function (e: Event) {
         return;
     }
     const img = (await props.onImgUpload(files[0])) as string;
+    // 上传等待期间可能已经卸载，不能继续使用已清理的编辑器实例。
+    if (!quillInstance) return;
     // 图片上传成功之后的回调
     let range = quillInstance.getSelection();
     if (!range) {
@@ -95,6 +97,8 @@ const initQuill = async function () {
         return;
     }
     const QuillModule = (await import("quill")).default;
+    // 动态导入完成前组件可能已卸载，模板 ref 此时已被 Vue 清空。
+    if (!webEditorRef.value) return;
     quillInstance = new QuillModule(webEditorRef.value, {
         modules: {
             toolbar: {

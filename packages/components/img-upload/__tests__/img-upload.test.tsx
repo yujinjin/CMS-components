@@ -7,12 +7,14 @@
  * @描述: img-upload组件测试用例
  */
 import { ref, nextTick } from "vue";
-import { mount } from "@vue/test-utils";
+import { mount, enableAutoUnmount, flushPromises } from "@vue/test-utils";
 import { afterEach, describe, expect, test, vi } from "vitest";
 import { formContextKey, formItemContextKey, ElForm, ElFormItem } from "element-plus";
 import ImgUpload from "../src/img-upload.vue";
 
-describe("ImgUpload", () => {
+enableAutoUnmount(afterEach);
+
+describe("图片上传组件", () => {
     window.URL.createObjectURL = vi.fn((file: Blob) => "");
 
     afterEach(() => {
@@ -55,7 +57,38 @@ describe("ImgUpload", () => {
         });
     };
 
-    test("render test & class", async () => {
+    test("恰好达到体积上限允许上传，超出一个字节拒绝上传", async () => {
+        const uploadRequest = vi.fn(async () => "/saved.png");
+        const wrapper = createWrapper(() => <ImgUpload maxSize={1} uploadRequest={uploadRequest} />);
+        const beforeUpload = wrapper.findComponent({ name: "ElUpload" }).props("beforeUpload")!;
+        const file = new File([new Uint8Array(1024)], "boundary.png", { type: "image/png" });
+        const oversized = new File([new Uint8Array(1025)], "oversized.png", { type: "image/png" });
+        expect(await beforeUpload(file as any)).toBe(true);
+        expect(await beforeUpload(oversized as any)).toBe(false);
+        expect(uploadRequest).not.toHaveBeenCalled();
+    });
+
+    test("上传失败保留原有 URL 与文件列表", async () => {
+        const uploadRequest = vi.fn().mockRejectedValue(new Error("上传失败"));
+        const value = ref("/original.png");
+        const wrapper = createWrapper(() => <ImgUpload v-model={value.value} uploadRequest={uploadRequest} />);
+        const upload = wrapper.findComponent({ name: "ElUpload" });
+        const request = upload.props("httpRequest")!;
+        await expect(request({ file: new File(["image"], "test.png") } as any)).rejects.toThrow("上传失败");
+        await flushPromises();
+        expect(value.value).toBe("/original.png");
+        expect(upload.props("fileList")).toMatchObject([{ url: "/original.png" }]);
+    });
+
+    test("数组模型上传成功后仍输出数组", async () => {
+        const value = ref<string[]>(["/original.png"]);
+        const wrapper = createWrapper(() => <ImgUpload v-model={value.value} uploadRequest={async () => "/saved.png"} />);
+        const request = wrapper.findComponent({ name: "ElUpload" }).props("httpRequest")!;
+        await request({ file: new File(["image"], "test.png") } as any);
+        expect(value.value).toEqual(["/saved.png", "/original.png"]);
+    });
+
+    test("正确渲染组件及样式类", async () => {
         const uploadRequest = vi.fn(async () => "/static/img/1.jpg");
         const wrapper = createWrapper(() => <ImgUpload uploadRequest={uploadRequest} />);
         expect(wrapper.classes()).toContain("img-upload");
@@ -63,7 +96,7 @@ describe("ImgUpload", () => {
         expect(wrapper.findComponent({ name: "ElDialog" }).exists()).toBe(true);
     });
 
-    test("default value", async () => {
+    test("正确回显默认选中值", async () => {
         const uploadRequest = vi.fn(async () => "/static/img/1.jpg");
         const value = ref<string | string[]>("/static/img/1.jpg");
         const wrapper = createWrapper(() => <ImgUpload v-model={value.value} uploadRequest={uploadRequest} />);
@@ -82,7 +115,7 @@ describe("ImgUpload", () => {
         ]);
     });
 
-    test("prop separator", async () => {
+    test("按照配置的分隔符解析图片地址", async () => {
         const uploadRequest = vi.fn(async () => "/static/img/3.jpg");
         const value = ref<string>("/static/img/1.jpg,/static/img/2.jpg");
         const wrapper = createWrapper(() => <ImgUpload v-model={value.value} separator="," uploadRequest={uploadRequest} />);
@@ -92,7 +125,7 @@ describe("ImgUpload", () => {
         ]);
     });
 
-    test("upload file", async () => {
+    test("上传文件后更新图片地址", async () => {
         const uploadRequest = vi.fn(async () => "/static/img/1.jpg");
         const value = ref<string>();
         const wrapper = createWrapper(() => <ImgUpload v-model={value.value} uploadRequest={uploadRequest} />);
@@ -105,7 +138,7 @@ describe("ImgUpload", () => {
         expect(wrapper.findComponent({ name: "ElUpload" }).vm.fileList).toMatchObject([{ name: "1.jpg", url: "/static/img/1.jpg" }]);
     });
 
-    test("prop maxSize", async () => {
+    test("文件体积超出上限时阻止上传", async () => {
         const uploadRequest = vi.fn(async () => "/static/img/1.jpg");
         const value = ref<string>();
         const wrapper = createWrapper(() => <ImgUpload v-model={value.value} uploadRequest={uploadRequest} />);
@@ -117,7 +150,7 @@ describe("ImgUpload", () => {
         expect(uploadRequest).not.toHaveBeenCalled();
     });
 
-    test("upload file number limit", async () => {
+    test("达到文件数量上限时阻止继续上传", async () => {
         const uploadRequest = vi.fn(async () => "/static/img/1.jpg");
         const onExceed = vi.fn();
         const value = ref<string[]>(["/static/img/1.jpg", "/static/img/2.jpg"]);
@@ -135,7 +168,7 @@ describe("ImgUpload", () => {
         expect(onExceed).toHaveBeenCalled();
     });
 
-    test("prop cropper", async () => {
+    test("启用裁剪时打开裁剪弹窗", async () => {
         const uploadRequest = vi.fn(async () => "/static/img/1.jpg");
         const value = ref<string>();
         const wrapper = createWrapper(() => <ImgUpload v-model={value.value} cropperProps uploadRequest={uploadRequest} />);
@@ -143,7 +176,7 @@ describe("ImgUpload", () => {
         const file = new File(["Hello, world!"], "file.png", { type: "image/png" });
         Object.defineProperty(file, "size", { value: 1024 * 1024 * 1 });
 
-        // Mock FileReader
+        // 模拟文件读取器
         const mockFileReader = {
             readAsDataURL: vi.fn(),
             onload: null as any,
@@ -167,7 +200,7 @@ describe("ImgUpload", () => {
         expect(dialog.vm.modelValue).toBe(true);
     });
 
-    test("modelValue as array with separator", async () => {
+    test("数组模型正确回显图片列表", async () => {
         const uploadRequest = vi.fn(async () => "/static/img/1.jpg");
         const value = ref<string[]>(["/static/img/1.jpg", "/static/img/2.jpg"]);
         const wrapper = createWrapper(() => <ImgUpload v-model={value.value} uploadRequest={uploadRequest} />);
@@ -178,7 +211,7 @@ describe("ImgUpload", () => {
         ]);
     });
 
-    test("modelValue as string with custom separator", async () => {
+    test("按照自定义分隔符回显字符串模型", async () => {
         const uploadRequest = vi.fn(async () => "/static/img/1.jpg");
         const value = ref<string>("/static/img/1.jpg;/static/img/2.jpg");
         const wrapper = createWrapper(() => <ImgUpload v-model={value.value} separator=";" uploadRequest={uploadRequest} />);
@@ -189,7 +222,7 @@ describe("ImgUpload", () => {
         ]);
     });
 
-    test("onRemove deletes file from list", async () => {
+    test("移除文件后同步更新绑定值", async () => {
         const uploadRequest = vi.fn(async () => "/static/img/1.jpg");
         const value = ref<string>("/static/img/1.jpg|/static/img/2.jpg");
         const wrapper = createWrapper(() => <ImgUpload v-model={value.value} uploadRequest={uploadRequest} />);
@@ -203,7 +236,7 @@ describe("ImgUpload", () => {
         expect(value.value).toBe("/static/img/1.jpg");
     });
 
-    test("cropperProps as object config", async () => {
+    test("支持通过对象配置裁剪选项", async () => {
         const uploadRequest = vi.fn(async () => "/static/img/1.jpg");
         const value = ref<string>();
         const cropperOptions = { aspectRatio: 16 / 9, viewMode: 2 as const };
@@ -213,7 +246,7 @@ describe("ImgUpload", () => {
         expect(wrapper.findComponent({ name: "ElDialog" }).exists()).toBe(true);
     });
 
-    test("empty modelValue renders empty file list", async () => {
+    test("绑定值为空时展示空文件列表", async () => {
         const uploadRequest = vi.fn(async () => "/static/img/1.jpg");
         const value = ref<string>("");
         const wrapper = createWrapper(() => <ImgUpload v-model={value.value} uploadRequest={uploadRequest} />);

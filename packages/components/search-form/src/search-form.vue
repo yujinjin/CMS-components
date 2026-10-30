@@ -82,7 +82,7 @@ const generateFormFields = function () {
             console.warn("字段没有属性name值", field);
             return;
         }
-        const newField = extend(true, { isShow: true, type: "primary", value: null }, field) as SearchFormField;
+        const newField = extend(true, { isShow: true, type: "input", value: null }, field) as SearchFormField;
         if (Object.prototype.hasOwnProperty.call(newField, "defaultValue")) {
             // defaultValue 是重置时的基准值，也作为字段首次生成时的初始值。
             newField.value = newField.defaultValue;

@@ -10,44 +10,44 @@ import { describe, test, expect } from "vitest";
 import { mount } from "@vue/test-utils";
 import TableColumnNumber from "../src/table-column-number.vue";
 
-describe("TableColumnNumber", () => {
+describe("表格数字列组件", () => {
     const createWrapper = (props = {}) => {
         return mount(TableColumnNumber, {
             props
         });
     };
 
-    test("renders dash when value is null", () => {
+    test("值为 null 时显示占位符", () => {
         const wrapper = createWrapper({ value: null });
         expect(wrapper.text()).toBe("-");
     });
 
-    test("renders dash when value is undefined", () => {
+    test("值未定义时显示占位符", () => {
         const wrapper = createWrapper({ value: undefined });
         expect(wrapper.text()).toBe("-");
     });
 
-    test("renders dash when value is empty string", () => {
+    test("值为空字符串时显示占位符", () => {
         const wrapper = createWrapper({ value: "" });
         expect(wrapper.text()).toBe("-");
     });
 
-    test("renders zero correctly", () => {
+    test("正确格式化零值", () => {
         const wrapper = createWrapper({ value: 0 });
         expect(wrapper.text()).toBe("0");
     });
 
-    test("renders integer correctly", () => {
+    test("正确格式化整数", () => {
         const wrapper = createWrapper({ value: 1234 });
         expect(wrapper.text()).toBe("1,234");
     });
 
-    test("renders decimal correctly", () => {
+    test("正确格式化小数", () => {
         const wrapper = createWrapper({ value: "01234.56" });
         expect(wrapper.text()).toBe("1,235");
     });
 
-    test("very large numbers", () => {
+    test("正确格式化大数值", () => {
         const wrapper = createWrapper({
             value: "1234001234.5678",
             digit: 2
@@ -55,17 +55,17 @@ describe("TableColumnNumber", () => {
         expect(wrapper.text()).toBe("1,234,001,234.57");
     });
 
-    test("renders negative number correctly", () => {
+    test("正确格式化负数", () => {
         const wrapper = createWrapper({ value: -1234.5, digit: 1 });
         expect(wrapper.text()).toContain("-");
     });
 
-    test("renders string number with digit", () => {
+    test("按照指定小数位格式化数字字符串", () => {
         const wrapper = createWrapper({ value: "1234.5678", digit: 2 });
         expect(wrapper.text()).toBe("1,234.57");
     });
 
-    test("renders number with zero digit", () => {
+    test("小数位为零时展示整数", () => {
         const wrapper = createWrapper({ value: 1234.5678, digit: 0 });
         expect(wrapper.text()).toBe("1,235");
     });

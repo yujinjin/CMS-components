@@ -52,7 +52,7 @@ export interface SearchPageRef {
     // 搜索查询函数；isInit=true 时会重置 DataTable 分页到第一页。
     query: (isInit?: boolean) => Promise<any> | undefined;
 
-    // 返回当前表单值与固定 filters 的合并结果；此读取方法同名项以表单值为准。
+    // 返回当前表单值与固定 filters 的合并结果；与实际查询一致，同名项以固定 filters 为准。
     getSearchingValue: () => Record<string, any>;
 
     // 返回最近一次提交查询时使用的筛选值副本（含固定 filters），不代表该次请求已成功。

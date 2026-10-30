@@ -74,10 +74,10 @@ const slots = computed<string[]>(() => {
 
 // 初始化操作按钮列表
 const initActionButtons = function () {
+    actionButtons.value = [];
     if (!props.buttons || props.buttons.length === 0) {
         return;
     }
-    actionButtons.value = [];
     props.buttons.forEach(button => {
         // 按钮 loading/isShow 属于弹窗内部运行期状态，不要求调用方提前声明。
         button = Object.assign({ loading: false, isShow: true }, button);

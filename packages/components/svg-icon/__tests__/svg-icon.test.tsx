@@ -6,24 +6,42 @@
  * @项目的路径: \CMS-components\packages\components\svg-icon\__tests__\svg-icon.test.tsx
  * @描述: svg icon 测试用例
  */
-import { defineComponent, h } from "vue";
-import { mount } from "@vue/test-utils";
-import { describe, expect, test } from "vitest";
+import { defineComponent, h, markRaw } from "vue";
+import { mount, enableAutoUnmount } from "@vue/test-utils";
+import { describe, expect, test, afterEach, vi } from "vitest";
 import SvgIcon from "../src/svg-icon.vue";
 
-describe("SvgIcon", () => {
-    test("render test & class", () => {
+enableAutoUnmount(afterEach);
+afterEach(() => {
+    vi.clearAllTimers();
+    vi.useRealTimers();
+    vi.restoreAllMocks();
+});
+
+describe("矢量图标组件", () => {
+    test("动态切换图标来源并清除旧样式", async () => {
+        const wrapper = mount(SvgIcon, { props: { value: "edit", color: "red", size: 24 } });
+        expect(wrapper.get("use").element.getAttribute("xlink:href")).toBe("#icon-edit");
+        const icon = markRaw({ render: () => h("span", { class: "component-icon" }) });
+        await wrapper.setProps({ value: icon, color: "", size: "" });
+        expect(wrapper.find("use").exists()).toBe(false);
+        expect(wrapper.find(".component-icon").exists()).toBe(true);
+        expect(wrapper.get("i").element.style.color).toBe("");
+        expect(wrapper.get("i").element.style.fontSize).toBe("");
+    });
+
+    test("正确渲染组件及样式类", () => {
         const wrapper = mount(() => <SvgIcon value="" />);
         expect(wrapper.find("i").classes()).toContain("cms-icon");
     });
 
-    test("value", () => {
+    test("根据图标值引用对应图标", () => {
         const value = "open";
         const wrapper = mount(() => <SvgIcon value={value} />);
         expect(wrapper.find("i.cms-icon > svg.svg-icon > use").element.getAttribute("xlink:href")).toEqual("#icon-" + value);
     });
 
-    test("aria-label attribute", () => {
+    test("按照图标值设置无障碍标签", () => {
         const wrapper = mount(() => <SvgIcon value="edit" />);
         expect(wrapper.find("i").attributes("aria-label")).toBe("edit");
 
@@ -32,41 +50,41 @@ describe("SvgIcon", () => {
         expect(emptyWrapper.find("i").attributes("aria-label")).toBeUndefined();
     });
 
-    describe("color prop", () => {
-        test("sets color style", () => {
+    describe("颜色属性", () => {
+        test("按照配置设置图标颜色", () => {
             const wrapper = mount(() => <SvgIcon value="edit" color="red" />);
             expect(wrapper.find("i").element.style.color).toBe("red");
         });
 
-        test("does not set color when empty", () => {
+        test("颜色为空时不设置内联颜色", () => {
             const wrapper = mount(() => <SvgIcon value="edit" color="" />);
             expect(wrapper.find("i").element.style.color).toBe("");
         });
     });
 
-    describe("size prop", () => {
-        test("sets fontSize with number value", () => {
+    describe("尺寸属性", () => {
+        test("数字尺寸自动补充像素单位", () => {
             const wrapper = mount(() => <SvgIcon value="edit" size={16} />);
             expect(wrapper.find("i").element.style.fontSize).toBe("16px");
         });
 
-        test("sets fontSize with numeric string value", () => {
+        test("纯数字字符串尺寸自动补充像素单位", () => {
             const wrapper = mount(() => <SvgIcon value="edit" size="24" />);
             expect(wrapper.find("i").element.style.fontSize).toBe("24px");
         });
 
-        test("sets fontSize with unit string value", () => {
+        test("带单位的字符串尺寸保持原值", () => {
             const wrapper = mount(() => <SvgIcon value="edit" size="2em" />);
             expect(wrapper.find("i").element.style.fontSize).toBe("2em");
         });
 
-        test("does not set fontSize when empty string", () => {
+        test("尺寸为空时不设置内联字号", () => {
             const wrapper = mount(() => <SvgIcon value="edit" size="" />);
             expect(wrapper.find("i").element.style.fontSize).toBe("");
         });
     });
 
-    test("renders component when value is a Component", () => {
+    test("图标值为组件对象时渲染该组件", () => {
         const MockComponent = defineComponent({
             name: "MockIcon",
             render() {
@@ -79,7 +97,7 @@ describe("SvgIcon", () => {
         expect(wrapper.find(".mock-icon").exists()).toBe(true);
     });
 
-    test("renders slot content", () => {
+    test("正确渲染默认插槽内容", () => {
         const wrapper = mount(() => (
             <SvgIcon value="">
                 <span class="slot-content">slot text</span>

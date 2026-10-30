@@ -22,7 +22,16 @@
     </el-select>
 
     <!-- checkbox-select -->
-    <check-select v-else-if="type === 'checkSelect'" :model-value="modelValue" :data="data" v-bind="allProps" @update:model-value="changeValue" v-on="events" />
+    <check-select
+        v-else-if="type === 'checkSelect'"
+        :model-value="modelValue"
+        :data="data"
+        :option-value-key="optionValueKey"
+        :option-label-key="optionLabelKey"
+        v-bind="allProps"
+        @update:model-value="changeValue"
+        v-on="events"
+    />
 
     <!-- date-picker -->
     <el-date-picker v-else-if="type === 'datePicker'" :model-value="modelValue" v-bind="allProps" @update:model-value="changeValue" v-on="events" />
