@@ -93,7 +93,7 @@ const initInputFormValue = function () {
     });
 };
 
-// 生成表单字段列表
+// 生成可编辑的字段副本，合并控件默认属性及栅格布局；外部 fields 重建时会重新初始化表单数据。
 const generateFormFields = function () {
     formFields.value = [];
     if (!props.fields || props.fields.length === 0) {
@@ -208,7 +208,7 @@ watch(
 );
 
 defineExpose<InputFormRef>({
-    // 获取表单的value
+    // 返回数据副本；常规路径使用 JSON 序列化，因此 Date 等值遵循 JSON 转换规则。
     getInputValue: function () {
         try {
             return JSON.parse(JSON.stringify(inputFormValue.value));
@@ -223,6 +223,7 @@ defineExpose<InputFormRef>({
      * @param value 属性值
      */
     setInputPropertyValue: function (propertyName: string, value: any) {
+        // 已声明字段走统一写值流程并触发 fieldValueChange；未声明路径只补写数据。
         const findField = formFields.value.find(field => field.name === propertyName);
         if (findField) {
             setFieldValue(value, findField);

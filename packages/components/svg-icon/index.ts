@@ -16,5 +16,5 @@ export { SvgIcon };
 
 export default SvgIcon;
 
-// TODO: 该组件不要实例，这里只做个测试
+/** Vue 图标组件实例类型，用于模板 ref 标注；该组件不额外暴露业务方法。 */
 export type SvgIconInstance = InstanceType<typeof SvgIconType>;

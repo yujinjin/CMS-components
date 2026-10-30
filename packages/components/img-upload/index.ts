@@ -9,6 +9,7 @@
 import ImgUpload from "./src/img-upload.vue";
 import type ImgUploadType from "./src/img-upload.vue";
 
+// 上传控件按需入口，公开上传与裁剪配置类型；文件请求通过 uploadRequest 注入。
 export * from "./src/img-upload";
 
 export default ImgUpload;

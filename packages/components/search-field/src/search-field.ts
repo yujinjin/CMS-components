@@ -13,7 +13,7 @@ import { type NotReadonly } from "../../types";
 type FieldType = "input" | "inputNumber" | "select" | "checkSelect" | "datePicker";
 
 export const searchFieldProps = buildProps({
-    /** 当前数据字段插槽 */
+    /** 为真值时改用默认插槽，上层 SearchForm 负责按字段 slot 名称转接内容。 */
     slot: {
         type: [String, Boolean]
     },
@@ -44,7 +44,7 @@ export const searchFieldProps = buildProps({
         type: String,
         default: "label"
     },
-    /** 组件自定义属性 */
+    /** 底层查询控件属性，合并时覆盖未声明的 attrs 中的同名项。 */
     props: {
         type: Object,
         default: function () {
@@ -63,7 +63,9 @@ export const searchFieldProps = buildProps({
 export type SearchFieldProps = NotReadonly<ExtractPublicPropTypes<typeof searchFieldProps>>;
 
 export const searchFieldEmits = {
+    /** 同步控件值；input 分支会先去除字符串首尾空白。 */
     "update:modelValue": (value: string | number | object | boolean | Array<any>) => true,
+    /** 紧随 update:modelValue 发出，供 SearchForm 将值变化关联到字段配置。 */
     "change": (value: string | number | object | boolean | Array<any>) => true
 };
 

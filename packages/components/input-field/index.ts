@@ -9,6 +9,7 @@
 import InputField from "./src/input-field.vue";
 import type InputFieldType from "./src/input-field.vue";
 
+// 导出字段控件属性和事件类型，供 InputForm 字段定义及独立控件使用。
 export * from "./src/input-field";
 
 export { InputField };

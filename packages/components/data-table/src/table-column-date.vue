@@ -35,6 +35,8 @@ const props = defineProps({
     }
 });
 
+// 支持单日期和日期数组；整体为假值或空数组时显示占位符，数组中的空项保留为空段。
+// 当前判断会把数值 0 也视作空值，调用方需使用其他日期表示形式展示该时间点。
 const dateText = computed(() => {
     if (!props.value) {
         return "-";

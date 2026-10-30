@@ -12,15 +12,17 @@ import { buildProps } from "@yujinjin/cms-components-utils";
 import { type NotReadonly } from "../../types";
 
 export const svgIconProps = buildProps({
-    // svg的link名称
+    /** 字符串对应已注册 SVG sprite 的 symbol 后缀，实际引用 #icon-{value}；也支持 Vue 图标组件。 */
     value: {
         type: [String, Object] as PropType<string | Component>,
         default: ""
     },
+    /** 图标容器的 CSS color；SVG 内容需使用 currentColor 才能继承该颜色。 */
     color: {
         type: String,
         default: ""
     },
+    /** 图标字号；数字和纯数字字符串补 px，其他字符串按 CSS 单位原样使用。 */
     size: {
         type: [String, Number] as PropType<string | number>,
         default: ""

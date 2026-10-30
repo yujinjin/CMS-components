@@ -9,6 +9,7 @@
 import SearchField from "./src/search-field.vue";
 import type SearchFieldType from "./src/search-field.vue";
 
+// 查询字段的独立入口；字段值同步与 change 通知由组件统一发出。
 export * from "./src/search-field";
 
 export { SearchField };

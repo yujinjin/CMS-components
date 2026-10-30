@@ -53,7 +53,7 @@ const props = defineProps(dialogFormProps);
 
 const emits = defineEmits(dialogFormEmits);
 
-// 弹窗显示状态
+// 内部可见状态用于关闭动画；外部 isShow 控制挂载，收到 close 后应由调用方同步外部状态。
 const dialogVisible: Ref<boolean> = ref(false);
 
 const inputFormRef = ref<InputFormRef>();
@@ -101,7 +101,7 @@ const inputFormFieldValueChange = function (field: InputFormField, fieldValue: a
     emits("fieldValueChange", field, fieldValue, formFields, inputValue);
 };
 
-// 按钮点击操作
+// 不自动执行表单校验；由业务回调决定是否校验及保存，只有明确返回 false 或异常才保留弹窗。
 const clickHandle = async function (button: DialogFormButton) {
     if (button.loading) {
         return;

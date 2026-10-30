@@ -66,7 +66,7 @@ defineOptions({
 
 const props = defineProps(imgUploadProps);
 
-// 上传的组件的值
+// 对外只暴露 URL 字符串或 URL 数组，Upload 的 uid、状态及本地文件对象留在内部列表。
 const modelValue = defineModel({ type: [String, Array] as PropType<string | string[]> });
 
 // 当前elForm实例
@@ -104,6 +104,7 @@ let newModelValue = "";
 // 剪切图片的方向
 let directionCropper = false;
 
+// 显式 disabled=false 可覆盖父级表单禁用；未指定时继承 ElForm 的 disabled 状态。
 const isDisabled = computed(() => props.uploadProps?.disabled === true || (elForm?.disabled === true && props.uploadProps?.disabled !== false));
 
 // 把当前modelValue转换成upload组件所用的文件格式列表
@@ -224,7 +225,7 @@ const changeDirectionCropper = function () {
     directionCropper = !directionCropper;
 };
 
-// 保存剪切的图
+// 裁剪画布转为 JPEG Blob 并再次校验体积；上传成功后才同步绑定值并关闭裁剪弹窗。
 const saveCropper = function () {
     cropperInstance.getCroppedCanvas().toBlob(async blob => {
         if (!blob) {
@@ -241,7 +242,7 @@ const saveCropper = function () {
     }, "image/jpeg");
 };
 
-// 默认上传属性
+// 上传默认钩子负责大小校验、URL 回填和删除同步；调用方覆盖同名钩子时需接管相应职责。
 const defaultUploadProps = {
     action: "", // 图片上传地址
     autoUpload: true, // 默认自动上传

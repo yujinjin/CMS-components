@@ -18,6 +18,7 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, watch, inject, computed, type Ref } from "vue";
 import { type FormItemContext, type FormContext, formItemContextKey, formContextKey } from "element-plus";
+// 标准入口静态加载 Quill，适配不支持代码分割的打包形式；SSR 场景应使用异步版本。
 import Quill from "quill";
 import { debounce } from "@yujinjin/utils";
 import { webEditorProps, webEditorEmits } from "./web-editor";

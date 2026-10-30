@@ -9,6 +9,7 @@
 import DialogForm from "./src/dialog-form.vue";
 import type DialogFormType from "./src/dialog-form.vue";
 
+// 导出弹窗属性、按钮回调及实例接口；保存和校验逻辑由业务按钮回调实现。
 export * from "./src/dialog-form";
 
 export { DialogForm };

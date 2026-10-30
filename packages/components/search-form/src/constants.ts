@@ -6,7 +6,11 @@
  * @项目的路径: \CMS-components\packages\components\search-form\src\constants.ts
  * @描述: search-form组件常量集合
  */
-// 查询表单中的组件默认属性
+/**
+ * SearchForm 的控件默认属性；由字段 props 覆盖，不与 InputForm 的编辑场景共用配置。
+ * datePicker 按 props.type 选择子配置，valueFormat 同时影响默认值初始化和重置后的格式。
+ * 单日期默认禁用未来日期；需要其他范围时由字段 props.disabledDate 显式覆盖。
+ */
 export const SEARCH_FORM_FIELD_DEFAULT_ATTRIBUTES: Record<string, any> = {
     // input 输入框默认配置选项(具体见element Input 输入框文档)
     input: {

@@ -9,6 +9,7 @@
 import CheckSelect from "./src/check-select.vue";
 import type CheckSelectType from "./src/check-select.vue";
 
+// 导出复选下拉框的 props/emits 声明与类型，组件值通过 v-model 绑定为选项值数组。
 export * from "./src/check-select";
 
 export default CheckSelect;

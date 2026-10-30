@@ -14,17 +14,20 @@ import { type ActionBarProps, type ActionButton } from "@yujinjin/cms-components
 import { type DataTableProps } from "@yujinjin/cms-components-modules/data-table";
 
 export const searchPageProps = buildProps({
-    // 初始化时正在加载
+    /** 初始化加载遮罩，同时抑制表格挂载时自动查询；首次观察到该值变化为 false 时补查一次。 */
     isLoadingForInit: {
         type: Boolean,
         default: false
     },
+    /** 查询区配置，未传时不渲染；搜索及重置通过 SearchForm 的 search 事件触发表格查询。 */
     searchFormProps: {
         type: Object as PropType<SearchFormProps>
     },
+    /** 操作栏配置，未传时不渲染；当前选中行由页面统一传入其按钮回调。 */
     actionBarProps: {
         type: Object as PropType<ActionBarProps>
     },
+    /** 表格配置；filters 与搜索表单值合并，查询时同名项以此处固定 filters 为准。 */
     dataTableProps: {
         type: Object as PropType<DataTableProps>
     }
@@ -33,7 +36,7 @@ export const searchPageProps = buildProps({
 export type SearchPageProps = NotReadonly<ExtractPublicPropTypes<typeof searchPageProps>>;
 
 export const searchPageEmits = {
-    // 搜索表单查询事件
+    // 搜索字段的值变化通知，不代表已经提交查询；携带当前字段和内部字段列表。
     searchValueChange: (field: SearchFormField, searchFormFields: SearchFormField[]) => true,
 
     // 搜索表单的字段变化事件
@@ -49,10 +52,10 @@ export interface SearchPageRef {
     // 搜索查询函数；isInit=true 时会重置 DataTable 分页到第一页。
     query: (isInit?: boolean) => Promise<any> | undefined;
 
-    // 获取当前搜索表单实时值，不要求这些值已经触发查询。
+    // 返回当前表单值与固定 filters 的合并结果；此读取方法同名项以表单值为准。
     getSearchingValue: () => Record<string, any>;
 
-    // 获取当前已经搜索出来的结果值，与 getSearchingValue 的区别是当前已经用它查询出来结果的搜索表单值。
+    // 返回最近一次提交查询时使用的筛选值副本（含固定 filters），不代表该次请求已成功。
     getSearchedValue: () => Record<string, any>;
 
     // 修改当前form字段的属性
@@ -63,7 +66,7 @@ export interface SearchPageRef {
 
     /**
      * 更新数据列显示状态
-     * @param columnKeys 显示列key值数组（不传值表示都展示）
+     * @param columnKeys 要显示的 prop 列表；不传显示全部，空数组隐藏有 prop 的列，无 prop 列不受影响。
      */
     updateTableColumnsShowStatus: (columnKeys?: string[]) => void;
 }

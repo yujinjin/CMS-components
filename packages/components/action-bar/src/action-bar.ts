@@ -11,6 +11,7 @@ import { buildProps } from "@yujinjin/cms-components-utils";
 import { type ButtonProps } from "element-plus";
 import { type NotReadonly } from "../../types";
 
+/** 在 Element Plus 按钮属性上扩展业务标识、图标和批量操作回调。 */
 export type ActionButton = NotReadonly<Partial<ButtonProps>> & {
     /** 当前按钮操作CODE */
     handleCode?: string;
@@ -18,7 +19,7 @@ export type ActionButton = NotReadonly<Partial<ButtonProps>> & {
     /** 按钮文案内容 */
     contents?: string;
 
-    /** 自定义插槽名称（如有值其他选项无效） */
+    /** 自定义插槽名称；提供后由插槽负责渲染和事件绑定，作用域参数为 button。 */
     slot?: string;
 
     /** 自定义图标 */
@@ -27,10 +28,10 @@ export type ActionButton = NotReadonly<Partial<ButtonProps>> & {
     /** 按钮是否正在加载 */
     // isLoading?: boolean;
 
-    /** 是否显示(通过当前固定展示数目来判断是否展示) */
+    /** 按钮配置中的显示标记；ActionBar 当前不会据此过滤，按需由自定义插槽处理。 */
     isShow?: boolean;
 
-    /** 按钮点击函数事件 */
+    /** 接收当前选中行和内部按钮对象；异步执行期间自动设置 loading，重复点击会被忽略。 */
     click?: (selectRows: Array<any>, button: ActionButton) => Promise<void> | void;
 };
 
@@ -45,6 +46,7 @@ export interface ActionBarRef {
 }
 
 export const actionBarProps = buildProps({
+    /** 按配置顺序生成按钮副本，内部 loading 的变化不会直接写回原按钮对象。 */
     buttons: {
         type: Array as PropType<ActionButton[]>,
         default: function () {
@@ -58,7 +60,7 @@ export const actionBarProps = buildProps({
             return [];
         }
     },
-    // 按钮默认位置,该位置会影响默认插槽内容
+    /** 按钮对齐方式；left 时默认插槽在按钮后，center/right 时在按钮前。 */
     align: {
         type: String as PropType<"center" | "left" | "right">,
         default: "left"

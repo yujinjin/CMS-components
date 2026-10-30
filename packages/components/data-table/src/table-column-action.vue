@@ -69,7 +69,7 @@ const hideStatusButtons: ComputedRef<Array<TableButton>> = computed(() => {
     return actionButtons.value.filter(button => !button.isShow);
 });
 
-// 初始化操作按钮列表
+// 先按 display(row) 排除不适用操作，再按 maxNumShow 折叠；isShow=false 的操作仍存在于更多菜单。
 const initActionButtons = function () {
     actionButtons.value = [];
     props.buttons.forEach(button => {
@@ -89,7 +89,7 @@ const initActionButtons = function () {
     }
 };
 
-// 按钮点击操作
+// 主按钮和更多菜单复用同一执行入口，按按钮隔离 loading，异步处理完成前忽略该按钮重复点击。
 const clickHandle = async function (button: TableButton) {
     if (button.loading) {
         return;

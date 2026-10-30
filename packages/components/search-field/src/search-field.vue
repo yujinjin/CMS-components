@@ -49,6 +49,7 @@ const attrs = useAttrs();
 
 const emits = defineEmits(searchFieldEmits);
 
+// 查询字段使用与输入字段一致的属性合并策略，避免多分支模板把 attrs 错绑到外层节点。
 const allProps = computed(() => {
     return {
         ...attrs,
@@ -56,6 +57,7 @@ const allProps = computed(() => {
     };
 });
 
+// 先同步 v-model，再通知上层字段变化；此处不自动发起查询，查询时机由 SearchForm 控制。
 const changeValue = function (value: any) {
     emits("update:modelValue", value);
     emits("change", value);

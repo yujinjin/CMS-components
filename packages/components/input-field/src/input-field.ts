@@ -10,6 +10,7 @@ import { type PropType, type ExtractPublicPropTypes } from "vue";
 import { buildProps } from "@yujinjin/cms-components-utils";
 import { type NotReadonly } from "../../types";
 
+/** 显式渲染的业务控件与按 el-* 名称解析的 Element Plus 控件类型。 */
 type FieldType =
     | "input"
     | "select"
@@ -31,7 +32,7 @@ type FieldType =
     | "colorPicker";
 
 export const inputFieldProps = buildProps({
-    /** 是否使用插槽 */
+    /** 为真值时仅渲染默认插槽；具名插槽由上层 InputForm 转接到此默认插槽。 */
     slot: {
         type: [String, Boolean],
         default: false
@@ -63,14 +64,14 @@ export const inputFieldProps = buildProps({
         type: String,
         default: "label"
     },
-    /** 组件自定义属性 */
+    /** 底层控件属性，与未声明的 attrs 合并；同名属性以此对象为准。 */
     props: {
         type: Object,
         default: function () {
             return {};
         }
     },
-    /** 组件自定义事件 */
+    /** 底层控件事件映射；由模板中绑定 v-on 的分支透传。 */
     events: {
         type: Object as PropType<Record<string, (...args: any[]) => any>>,
         default: function () {
@@ -82,6 +83,7 @@ export const inputFieldProps = buildProps({
 export type InputFieldProps = NotReadonly<ExtractPublicPropTypes<typeof inputFieldProps>>;
 
 export const inputFieldEmits = {
+    /** 原样回传底层控件值，类型随控件变化，不在字段层进行格式转换或校验。 */
     "update:modelValue": (value: string | number | object | boolean | Array<any>) => true
 };
 

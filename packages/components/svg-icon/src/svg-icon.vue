@@ -28,7 +28,7 @@ defineOptions({
 // 声明组件属性
 const props = defineProps(svgIconProps);
 
-// 计算图标样式，将模板内复杂表达式提取为 computed
+// 不改写 SVG 或组件本身，通过外层 color/font-size 控制外观；未传值时保留样式表默认值。
 const iconStyle = computed(() => {
     const style: Record<string, string> = {};
     if (props.color) {

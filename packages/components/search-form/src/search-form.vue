@@ -157,7 +157,7 @@ const searchHandle = function () {
     emits("search", getSearchFormValue());
 };
 
-// 重置操作
+// 重置到 defaultValue（未配置时置 null），先通知 reset 再发起 search，保持页面查询与表单一致。
 const resetHandle = function () {
     formFields.value.forEach(field => {
         if (Object.prototype.hasOwnProperty.call(field, "defaultValue")) {
@@ -179,7 +179,7 @@ const changeHandle = function (field: SearchFormField) {
     emits("change", field, formFields.value);
 };
 
-// 扩展按钮点击事件
+// 扩展按钮独立维护 loading 并等待异步回调，不会像查询/重置按钮一样自动触发 search。
 const extendButtonClickHandle = async function (button: SearchFormButton) {
     if (!button.click || button.loading) {
         return;

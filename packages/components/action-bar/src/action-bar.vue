@@ -46,7 +46,7 @@ const props = defineProps(actionBarProps);
 // click: 按钮点击事件
 const actionButtons = ref<ActionButton[]>([]);
 
-// 初始化操作按钮列表
+// 外部按钮配置变化时重建内部副本；对象形式的图标保持原始组件身份，不参与深度响应式代理。
 const initActionButtons = function () {
     actionButtons.value = [];
     props.buttons.forEach(button => {
@@ -62,7 +62,7 @@ const initActionButtons = function () {
     });
 };
 
-// 按钮点击操作
+// loading 同时用于视觉反馈和防止重复提交；回调异常记录到控制台后也会恢复可点击状态。
 const clickHandle = async function (button: ActionButton) {
     if (button.loading) {
         return;

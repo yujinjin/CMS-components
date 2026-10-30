@@ -13,7 +13,7 @@ import { type NotReadonly } from "../../types";
 import { type InputFieldProps } from "@yujinjin/cms-components-modules/input-field";
 
 export type InputFormField = InputFieldProps & {
-    /** 查询项的名称，同时也是组件的双向绑定值属性 */
+    /** 表单数据路径，如 user.name；同时作为默认 FormItem prop，用于取值、写值和校验定位。 */
     name: string;
 
     /** 当前数据字段插槽 */
@@ -25,7 +25,7 @@ export type InputFormField = InputFieldProps & {
     /**  字段标签 */
     label?: string;
 
-    /** 选项的值 */
+    /** 字段初始值；仅当表单 value 中对应路径为 undefined 时使用，null/false/0 不会被覆盖。 */
     value?: any;
 
     /** label宽度 */
@@ -37,7 +37,7 @@ export type InputFormField = InputFieldProps & {
     /** 组件所占的列数,默认是24 */
     span?: number;
 
-    /** 是否显示 */
+    /** false 时不渲染字段，但字段配置和内部数据仍保留。 */
     isShow?: boolean;
 
     /** 表单验证规则 */
@@ -62,6 +62,7 @@ export type InputFormSlotScope = {
 };
 
 export const inputFormProps = buildProps({
+    /** 字段定义列表，内部深拷贝后补充布局、控件默认属性和校验配置。 */
     fields: {
         type: Array as PropType<InputFormField[]>,
         default() {
@@ -86,7 +87,7 @@ export const inputFormProps = buildProps({
     events: {
         type: Object as PropType<Record<string, (...args: any[]) => any>>
     },
-    // 表单数据默认值
+    /** 表单初始/同步数据，优先于字段 value；深度变化后会重新初始化内部编辑值。 */
     value: {
         type: Object as PropType<Record<string, any>>,
         default: function () {
@@ -98,6 +99,7 @@ export const inputFormProps = buildProps({
 export type InputFormProps = NotReadonly<ExtractPublicPropTypes<typeof inputFormProps>>;
 
 export const inputFormEmits = {
+    /** 单字段写入后的通知，携带字段、当前值、内部字段列表及完整表单值，便于字段联动。 */
     fieldValueChange: (field: InputFormField, fieldValue: any, formFields: InputFormField[], inputFormValue: Record<string, any>) => true
 };
 
@@ -111,7 +113,7 @@ export interface InputFormRef {
     /** 设置表单的属性值 */
     setInputPropertyValue: (propertyName: string, value: any) => void;
 
-    /** 修改表单字段属性 */
+    /** 回调接收内部响应式字段列表，可修改显示、禁用、选项等配置，无需改写外部 fields。 */
     changeFormFields: (callback: (formFields: InputFormField[]) => void) => void;
 
     // 获取form Ref（组件未挂载时返回 null）

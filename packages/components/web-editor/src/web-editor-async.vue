@@ -22,6 +22,7 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, watch, inject, computed, type Ref } from "vue";
 import { type FormItemContext, type FormContext, formItemContextKey, formContextKey } from "element-plus";
+// 顶层只导入类型；Quill 的运行时代码延后到浏览器挂载阶段加载，避免服务端访问 document。
 import type Quill from "quill";
 import { debounce } from "@yujinjin/utils";
 import { webEditorProps, webEditorEmits } from "./web-editor";
@@ -58,7 +59,7 @@ let quillInstance: Quill | null = null;
 // 默认工具栏配置
 const defaultToolbar = ["bold", "italic", "underline", { header: 1 }, { header: 2 }, "blockquote", "code-block", "code", "link", { list: "ordered" }, { list: "bullet" }, "image", ["clean"]];
 
-// 输入内容变化操作
+// 与标准入口保持相同数据协议：text-change 防抖 300ms 后同步语义化 HTML 和 change 校验。
 const textChangeHandle = debounce(() => {
     if (!quillInstance) {
         return;
@@ -88,7 +89,7 @@ const imgFileChangeHandle = async function (e: Event) {
     }
 };
 
-// 初始化quill（异步动态导入）
+// 仅在浏览器挂载后调用；工具栏和初始 HTML 在创建时读取，后续值变化由 watch 同步。
 const initQuill = async function () {
     if (!webEditorRef.value) {
         return;
@@ -126,6 +127,7 @@ const destroyQuill = function () {
 watch(
     () => props.modelValue,
     value => {
+        // 跳过编辑器刚回写的相同 HTML，避免重复转换文档并干扰光标位置。
         if (!quillInstance || value === quillInstance.getSemanticHTML()) return;
         quillInstance.setContents(quillInstance.clipboard.convert({ html: props.modelValue }));
     }

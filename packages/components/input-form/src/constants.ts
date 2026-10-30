@@ -6,7 +6,11 @@
  * @项目的路径: \CMS-components\packages\components\input-form\src\constants.ts
  * @描述: input-form组件常量集合
  */
-// 数据输入表单中的组件默认属性
+/**
+ * InputForm 生成字段时使用的控件默认属性，不直接作为响应式表单状态。
+ * 普通控件按 type 读取；datePicker 再按字段 props.type 读取子配置。
+ * 字段自身 props 最后合并，可覆盖占位符、日期格式和 disabledDate 等默认行为。
+ */
 export const INPUT_FORM_FIELD_DEFAULT_ATTRIBUTES: Record<string, any> = {
     // input 输入框默认配置选项(具体见element plus Input 输入框文档)
     input: {

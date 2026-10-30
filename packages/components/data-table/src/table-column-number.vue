@@ -30,6 +30,7 @@ const props = defineProps({
     }
 });
 
+// 只对缺失值和空白字符串展示占位符，0 仍参与格式化；小数位及数字展示交给 numberFormat。
 const numberText = computed(() => {
     if (props.value === null || props.value === undefined || String(props.value).trim() === "") {
         return "-";

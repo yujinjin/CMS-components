@@ -76,7 +76,7 @@ const emits = defineEmits(searchPageEmits);
 // 当前数据表格实际使用的筛选参数快照，由搜索表单值和 dataTableProps.filters 合并而来。
 const dataTableFilters: Ref<Record<string, any>> = ref({});
 
-// 当前搜索表单的实时值；用户输入后未查询时，它可能与 dataTableFilters 不一致。
+// 查询提交时读取的表单值；输入中的最新内容由 SearchForm 持有，通过实例 getValue 获取。
 const searchFormValue: Ref<Record<string, any>> = ref({});
 
 // datatable组件ref
@@ -141,6 +141,7 @@ const queryDataList = async function (isInit = true, formValue?: Record<string, 
     } else {
         dataTableFilters.value = searchFormValue.value;
     }
+    // 等待新的 filters 透传到 DataTable，再执行查询，避免请求仍使用上一轮筛选参数。
     await nextTick();
     return dataTableRef.value?.queryDataList(isInit);
 };
@@ -211,10 +212,10 @@ defineExpose<SearchPageRef>({
         }
     },
 
-    // 获取当前已经搜索出来的结果值，与getSearchFormValue区别是当前已经用它查询出来结果的搜索表单值
+    // 获取最近一次提交的查询条件副本，不包含分页参数。
     getSearchedValue: function () {
         try {
-            // 返回最近一次 queryDataList 固化的筛选快照，适合导出等依赖当前表格结果的操作。
+            // 返回最近一次提交的筛选值副本；该状态在请求前更新，不保证请求已经成功完成。
             return extend(true, {}, dataTableFilters.value);
         } catch (error) {
             console.warn("getSearchedValue: 获取已搜索值失败", error);
@@ -234,7 +235,7 @@ defineExpose<SearchPageRef>({
 
     /**
      * 更新数据列显示状态
-     * @param columnKeys 显示列key值数组（不传值表示都展示）
+     * @param columnKeys 要显示的 prop 列表；不传显示全部，空数组隐藏有 prop 的列，无 prop 列不受影响。
      */
     updateTableColumnsShowStatus(columnKeys?: string[]) {
         dataTableRef.value?.updateTableColumnsShowStatus(columnKeys);

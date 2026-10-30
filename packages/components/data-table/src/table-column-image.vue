@@ -51,7 +51,7 @@ const props = defineProps({
     }
 });
 
-// 图片预览列表
+// 数组直接作为整组预览源；字符串仅在明确设置 separator 时拆分，避免误拆 URL。
 const previewImgList = computed<string[]>(() => {
     if (!props.value) return [];
     if (Array.isArray(props.value)) {
@@ -60,6 +60,6 @@ const previewImgList = computed<string[]>(() => {
     return props.separator ? props.value.split(props.separator) : [props.value];
 });
 
-// 初始预览图像索引
+// 点击哪张缩略图就从对应索引打开预览；预览层挂到 body，避免被表格滚动容器裁切。
 const initialIndex = ref(0);
 </script>

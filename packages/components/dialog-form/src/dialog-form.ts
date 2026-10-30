@@ -29,7 +29,7 @@ export type DialogFormButton = NotReadonly<Partial<ButtonProps>> & {
     /** 是否显示（如果不想销毁当前组件数据可以使用此属性） */
     isShow?: boolean;
 
-    /** 按钮点击函数事件（注入：返回false或者异常不会自动关闭弹窗） */
+    /** 接收表单值、ElForm 实例和内部按钮；返回 false 或抛错阻止关闭，校验需由回调主动调用。 */
     click?: (inputFormValue: Record<string, any> | null, formRef: FormInstance | null, button: DialogFormButton) => Promise<void | boolean> | void | boolean;
 };
 
@@ -38,16 +38,20 @@ export type DialogFormButtonSlotScope = {
 };
 
 export const dialogFormProps = buildProps({
+    /** 控制弹窗是否挂载，并在变为 true 时打开内部弹窗；关闭后由 close 通知外部同步状态。 */
     isShow: {
         type: Boolean,
         default: true
     },
+    /** ElDialog 配置，在 isShow 变为 true 时与内置默认值合并。 */
     dialogProps: {
         type: Object as PropType<Partial<NotReadonly<DialogProps>>>
     },
+    /** 底部操作按钮；具名插槽接管的按钮需自行绑定点击行为。 */
     buttons: {
         type: Array as PropType<DialogFormButton[]>
     },
+    /** InputForm 配置；字段插槽按原名称透传，字段变化事件由弹窗继续向外转发。 */
     inputFormProps: {
         type: Object as PropType<InputFormProps>
     }
@@ -59,7 +63,7 @@ export const dialogFormEmits = {
     // 表单数值的变化
     fieldValueChange: (field: InputFormField, fieldValue: any, formFields: InputFormField[], inputValue: Record<string, any>) => true,
 
-    // 弹窗关闭事件
+    // ElDialog 的 closed 事件转发，在关闭动画完成后触发，外部可据此移除弹窗或清理数据。
     close: () => true
 };
 

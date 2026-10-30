@@ -9,6 +9,7 @@
 import SearchPage from "./src/search-page.vue";
 import type SearchPageType from "./src/search-page.vue";
 
+// 搜索页面组合入口，导出查询区、操作栏、数据表格之间的属性与实例调用契约。
 export * from "./src/search-page";
 
 export { SearchPage };

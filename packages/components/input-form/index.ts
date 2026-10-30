@@ -9,6 +9,7 @@
 import InputForm from "./src/input-form.vue";
 import type InputFormType from "./src/input-form.vue";
 
+// 导出字段结构、插槽作用域和表单实例接口，便于联动、校验及模板 ref 类型标注。
 export * from "./src/input-form";
 
 export { InputForm };

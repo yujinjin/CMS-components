@@ -42,6 +42,7 @@ const props = defineProps(checkSelectProps);
 
 const emits = defineEmits(checkSelectEmits);
 
+// 双向绑定保存选项值数组；内部增删先复制数组，再整体回写，避免直接修改外部数组。
 const modelValue = defineModel({ type: Array as PropType<Array<object | string | number>> });
 
 // el-select 实例引用
@@ -50,6 +51,7 @@ const checkSelectRef = ref<InstanceType<typeof ElSelect>>();
 // 当前搜索过滤词
 const filterQuery = ref("");
 
+// 以首项类型判断数据形态；基础类型统一使用 label/value，因此自定义字段名主要用于对象列表。
 const selectDataList: ComputedRef<Array<Record<string, any>>> = computed(() => {
     if (!props.data || props.data.length === 0) {
         return [];
@@ -193,7 +195,7 @@ const isCheckboxDisabled = function (item: Record<string, any>) {
     return false;
 };
 
-// 全选/取消全选
+// 只增删当前过滤词匹配且未禁用的选项，保留过滤范围外的已选值；达到数量上限时整个全选入口禁用。
 const checkAllChangeHandle = function () {
     if (checkAllStatus.value.isDisabled) return;
     const selectableValues = selectableOptionValues.value;

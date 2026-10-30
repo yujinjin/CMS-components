@@ -41,7 +41,7 @@ export type SearchFormField = SearchFieldProps & {
     /** 当前数据字段插槽 */
     slot?: string;
 
-    /** 当前内容是否去除空格，只针对input输入框有效。默认false */
+    /** 兼容字段配置；当前 SearchField 的 input 分支始终 trim，不读取此开关。 */
     trim?: boolean;
 
     /**  选项的标签名称 */
@@ -50,7 +50,7 @@ export type SearchFormField = SearchFieldProps & {
     /** 当前字段的值 */
     value?: any;
 
-    /** 当前字段的默认值 */
+    /** 首次生成和重置的基准值；存在该属性时优先于 value，日期可按 props.valueFormat 转换。 */
     defaultValue?: any;
 
     /** label宽度 */
@@ -59,7 +59,7 @@ export type SearchFormField = SearchFieldProps & {
     /** 表单组件的宽度 */
     inputWidth?: number;
 
-    /** 是否显示 */
+    /** false 时隐藏控件；该字段仍参与 getValue 输出和重置。 */
     isShow?: boolean;
 };
 
@@ -133,13 +133,13 @@ export const searchFormEmits = {
     // 搜索操作
     search: (searchFormValue: Record<string, any>) => searchFormValue !== null && typeof searchFormValue === "object",
 
-    // 重置操作
+    // 重置完成后的数据；随后还会触发 search，调用方无需再手动查询一次。
     reset: (searchFormValue: Record<string, any>) => searchFormValue !== null && typeof searchFormValue === "object",
 
     // 表单字段值变化事件
     change: (formField: SearchFormField, formFields: SearchFormField[]) => formField !== null && typeof formField === "object" && Array.isArray(formFields),
 
-    // 折叠状态变化事件
+    // 展开状态变化事件：true 为展开，false 为收起。
     collapseStatusChange: (status: boolean) => typeof status === "boolean"
 };
 
@@ -150,6 +150,6 @@ export interface SearchFormRef {
     // 修改当前form字段的属性
     changeFormFields: (callback: (formFields: SearchFormField[]) => void) => void;
 
-    // 获取当前搜索表单的数据对象
+    // 按字段 name 生成数据对象，支持嵌套路径；不会排除 isShow=false 的隐藏字段。
     getValue: () => Record<string, any>;
 }

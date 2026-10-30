@@ -71,6 +71,7 @@ const attrs = useAttrs();
 
 const emits = defineEmits(inputFieldEmits);
 
+// 多分支模板关闭自动 attrs 继承，统一在实际控件上绑定；显式 props 覆盖同名 attrs。
 const allProps = computed(() => {
     return {
         ...attrs,
@@ -86,6 +87,7 @@ const getElComponentName = function (type: string): string {
     return "el-" + type.replace(/([A-Z])/g, "-$1").toLowerCase();
 };
 
+// 字段层只同步值；裁剪上传、富文本及表单规则分别由对应控件和上层表单负责。
 const changeValue = function (value: any) {
     emits("update:modelValue", value);
 };

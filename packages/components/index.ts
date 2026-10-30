@@ -6,6 +6,7 @@
  * @项目的路径: \CMS-components\packages\components\index.ts
  * @描述: 组件组件列表
  */
+// 聚合各组件的具名导出及公共类型；按需导入也可使用各组件目录的独立入口。
 export * from "./svg-icon";
 export * from "./check-select";
 export * from "./img-upload";

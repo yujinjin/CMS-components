@@ -42,6 +42,8 @@ const props = defineProps({
     }
 });
 
+// 数字/布尔值严格匹配，确保 0 和 false 不被当作空值；未命中时展示原值。
+// 字符串按 separator 拆分，各段兼容字符串和 parseInt 后的数字匹配，最后按原分隔符拼接。
 const enumText = computed(() => {
     if (typeof props.value === "number" || typeof props.value === "boolean") {
         const findItem = props.data.find(dateItem => dateItem[props.valueKey] === props.value);

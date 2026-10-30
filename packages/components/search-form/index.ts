@@ -9,6 +9,7 @@
 import SearchForm from "./src/search-form.vue";
 import type SearchFormType from "./src/search-form.vue";
 
+// 导出查询字段、扩展按钮和插槽类型；查询与重置结果通过事件交给调用方处理。
 export * from "./src/search-form";
 
 export { SearchForm };

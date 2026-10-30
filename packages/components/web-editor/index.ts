@@ -6,6 +6,7 @@
  * @项目的路径: \CMS-components\packages\components\web-editor\index.ts
  * @描述: web-editor组件
  */
+// 默认导出静态加载 Quill 的标准版本；异步版本单独位于 src/web-editor-async.vue。
 import WebEditor from "./src/web-editor.vue";
 import type WebEditorType from "./src/web-editor.vue";
 

@@ -180,7 +180,7 @@ const initColumns = function () {
     });
 };
 
-// 查询数据
+// 同一时刻只允许一个查询；分页重置、参数加工、响应加工按顺序执行，结束后统一通知加载状态。
 const queryDataList = async function (isInit = true) {
     if (isLoadingForSearch.value) {
         return;
@@ -215,7 +215,7 @@ const queryDataList = async function (isInit = true) {
     emits("search", false);
 };
 
-// 获取当前数据列的值
+// formatter 优先且接收原始单元格值；未配置时按 prop 直接取值，分隔的多个 prop 返回数组。
 const getCellValue = function (row: any, columnItem: DataTableColumn<any>, index: number) {
     if (columnItem.formatter) {
         return columnItem.formatter(row, columnItem as TableColumnCtx<any>, columnItem.prop ? row[columnItem.prop] : null, index);
@@ -298,7 +298,7 @@ defineExpose<DataTableRef>({
 
     /**
      * 更新数据列显示状态
-     * @param columnKeys 显示列key值数组（不传值表示都展示）
+     * @param columnKeys 要显示的 prop 列表；不传显示全部，空数组隐藏有 prop 的列，无 prop 列不受影响。
      */
     updateTableColumnsShowStatus(columnKeys?: string[]) {
         columnList.value.forEach(column => {
